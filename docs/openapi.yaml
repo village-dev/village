@@ -1,0 +1,1577 @@
+components:
+  schemas:
+    Body_build_script:
+      properties:
+        context:
+          format: binary
+          title: Context
+          type: string
+        script_id:
+          title: Script Id
+          type: string
+      required:
+      - script_id
+      - context
+      title: Body_build_script
+      type: object
+    Build:
+      description: Represents a Build record
+      properties:
+        build_command:
+          title: Build Command
+          type: string
+        completed_at:
+          format: date-time
+          title: Completed At
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/User'
+        creator_id:
+          title: Creator Id
+          type: string
+        id:
+          title: Id
+          type: string
+        image:
+          title: Image
+          type: string
+        output:
+          title: Output
+          type: string
+        params:
+          items:
+            $ref: '#/components/schemas/Param'
+          title: Params
+          type: array
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        script_id:
+          title: Script Id
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - script_id
+      - status
+      - output
+      - creator_id
+      title: Build
+      type: object
+    CreateScheduleInput:
+      description: Schedule creation model
+      properties:
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        description:
+          title: Description
+          type: string
+        hour:
+          title: Hour
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        name:
+          title: Name
+          type: string
+        params:
+          additionalProperties:
+            type: string
+          title: Params
+          type: object
+        script_id:
+          title: Script Id
+          type: string
+      required:
+      - script_id
+      - name
+      - day_of_month
+      - day_of_week
+      - hour
+      - minute
+      - month_of_year
+      title: CreateScheduleInput
+      type: object
+    CreateScriptInput:
+      description: Script registration input
+      properties:
+        description:
+          title: Description
+          type: string
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engine_version:
+          title: Engine Version
+          type: string
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - name
+      - workspace_id
+      - engine
+      - engine_version
+      title: CreateScriptInput
+      type: object
+    Engine:
+      description: An enumeration.
+      enum:
+      - Node
+      - Python
+      title: Engine
+      type: string
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
+      type: object
+    Param:
+      description: Represents a Param record
+      properties:
+        build:
+          $ref: '#/components/schemas/Build'
+        build_id:
+          title: Build Id
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        default:
+          title: Default
+          type: string
+        description:
+          title: Description
+          type: string
+        id:
+          title: Id
+          type: string
+        key:
+          title: Key
+          type: string
+        options:
+          items:
+            type: string
+          title: Options
+          type: array
+        required:
+          title: Required
+          type: boolean
+        type:
+          $ref: '#/components/schemas/ParamType'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - required
+      - options
+      - build_id
+      - key
+      - type
+      title: Param
+      type: object
+    ParamType:
+      description: An enumeration.
+      enum:
+      - string
+      - bigstring
+      - date
+      - datetime
+      - integer
+      - float
+      - boolean
+      title: ParamType
+      type: string
+    Role:
+      description: An enumeration.
+      enum:
+      - ADMIN
+      title: Role
+      type: string
+    Run:
+      description: Represents a Run record
+      properties:
+        build:
+          $ref: '#/components/schemas/Build'
+        build_id:
+          title: Build Id
+          type: string
+        completed_at:
+          format: date-time
+          title: Completed At
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/User'
+        creator_id:
+          title: Creator Id
+          type: string
+        id:
+          title: Id
+          type: string
+        output:
+          title: Output
+          type: string
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        schedule_id:
+          title: Schedule Id
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - build_id
+      - status
+      - output
+      title: Run
+      type: object
+    RunScriptInput:
+      description: Script run input
+      properties:
+        params:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+          title: Params
+          type: object
+        script_id:
+          title: Script Id
+          type: string
+      required:
+      - script_id
+      title: RunScriptInput
+      type: object
+    RunWithBuilds:
+      properties:
+        build:
+          $ref: '#/components/schemas/Build'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - id
+      - status
+      - created_at
+      title: RunWithBuilds
+      type: object
+    Schedule:
+      description: Represents a Schedule record
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/User'
+        creator_id:
+          title: Creator Id
+          type: string
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        description:
+          title: Description
+          type: string
+        hour:
+          title: Hour
+          type: string
+        id:
+          title: Id
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        name:
+          title: Name
+          type: string
+        params:
+          format: json-string
+          title: Params
+          type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        script_id:
+          title: Script Id
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - script_id
+      - day_of_month
+      - day_of_week
+      - hour
+      - minute
+      - month_of_year
+      - creator_id
+      - name
+      title: Schedule
+      type: object
+    ScheduleWithScript:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        hour:
+          title: Hour
+          type: string
+        id:
+          title: Id
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        script:
+          $ref: '#/components/schemas/Script'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - minute
+      - hour
+      - day_of_month
+      - month_of_year
+      - day_of_week
+      title: ScheduleWithScript
+      type: object
+    Script:
+      description: Represents a Script record
+      properties:
+        builds:
+          items:
+            $ref: '#/components/schemas/Build'
+          title: Builds
+          type: array
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/User'
+        creator_id:
+          title: Creator Id
+          type: string
+        description:
+          title: Description
+          type: string
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engine_version:
+          title: Engine Version
+          type: string
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        schedules:
+          items:
+            $ref: '#/components/schemas/Schedule'
+          title: Schedules
+          type: array
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace:
+          $ref: '#/components/schemas/Workspace'
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - name
+      - engine
+      - engine_version
+      - description
+      - workspace_id
+      - creator_id
+      title: Script
+      type: object
+    ScriptWithBuild:
+      properties:
+        builds:
+          items:
+            $ref: '#/components/schemas/Build'
+          title: Builds
+          type: array
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        description:
+          title: Description
+          type: string
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engine_version:
+          title: Engine Version
+          type: string
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - engine
+      - engine_version
+      - description
+      - workspace_id
+      title: ScriptWithBuild
+      type: object
+    UpdateScheduleInput:
+      description: Schedule update model
+      properties:
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        description:
+          title: Description
+          type: string
+        hour:
+          title: Hour
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        name:
+          title: Name
+          type: string
+        params:
+          additionalProperties:
+            type: string
+          title: Params
+          type: object
+        schedule_id:
+          title: Schedule Id
+          type: string
+      required:
+      - name
+      - day_of_month
+      - day_of_week
+      - hour
+      - minute
+      - month_of_year
+      - schedule_id
+      title: UpdateScheduleInput
+      type: object
+    UpdateScriptInput:
+      description: Script registration input
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+      required:
+      - id
+      title: UpdateScriptInput
+      type: object
+    User:
+      description: Represents a User record
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_builds:
+          items:
+            $ref: '#/components/schemas/Build'
+          title: Created Builds
+          type: array
+        created_runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Created Runs
+          type: array
+        created_schedules:
+          items:
+            $ref: '#/components/schemas/Schedule'
+          title: Created Schedules
+          type: array
+        created_scripts:
+          items:
+            $ref: '#/components/schemas/Script'
+          title: Created Scripts
+          type: array
+        created_workspaces:
+          items:
+            $ref: '#/components/schemas/Workspace'
+          title: Created Workspaces
+          type: array
+        default_workspace:
+          $ref: '#/components/schemas/Workspace'
+        default_workspace_id:
+          title: Default Workspace Id
+          type: string
+        id:
+          title: Id
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspaces:
+          items:
+            $ref: '#/components/schemas/WorkspaceUsers'
+          title: Workspaces
+          type: array
+      required:
+      - id
+      - created_at
+      title: User
+      type: object
+    UserWithWorkspaces:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        default_workspace:
+          $ref: '#/components/schemas/Workspace'
+        id:
+          title: Id
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspaces:
+          items:
+            $ref: '#/components/schemas/WorkspaceUsers'
+          title: Workspaces
+          type: array
+      required:
+      - id
+      - created_at
+      title: UserWithWorkspaces
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
+    Workspace:
+      description: Represents a Workspace record
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/User'
+        creator_id:
+          title: Creator Id
+          type: string
+        default_of:
+          items:
+            $ref: '#/components/schemas/User'
+          title: Default Of
+          type: array
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        scripts:
+          items:
+            $ref: '#/components/schemas/Script'
+          title: Scripts
+          type: array
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        users:
+          items:
+            $ref: '#/components/schemas/WorkspaceUsers'
+          title: Users
+          type: array
+      required:
+      - id
+      - created_at
+      - name
+      - creator_id
+      title: Workspace
+      type: object
+    WorkspaceUsers:
+      description: Represents a WorkspaceUsers record
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        user_id:
+          title: User Id
+          type: string
+        workspace:
+          $ref: '#/components/schemas/Workspace'
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - created_at
+      - workspace_id
+      - user_id
+      - role
+      title: WorkspaceUsers
+      type: object
+  securitySchemes:
+    HTTPBearer:
+      scheme: bearer
+      type: http
+info:
+  title: Village API
+  version: 0.1.0
+openapi: 3.0.2
+paths:
+  /build/delete:
+    delete:
+      description: Delete a build.
+      operationId: delete_build
+      parameters:
+      - in: query
+        name: build_id
+        required: true
+        schema:
+          title: Build Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Build'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Delete Build
+      tags:
+      - builds
+  /build/get:
+    get:
+      description: Get a build.
+      operationId: get_build
+      parameters:
+      - in: query
+        name: build_id
+        required: true
+        schema:
+          title: Build Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Build
+      tags:
+      - builds
+  /build/list:
+    get:
+      description: List all builds.
+      operationId: list_builds
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: List Builds
+      tags:
+      - builds
+  /build/runs:
+    get:
+      description: Get all runs for a build.
+      operationId: get_build_runs
+      parameters:
+      - in: query
+        name: build_id
+        required: true
+        schema:
+          title: Build Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Build Runs
+      tags:
+      - builds
+  /run/delete:
+    delete:
+      description: Delete a run.
+      operationId: delete_run
+      parameters:
+      - in: query
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Delete Run
+      tags:
+      - runs
+  /run/get:
+    get:
+      description: Get a run.
+      operationId: get_run
+      parameters:
+      - in: query
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Run
+      tags:
+      - runs
+  /run/list:
+    get:
+      description: List all runs.
+      operationId: list_runs
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/RunWithBuilds'
+                title: Response List Runs
+                type: array
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: List Runs
+      tags:
+      - runs
+  /schedule/create:
+    post:
+      description: Add a script schedule to the scheduler
+      operationId: create_schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScheduleInput'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Schedule
+      tags:
+      - schedules
+  /schedule/delete:
+    delete:
+      description: Delete a script schedule from the scheduler
+      operationId: delete_schedule
+      parameters:
+      - in: query
+        name: schedule_id
+        required: true
+        schema:
+          title: Schedule Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Delete Schedule
+      tags:
+      - schedules
+  /schedule/list:
+    get:
+      description: List all schedules
+      operationId: list_schedules
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ScheduleWithScript'
+                title: Response List Schedules
+                type: array
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: List Schedules
+      tags:
+      - schedules
+  /schedule/run:
+    post:
+      description: Execute a script based on its schedule entry
+      operationId: run_schedule
+      parameters:
+      - in: query
+        name: schedule_id
+        required: true
+        schema:
+          title: Schedule Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Run Schedule
+      tags:
+      - schedules
+  /schedule/update:
+    post:
+      operationId: update_schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScheduleInput'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Update Schedule
+      tags:
+      - schedules
+  /script/build:
+    post:
+      description: Build a script so that it can be run.
+      operationId: build_script
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_build_script'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Build'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Build Script
+      tags:
+      - scripts
+  /script/builds:
+    get:
+      description: Get all builds for a script.
+      operationId: get_script_builds
+      parameters:
+      - in: query
+        name: script_id
+        required: true
+        schema:
+          title: Script Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Build'
+                title: Response Get Script Builds
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Script Builds
+      tags:
+      - scripts
+  /script/create:
+    post:
+      description: Initialize a script.
+      operationId: create_script
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScriptInput'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Script
+      tags:
+      - scripts
+  /script/delete:
+    delete:
+      description: Delete a script.
+      operationId: delete_script
+      parameters:
+      - in: query
+        name: script_id
+        required: true
+        schema:
+          title: Script Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Delete Script
+      tags:
+      - scripts
+  /script/get:
+    get:
+      description: Get a script.
+      operationId: get_script
+      parameters:
+      - in: query
+        name: script_id
+        required: true
+        schema:
+          title: Script Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptWithBuild'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Script
+      tags:
+      - scripts
+  /script/list:
+    get:
+      description: List all scripts.
+      operationId: list_scripts
+      parameters:
+      - in: query
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Script'
+                title: Response List Scripts
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Scripts
+      tags:
+      - scripts
+  /script/run:
+    post:
+      description: Execute the latest build for a script.
+      operationId: run_script
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunScriptInput'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Run Script
+      tags:
+      - scripts
+  /script/runs:
+    get:
+      description: Get all runs for a script.
+      operationId: get_script_runs
+      parameters:
+      - in: query
+        name: script_id
+        required: true
+        schema:
+          title: Script Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Run'
+                title: Response Get Script Runs
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Script Runs
+      tags:
+      - scripts
+  /script/schedules:
+    get:
+      description: Get all schedules for a script.
+      operationId: get_script_schedules
+      parameters:
+      - in: query
+        name: script_id
+        required: true
+        schema:
+          title: Script Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Schedule'
+                title: Response Get Script Schedules
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Script Schedules
+      tags:
+      - scripts
+  /script/update:
+    post:
+      description: Update script contents.
+      operationId: update_script
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScriptInput'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Update Script
+      tags:
+      - scripts
+  /scripts/check_id:
+    get:
+      description: Check if a script ID is available.
+      operationId: check_id
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          title: Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Check Id
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Check Id
+      tags:
+      - scripts
+  /scripts/propose_id:
+    get:
+      description: Propose a script ID based on the name.
+      operationId: propose_id
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Propose Id
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Propose Id
+      tags:
+      - scripts
+  /user/create:
+    post:
+      description: Create a user.
+      operationId: create_user
+      parameters:
+      - in: query
+        name: user_id
+        required: true
+        schema:
+          title: User Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithWorkspaces'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create User
+      tags:
+      - user
+  /users/get:
+    get:
+      description: Get a user.
+      operationId: get_current_user
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithWorkspaces'
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: Get Current User
+      tags:
+      - user
+  /workspace/create:
+    post:
+      description: Create a workspace.
+      operationId: create_workspace
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Workspace
+      tags:
+      - workspace
+  /workspace/get:
+    get:
+      description: Get a workspace.
+      operationId: get_workspace
+      parameters:
+      - in: query
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Workspace
+      tags:
+      - workspace
+  /workspace/list:
+    get:
+      description: List all workspaces.
+      operationId: list_user_workspaces
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Workspace'
+                title: Response List User Workspaces
+                type: array
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: List User Workspaces
+      tags:
+      - workspace
+  /workspace/set_default:
+    post:
+      description: Set default workspace.
+      operationId: set_default_workspace
+      parameters:
+      - in: query
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Set Default Workspace
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Set Default Workspace
+      tags:
+      - workspace

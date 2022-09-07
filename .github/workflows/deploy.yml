@@ -1,0 +1,36 @@
+# production deployment
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            docs:
+              - 'docs/**'
+              - 'server/openapi.yaml'
+
+  docs:
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - shell: bash
+        env:
+          CLOUDFLARE_PAGES_DEPLOY_ENDPOINT: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_ENDPOINT }}
+        # specified in https://github.com/netaverse/netaverse/settings/secrets/actions
+        run: curl -X POST "$CLOUDFLARE_PAGES_DEPLOY_ENDPOINT"

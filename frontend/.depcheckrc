@@ -1,0 +1,17 @@
+ignores: [
+    'tailwindcss',
+    'autoprefixer',
+    'postcss',
+    'typescript',
+    'ts-node',
+    'axios',
+    'form-data',
+    '@models/*',
+    '@common/*',
+    '@components/*',
+    '@contexts/*',
+    '@pages/*',
+    '@hooks/*',
+    '@utils/*',
+    'prettier-plugin-tailwindcss',
+]

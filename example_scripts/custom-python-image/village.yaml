@@ -1,0 +1,6 @@
+name: custom-python-image
+id: custom_python_image
+engine: Python
+engine_version: '3.9'
+params: []
+image: 'python:3.10-slim-buster'

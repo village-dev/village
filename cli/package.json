@@ -1,0 +1,57 @@
+{
+    "name": "village",
+    "version": "0.0.2-alpha",
+    "bin": "dist/index.js",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "prebuild": "yarn generate",
+        "build": "ts-node ./src/build.ts && npm install -g",
+        "depcheck": "npx depcheck .",
+        "eslint": "eslint ./src --ext .ts",
+        "generate": "ts-node ./generate.ts",
+        "prettier-check": "prettier -l ./src",
+        "prettier-format": "prettier ./src --write",
+        "typecheck": "yarn run tsc --project tsconfig.json --skipLibCheck --noemit"
+    },
+    "prettier": {
+        "semi": false,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "es5"
+    },
+    "dependencies": {
+        "@types/js-yaml": "^4.0.5",
+        "axios": "^0.27.2",
+        "chalk": "^5.0.1",
+        "cli-table3": "^0.6.2",
+        "commander": "^9.4.0",
+        "date-fns": "^2.29.2",
+        "dotenv": "^16.0.2",
+        "inquirer": "^9.1.0",
+        "js-yaml": "^4.1.0",
+        "node-fetch": "^3.2.10",
+        "picomatch": "^2.3.1",
+        "qs": "^6.11.0",
+        "tar": "^6.1.11",
+        "tmp": "^0.2.1"
+    },
+    "devDependencies": {
+        "@types/inquirer": "^9.0.1",
+        "@types/node": "^18.7.6",
+        "@types/picomatch": "^2.3.0",
+        "@types/tmp": "^0.2.3",
+        "@typescript-eslint/eslint-plugin": "^5.35.1",
+        "@typescript-eslint/parser": "^5.35.1",
+        "depcheck": "^1.4.3",
+        "esbuild": "^0.15.3",
+        "eslint": "^8.22.0",
+        "form-data": "4.x",
+        "openapi-typescript-codegen": "^0.23.0",
+        "prettier": "^2.7.1",
+        "ts-node": "^10.9.1",
+        "tslib": "^2.4.0",
+        "typescript": "^4.7.4"
+    }
+}

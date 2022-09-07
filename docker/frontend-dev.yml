@@ -1,0 +1,10 @@
+services:
+  frontend:
+    build: ../frontend
+    volumes:
+      - ../frontend:/app
+      # stop mounting node_modules from host
+      - /app/node_modules
+    command: yarn start
+    ports:
+      - '5173:5173'

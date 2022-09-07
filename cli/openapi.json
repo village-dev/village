@@ -1,0 +1,2368 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Village API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "\/scripts\/propose_id": {
+      "get": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Propose Id",
+        "description": "Propose a script ID based on the name.",
+        "operationId": "propose_id",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            },
+            "name": "name",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Propose Id",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/scripts\/check_id": {
+      "get": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Check Id",
+        "description": "Check if a script ID is available.",
+        "operationId": "check_id",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            },
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Check Id",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/create": {
+      "post": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Create Script",
+        "description": "Initialize a script.",
+        "operationId": "create_script",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/CreateScriptInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Script"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/update": {
+      "post": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Update Script",
+        "description": "Update script contents.",
+        "operationId": "update_script",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/UpdateScriptInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Script"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/build": {
+      "post": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Build Script",
+        "description": "Build a script so that it can be run.",
+        "operationId": "build_script",
+        "requestBody": {
+          "content": {
+            "multipart\/form-data": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Body_build_script"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Build"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/run": {
+      "post": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Run Script",
+        "description": "Execute the latest build for a script.",
+        "operationId": "run_script",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/RunScriptInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Run"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/list": {
+      "get": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "List Scripts",
+        "description": "List all scripts.",
+        "operationId": "list_scripts",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "name": "workspace_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response List Scripts",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Script"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/get": {
+      "get": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Get Script",
+        "description": "Get a script.",
+        "operationId": "get_script",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Script Id",
+              "type": "string"
+            },
+            "name": "script_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/ScriptWithBuild"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/builds": {
+      "get": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Get Script Builds",
+        "description": "Get all builds for a script.",
+        "operationId": "get_script_builds",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Script Id",
+              "type": "string"
+            },
+            "name": "script_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Get Script Builds",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Build"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/schedules": {
+      "get": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Get Script Schedules",
+        "description": "Get all schedules for a script.",
+        "operationId": "get_script_schedules",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Script Id",
+              "type": "string"
+            },
+            "name": "script_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Get Script Schedules",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Schedule"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/runs": {
+      "get": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Get Script Runs",
+        "description": "Get all runs for a script.",
+        "operationId": "get_script_runs",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Script Id",
+              "type": "string"
+            },
+            "name": "script_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Get Script Runs",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Run"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/delete": {
+      "delete": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Delete Script",
+        "description": "Delete a script.",
+        "operationId": "delete_script",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Script Id",
+              "type": "string"
+            },
+            "name": "script_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Script"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/build\/get": {
+      "get": {
+        "tags": [
+          "builds"
+        ],
+        "summary": "Get Build",
+        "description": "Get a build.",
+        "operationId": "get_build",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Build Id",
+              "type": "string"
+            },
+            "name": "build_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/build\/list": {
+      "get": {
+        "tags": [
+          "builds"
+        ],
+        "summary": "List Builds",
+        "description": "List all builds.",
+        "operationId": "list_builds",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/build\/runs": {
+      "get": {
+        "tags": [
+          "builds"
+        ],
+        "summary": "Get Build Runs",
+        "description": "Get all runs for a build.",
+        "operationId": "get_build_runs",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Build Id",
+              "type": "string"
+            },
+            "name": "build_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/build\/delete": {
+      "delete": {
+        "tags": [
+          "builds"
+        ],
+        "summary": "Delete Build",
+        "description": "Delete a build.",
+        "operationId": "delete_build",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Build Id",
+              "type": "string"
+            },
+            "name": "build_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Build"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/run\/list": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "List Runs",
+        "description": "List all runs.",
+        "operationId": "list_runs",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response List Runs",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/RunWithBuilds"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/run\/get": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "Get Run",
+        "description": "Get a run.",
+        "operationId": "get_run",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            },
+            "name": "run_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Run"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/run\/delete": {
+      "delete": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "Delete Run",
+        "description": "Delete a run.",
+        "operationId": "delete_run",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            },
+            "name": "run_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Run"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/schedule\/create": {
+      "post": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Create Schedule",
+        "description": "Add a script schedule to the scheduler",
+        "operationId": "create_schedule",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/CreateScheduleInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Schedule"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/schedule\/update": {
+      "post": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Update Schedule",
+        "operationId": "update_schedule",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/UpdateScheduleInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Schedule"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/schedule\/run": {
+      "post": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Run Schedule",
+        "description": "Execute a script based on its schedule entry",
+        "operationId": "run_schedule",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Schedule Id",
+              "type": "string"
+            },
+            "name": "schedule_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Run"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/schedule\/list": {
+      "get": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "List Schedules",
+        "description": "List all schedules",
+        "operationId": "list_schedules",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response List Schedules",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/ScheduleWithScript"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/schedule\/delete": {
+      "delete": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Delete Schedule",
+        "description": "Delete a script schedule from the scheduler",
+        "operationId": "delete_schedule",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Schedule Id",
+              "type": "string"
+            },
+            "name": "schedule_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Schedule"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/user\/create": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create User",
+        "description": "Create a user.",
+        "operationId": "create_user",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string"
+            },
+            "name": "user_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/UserWithWorkspaces"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/users\/get": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get Current User",
+        "description": "Get a user.",
+        "operationId": "get_current_user",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/UserWithWorkspaces"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/workspace\/create": {
+      "post": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Create Workspace",
+        "description": "Create a workspace.",
+        "operationId": "create_workspace",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            },
+            "name": "name",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Workspace"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/workspace\/get": {
+      "get": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Get Workspace",
+        "description": "Get a workspace.",
+        "operationId": "get_workspace",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "name": "workspace_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Workspace"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/workspace\/list": {
+      "get": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "List User Workspaces",
+        "description": "List all workspaces.",
+        "operationId": "list_user_workspaces",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response List User Workspaces",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Workspace"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/workspace\/set_default": {
+      "post": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Set Default Workspace",
+        "description": "Set default workspace.",
+        "operationId": "set_default_workspace",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "name": "workspace_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Set Default Workspace",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_build_script": {
+        "title": "Body_build_script",
+        "required": [
+          "script_id",
+          "context"
+        ],
+        "type": "object",
+        "properties": {
+          "script_id": {
+            "title": "Script Id",
+            "type": "string"
+          },
+          "context": {
+            "title": "Context",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Build": {
+        "title": "Build",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "script_id",
+          "status",
+          "output",
+          "creator_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "script_id": {
+            "title": "Script Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "output": {
+            "title": "Output",
+            "type": "string"
+          },
+          "build_command": {
+            "title": "Build Command",
+            "type": "string"
+          },
+          "image": {
+            "title": "Image",
+            "type": "string"
+          },
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "creator_id": {
+            "title": "Creator Id",
+            "type": "string"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "params": {
+            "title": "Params",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Param"
+            }
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          }
+        },
+        "description": "Represents a Build record"
+      },
+      "CreateScheduleInput": {
+        "title": "CreateScheduleInput",
+        "required": [
+          "script_id",
+          "name",
+          "day_of_month",
+          "day_of_week",
+          "hour",
+          "minute",
+          "month_of_year"
+        ],
+        "type": "object",
+        "properties": {
+          "script_id": {
+            "title": "Script Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "params": {
+            "title": "Params",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          }
+        },
+        "description": "Schedule creation model"
+      },
+      "CreateScriptInput": {
+        "title": "CreateScriptInput",
+        "required": [
+          "name",
+          "workspace_id",
+          "engine",
+          "engine_version"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "workspace_id": {
+            "title": "Workspace Id",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "engine": {
+            "$ref": "#\/components\/schemas\/Engine"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          }
+        },
+        "description": "Script registration input"
+      },
+      "Engine": {
+        "title": "Engine",
+        "enum": [
+          "Node",
+          "Python"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/ValidationError"
+            }
+          }
+        }
+      },
+      "Param": {
+        "title": "Param",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "required",
+          "options",
+          "build_id",
+          "key",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "default": {
+            "title": "Default",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "required": {
+            "title": "Required",
+            "type": "boolean"
+          },
+          "options": {
+            "title": "Options",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "build_id": {
+            "title": "Build Id",
+            "type": "string"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#\/components\/schemas\/ParamType"
+          },
+          "build": {
+            "$ref": "#\/components\/schemas\/Build"
+          }
+        },
+        "description": "Represents a Param record"
+      },
+      "ParamType": {
+        "title": "ParamType",
+        "enum": [
+          "string",
+          "bigstring",
+          "date",
+          "datetime",
+          "integer",
+          "float",
+          "boolean"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      },
+      "Role": {
+        "title": "Role",
+        "enum": [
+          "ADMIN"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      },
+      "Run": {
+        "title": "Run",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "build_id",
+          "status",
+          "output"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "build_id": {
+            "title": "Build Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "output": {
+            "title": "Output",
+            "type": "string"
+          },
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "schedule_id": {
+            "title": "Schedule Id",
+            "type": "string"
+          },
+          "creator_id": {
+            "title": "Creator Id",
+            "type": "string"
+          },
+          "build": {
+            "$ref": "#\/components\/schemas\/Build"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "schedule": {
+            "$ref": "#\/components\/schemas\/Schedule"
+          }
+        },
+        "description": "Represents a Run record"
+      },
+      "RunScriptInput": {
+        "title": "RunScriptInput",
+        "required": [
+          "script_id"
+        ],
+        "type": "object",
+        "properties": {
+          "script_id": {
+            "title": "Script Id",
+            "type": "string"
+          },
+          "params": {
+            "title": "Params",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            }
+          }
+        },
+        "description": "Script run input"
+      },
+      "RunWithBuilds": {
+        "title": "RunWithBuilds",
+        "required": [
+          "id",
+          "status",
+          "created_at"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "build": {
+            "$ref": "#\/components\/schemas\/Build"
+          }
+        }
+      },
+      "Schedule": {
+        "title": "Schedule",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "script_id",
+          "day_of_month",
+          "day_of_week",
+          "hour",
+          "minute",
+          "month_of_year",
+          "creator_id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "script_id": {
+            "title": "Script Id",
+            "type": "string"
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          },
+          "params": {
+            "title": "Params",
+            "type": "string",
+            "format": "json-string"
+          },
+          "creator_id": {
+            "title": "Creator Id",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          }
+        },
+        "description": "Represents a Schedule record"
+      },
+      "ScheduleWithScript": {
+        "title": "ScheduleWithScript",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "minute",
+          "hour",
+          "day_of_month",
+          "month_of_year",
+          "day_of_week"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          }
+        }
+      },
+      "Script": {
+        "title": "Script",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "name",
+          "engine",
+          "engine_version",
+          "description",
+          "workspace_id",
+          "creator_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "engine": {
+            "$ref": "#\/components\/schemas\/Engine"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "workspace_id": {
+            "title": "Workspace Id",
+            "type": "string"
+          },
+          "creator_id": {
+            "title": "Creator Id",
+            "type": "string"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "workspace": {
+            "$ref": "#\/components\/schemas\/Workspace"
+          },
+          "builds": {
+            "title": "Builds",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Build"
+            }
+          },
+          "schedules": {
+            "title": "Schedules",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schedule"
+            }
+          }
+        },
+        "description": "Represents a Script record"
+      },
+      "ScriptWithBuild": {
+        "title": "ScriptWithBuild",
+        "required": [
+          "id",
+          "name",
+          "created_at",
+          "updated_at",
+          "engine",
+          "engine_version",
+          "description",
+          "workspace_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "engine": {
+            "$ref": "#\/components\/schemas\/Engine"
+          },
+          "builds": {
+            "title": "Builds",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Build"
+            }
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "workspace_id": {
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        }
+      },
+      "UpdateScheduleInput": {
+        "title": "UpdateScheduleInput",
+        "required": [
+          "name",
+          "day_of_month",
+          "day_of_week",
+          "hour",
+          "minute",
+          "month_of_year",
+          "schedule_id"
+        ],
+        "type": "object",
+        "properties": {
+          "params": {
+            "title": "Params",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          },
+          "schedule_id": {
+            "title": "Schedule Id",
+            "type": "string"
+          }
+        },
+        "description": "Schedule update model"
+      },
+      "UpdateScriptInput": {
+        "title": "UpdateScriptInput",
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "description": "Script registration input"
+      },
+      "User": {
+        "title": "User",
+        "required": [
+          "id",
+          "created_at"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "default_workspace_id": {
+            "title": "Default Workspace Id",
+            "type": "string"
+          },
+          "default_workspace": {
+            "$ref": "#\/components\/schemas\/Workspace"
+          },
+          "created_builds": {
+            "title": "Created Builds",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Build"
+            }
+          },
+          "created_runs": {
+            "title": "Created Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          },
+          "created_schedules": {
+            "title": "Created Schedules",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schedule"
+            }
+          },
+          "created_scripts": {
+            "title": "Created Scripts",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Script"
+            }
+          },
+          "created_workspaces": {
+            "title": "Created Workspaces",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Workspace"
+            }
+          },
+          "workspaces": {
+            "title": "Workspaces",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/WorkspaceUsers"
+            }
+          }
+        },
+        "description": "Represents a User record"
+      },
+      "UserWithWorkspaces": {
+        "title": "UserWithWorkspaces",
+        "required": [
+          "id",
+          "created_at"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspaces": {
+            "title": "Workspaces",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/WorkspaceUsers"
+            }
+          },
+          "default_workspace": {
+            "$ref": "#\/components\/schemas\/Workspace"
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      },
+      "Workspace": {
+        "title": "Workspace",
+        "required": [
+          "id",
+          "created_at",
+          "name",
+          "creator_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "creator_id": {
+            "title": "Creator Id",
+            "type": "string"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "scripts": {
+            "title": "Scripts",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Script"
+            }
+          },
+          "default_of": {
+            "title": "Default Of",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/User"
+            }
+          },
+          "users": {
+            "title": "Users",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/WorkspaceUsers"
+            }
+          }
+        },
+        "description": "Represents a Workspace record"
+      },
+      "WorkspaceUsers": {
+        "title": "WorkspaceUsers",
+        "required": [
+          "created_at",
+          "workspace_id",
+          "user_id",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspace_id": {
+            "title": "Workspace Id",
+            "type": "string"
+          },
+          "user_id": {
+            "title": "User Id",
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#\/components\/schemas\/Role"
+          },
+          "user": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "workspace": {
+            "$ref": "#\/components\/schemas\/Workspace"
+          }
+        },
+        "description": "Represents a WorkspaceUsers record"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

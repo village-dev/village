@@ -1,0 +1,220 @@
+# continuous integration tests
+name: CI
+
+on:
+  # Trigger the workflow on pull request,
+  # but only for the main branch
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      cli: ${{ steps.filter.outputs.cli }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      server: ${{ steps.filter.outputs.server }}
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v2
+
+      # For pull requests it's not necessary to checkout the code
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+            cli:
+              - 'cli/**'
+            server:
+              - 'server/**'
+            docs:
+              - 'docs/**'
+
+  frontend:
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          cache-dependency-path: frontend/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./frontend
+
+      - name: Depcheck
+        run: yarn run depcheck
+        working-directory: ./frontend
+
+      - name: Generate OpenAPI client
+        run: yarn run generate
+        working-directory: ./frontend
+
+      - name: Prettier check
+        run: yarn run prettier-check
+        working-directory: ./frontend
+
+      - name: ESlint
+        run: yarn run eslint
+        working-directory: ./frontend
+
+      - name: Build
+        run: NODE_ENV=production yarn build
+        working-directory: ./frontend
+
+  cli:
+    needs: changes
+    if: ${{ needs.changes.outputs.cli == 'true' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          cache-dependency-path: cli/yarn.lock
+
+      - name: Install dependencies
+        run: npm install --global yarn && yarn
+        working-directory: ./cli
+
+      - name: Depcheck
+        run: yarn run depcheck
+        working-directory: ./cli
+
+      - name: Generate OpenAPI client
+        run: yarn run generate
+        working-directory: ./cli
+
+      - name: Prettier check
+        run: yarn run prettier-check
+        working-directory: ./cli
+
+      - name: ESlint
+        run: yarn run eslint
+        working-directory: ./cli
+
+      - name: Type checks
+        run: yarn run typecheck
+        working-directory: ./cli
+
+      - name: Build
+        run: NODE_ENV=production yarn build
+        working-directory: ./cli
+
+  server:
+    needs: changes
+    if: ${{ needs.changes.outputs.server == 'true' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.6.x, 3.8.x, 3.10.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.15
+
+      - name: Cache Poetry cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python${{ matrix.python-version }}-${{ hashFiles('server/poetry.lock') }}-${{ hashFiles('server/schema.prisma') }}-${{ hashFiles('server/models/prisma_partials.py') }}
+
+      - name: Cache packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.local
+          key: poetry-${{ runner.os }}-python${{ matrix.python-version }}-${{ hashFiles('server/poetry.lock') }}-${{ hashFiles('server/schema.prisma') }}-${{ hashFiles('server/models/prisma_partials.py') }}
+
+      - name: Install dependencies
+        run: poetry install
+        working-directory: ./server
+
+      - name: Generate Prisma library
+        run: make generate
+        working-directory: ./server
+
+      - name: Black
+        run: make black-check
+        working-directory: ./server
+
+      - name: Isort
+        run: make isort-check
+        working-directory: ./server
+
+      - name: Pyright
+        run: make pyright
+        working-directory: ./server
+
+      - name: Check OpenAPI files up to date
+        run: make check-openapi-files
+        working-directory: ./server
+
+  docs:
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          cache-dependency-path: docs/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./docs
+
+      - name: Build
+        run: yarn run build
+        working-directory: ./docs

@@ -1,0 +1,5 @@
+name: node-dependencies
+id: node_dependencies
+engine: Node
+engine_version: '17'
+params: []

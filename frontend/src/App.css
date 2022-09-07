@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/Inter-VariableFont_slnt,wght.ttf');
+}
+
+:root {
+    font-family: Inter, sans-serif;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* enable variable font weights */
+/* see https://github.com/tailwindlabs/tailwindcss/discussions/3225 */
+@layer utilities {
+    .font-thin {
+        font-variation-settings: 'wght' 100;
+    }
+    .font-extralight {
+        font-variation-settings: 'wght' 200;
+    }
+    .font-light {
+        font-variation-settings: 'wght' 300;
+    }
+    .font-normal {
+        font-variation-settings: 'wght' 400;
+    }
+    .font-medium {
+        font-variation-settings: 'wght' 500;
+    }
+    .font-semibold {
+        font-variation-settings: 'wght' 600;
+    }
+    .font-bold {
+        font-variation-settings: 'wght' 700;
+    }
+    .font-extrabold {
+        font-variation-settings: 'wght' 800;
+    }
+    .font-black {
+        font-variation-settings: 'wght' 900;
+    }
+}

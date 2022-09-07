@@ -1,0 +1,7 @@
+ignores: [
+    "node-fetch",
+    "form-data",
+    "tslib",
+    "@common/*",
+    "@commands/*",
+]

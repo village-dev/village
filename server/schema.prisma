@@ -1,0 +1,148 @@
+generator db {
+  provider               = "prisma-client-py"
+  interface              = "asyncio"
+  partial_type_generator = "models/prisma_partials.py"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgres://postgres:thisisapassword@localhost:5432/postgres"
+}
+
+model User {
+  id                   String           @id @default(cuid())
+  created_at           DateTime         @default(now())
+  updated_at           DateTime?        @updatedAt
+  default_workspace_id String?
+  default_workspace    Workspace?       @relation("default_workspace", fields: [default_workspace_id], references: [id])
+  created_builds       Build[]
+  created_runs         Run[]
+  created_schedules    Schedule[]
+  created_scripts      Script[]
+  created_workspaces   Workspace[]      @relation("created_by")
+  workspaces           WorkspaceUsers[]
+}
+
+model Workspace {
+  id         String           @id @default(cuid())
+  created_at DateTime         @default(now())
+  updated_at DateTime?        @updatedAt
+  name       String
+  creator_id String
+  created_by User             @relation("created_by", fields: [creator_id], references: [id])
+  scripts    Script[]
+  default_of User[]           @relation("default_workspace")
+  users      WorkspaceUsers[]
+}
+
+model WorkspaceUsers {
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+  workspace_id String
+  user_id      String
+  role         Role
+  user         User      @relation(fields: [user_id], references: [id])
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+
+  @@id([workspace_id, user_id])
+}
+
+model Script {
+  id             String     @id @default(cuid())
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  name           String
+  engine         Engine
+  engine_version String
+  description    String     @default("")
+  workspace_id   String
+  creator_id     String
+  created_by     User       @relation(fields: [creator_id], references: [id])
+  workspace      Workspace  @relation(fields: [workspace_id], references: [id])
+  builds         Build[]
+  schedules      Schedule[]
+}
+
+model Build {
+  id            String    @id @default(cuid())
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  script_id     String
+  status        String
+  output        String
+  build_command String?
+  image         String?
+  completed_at  DateTime?
+  creator_id    String
+  created_by    User      @relation(fields: [creator_id], references: [id])
+  script        Script    @relation(fields: [script_id], references: [id], onDelete: Cascade)
+  params        Param[]
+  runs          Run[]
+}
+
+model Param {
+  id          String    @id @default(cuid())
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  default     String?
+  description String?
+  required    Boolean   @default(true)
+  options     String[]
+  build_id    String
+  key         String
+  type        ParamType
+  build       Build     @relation(fields: [build_id], references: [id], onDelete: Cascade)
+}
+
+model Schedule {
+  id            String   @id @default(cuid())
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  script_id     String
+  day_of_month  String
+  day_of_week   String
+  hour          String
+  minute        String
+  month_of_year String
+  params        Json?
+  creator_id    String
+  description   String?
+  name          String
+  created_by    User     @relation(fields: [creator_id], references: [id])
+  script        Script   @relation(fields: [script_id], references: [id], onDelete: Cascade)
+  runs          Run[]
+}
+
+model Run {
+  id           String    @id @default(cuid())
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  build_id     String
+  status       String
+  output       String
+  completed_at DateTime?
+  schedule_id  String?
+  creator_id   String?
+  build        Build     @relation(fields: [build_id], references: [id], onDelete: Cascade)
+  created_by   User?     @relation(fields: [creator_id], references: [id])
+  schedule     Schedule? @relation(fields: [schedule_id], references: [id])
+}
+
+enum Role {
+  ADMIN
+}
+
+enum Engine {
+  Node
+  Python
+}
+
+enum ParamType {
+  string
+  bigstring
+  date
+  datetime
+  integer
+  float
+  boolean
+}

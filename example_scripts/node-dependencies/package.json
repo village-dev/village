@@ -1,0 +1,12 @@
+{
+  "name": "node-dependencies",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "luxon": "^3.0.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}

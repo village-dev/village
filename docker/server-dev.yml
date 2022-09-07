@@ -1,0 +1,8 @@
+services:
+  server:
+    build: ../server
+    volumes:
+      - ../server:/app
+    command: make dev
+    ports:
+      - '8000:8000'

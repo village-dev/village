@@ -1,0 +1,29 @@
+{
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "python.formatting.provider": "black",
+  "python.sortImports.args": ["--profile", "black"],
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyPath": "/Users/kevinhu/Library/Caches/pypoetry/virtualenvs/server-2nIca64J-py3.10/bin/mypy",
+  "python.linting.enabled": false,
+  "python.linting.pylintEnabled": false,
+  "analysis.enableDiagnostics": true,
+  "analysis.enableCodeActions": true,
+  "python.linting.flake8Enabled": true,
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}

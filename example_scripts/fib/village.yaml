@@ -1,0 +1,12 @@
+id: fib
+name: fib
+workspace: default_workspace_1
+engine: Python
+engine_version: '3.7'
+params:
+  number:
+    description: The number to compute the fibonacci sequence for
+    default: '10'
+    required: true
+    options: []
+    type: integer

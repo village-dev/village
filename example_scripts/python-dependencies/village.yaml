@@ -1,0 +1,54 @@
+name: python-dependencies
+id: python_dependencies
+
+build_command: "echo 'Hello World'"
+
+params:
+  village:
+    type: string
+    default: village
+    description: The name of the village.
+    required: true
+    options:
+      - Mandaloun
+      - Authentic
+      - label: CH
+        value: Country House
+      - Justify
+
+
+  description:
+    type: bigstring
+    default: 0
+    description: The age of the village.
+    required: true
+
+  birthday:
+    type: date
+    default: '2017-01-01'
+    description: The date of the village's birthday.
+    required: true
+
+  birthday_time:
+    type: datetime
+    default: '2017-01-01T00:00:00Z'
+    description: The time of the village's birthday.
+    required: true
+
+  age:
+    type: integer
+    default: 0
+    description: The age of the village.
+    required: true
+
+  weight:
+    type: float
+    default: 0.0
+    description: The weight of the village.
+    required: true
+
+  is_village:
+    type: boolean
+    default: false
+    description: Whether the village is a village.
+    required: true
