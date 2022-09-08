@@ -28,6 +28,7 @@ export const Dashboard: React.FC = () => {
 
             <div className="h-screen w-full overflow-y-scroll">
                 <Routes>
+                    <Route path="" element={<Scripts />} />
                     <Route path="profile" element={<Profile />} />
 
                     <Route path="scripts">
