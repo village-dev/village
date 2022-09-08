@@ -44,8 +44,6 @@ export const NewScript: React.FC = () => {
         engineVersions[engine.value as Engine][0]
     )
 
-    console.log(manualId)
-
     useEffect(() => {
         setEngineVersion(engineVersions[engine.value as Engine][0])
     }, [engine])

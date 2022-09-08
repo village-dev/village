@@ -1172,14 +1172,14 @@
         ]
       }
     },
-    "\/workspace\/create": {
-      "post": {
+    "\/workspaces\/propose_id": {
+      "get": {
         "tags": [
           "workspace"
         ],
-        "summary": "Create Workspace",
-        "description": "Create a workspace.",
-        "operationId": "create_workspace",
+        "summary": "Propose Id",
+        "description": "Propose a script ID based on the name.",
+        "operationId": "propose_id",
         "parameters": [
           {
             "required": true,
@@ -1191,6 +1191,103 @@
             "in": "query"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Propose Id",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/workspaces\/check_id": {
+      "get": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Check Id",
+        "description": "Check if a script ID is available.",
+        "operationId": "check_id",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            },
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Check Id",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/workspace\/create": {
+      "post": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Create Workspace",
+        "description": "Create a workspace.",
+        "operationId": "create_workspace",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/CreateWorkspaceInput"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1539,6 +1636,23 @@
           }
         },
         "description": "Script registration input"
+      },
+      "CreateWorkspaceInput": {
+        "title": "CreateWorkspaceInput",
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          }
+        }
       },
       "Engine": {
         "title": "Engine",

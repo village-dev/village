@@ -143,6 +143,18 @@ components:
       - engine_version
       title: CreateScriptInput
       type: object
+    CreateWorkspaceInput:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateWorkspaceInput
+      type: object
     Engine:
       description: An enumeration.
       enum:
@@ -1472,13 +1484,12 @@ paths:
     post:
       description: Create a workspace.
       operationId: create_workspace
-      parameters:
-      - in: query
-        name: name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkspaceInput'
         required: true
-        schema:
-          title: Name
-          type: string
       responses:
         '200':
           content:
@@ -1573,5 +1584,65 @@ paths:
       security:
       - HTTPBearer: []
       summary: Set Default Workspace
+      tags:
+      - workspace
+  /workspaces/check_id:
+    get:
+      description: Check if a script ID is available.
+      operationId: check_id
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          title: Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Check Id
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Check Id
+      tags:
+      - workspace
+  /workspaces/propose_id:
+    get:
+      description: Propose a script ID based on the name.
+      operationId: propose_id
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Propose Id
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Propose Id
       tags:
       - workspace
