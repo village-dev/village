@@ -20,6 +20,10 @@ cryptography = "^37.0.4"
 PyYAML = "^6.0"
 village-temporalio = "^0.1b2"
 ujson = "^5.4.0"
+pulumi = "^3.39.1"
+pulumi-awsx = "^1.0.0-beta.10"
+pulumi-aws = "^5.13.0"
+boto3 = "^1.24.62"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -27,15 +31,16 @@ black = "^22.6.0"
 isort = "^5.10.1"
 pyright = "^1.1.266"
 pylint = "^2.14.5"
-vulture = "^2.5"
+types-boto3 = "^1.0.2"
+boto3-stubs = {extras = ["s3"], version = "^1.24.67"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pyright]
-typeCheckingMode = "strict"
 reportMissingTypeStubs = false
+useLibraryCodeForTypes= false
 
 [tool.isort]
 multi_line_output = 3

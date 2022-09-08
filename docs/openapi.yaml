@@ -1,5 +1,19 @@
 components:
   schemas:
+    Body_build_container:
+      properties:
+        context:
+          format: binary
+          title: Context
+          type: string
+        script_id:
+          title: Script Id
+          type: string
+      required:
+      - script_id
+      - context
+      title: Body_build_container
+      type: object
     Body_build_script:
       properties:
         context:
@@ -38,6 +52,9 @@ components:
           type: string
         image:
           title: Image
+          type: string
+        image_uri:
+          title: Image Uri
           type: string
         output:
           title: Output
@@ -1126,6 +1143,35 @@ paths:
       summary: Build Script
       tags:
       - scripts
+  /script/build-container:
+    post:
+      description: Build a script, put tarball in S3, create cluster, and build/put
+        image in ECR.
+      operationId: build_container
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_build_container'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Build'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Build Container
+      tags:
+      - scripts
   /script/builds:
     get:
       description: Get all builds for a script.
@@ -1302,6 +1348,34 @@ paths:
       security:
       - HTTPBearer: []
       summary: Run Script
+      tags:
+      - scripts
+  /script/run-container:
+    post:
+      description: Run script on Fargate.
+      operationId: run_container
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunScriptInput'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Run Script Container
       tags:
       - scripts
   /script/runs:
