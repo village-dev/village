@@ -22,8 +22,46 @@ export const Scripts: React.FC = () => {
             })
     }, [user?.currentWorkspace])
 
+    let innerTable
+
+    if (scripts.length === 0) {
+        innerTable = (
+            <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+                <h1 className="text-2xl font-semibold">No scripts</h1>
+                <p className="mt-8 text-gray-600">
+                    Scripts can automate anything
+                </p>
+            </div>
+        )
+    } else {
+        innerTable = (
+            <Table columnNames={['Name', 'Engine', 'Updated']}>
+                {scripts.map((script) => {
+                    return (
+                        <tr>
+                            <td className="py-4">
+                                <Link
+                                    to={`/app/scripts/${script.id}`}
+                                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                                >
+                                    {script.name}
+                                </Link>
+                            </td>
+                            <td className="pl-4">
+                                {script.engine} {script.engine_version}
+                            </td>
+                            <td className="pl-4">
+                                {getTimeSince(script.updated_at)}
+                            </td>
+                        </tr>
+                    )
+                })}
+            </Table>
+        )
+    }
+
     return (
-        <div className="flex flex-col space-y-6 px-8 py-16">
+        <div className="flex h-full flex-col space-y-6 px-8 py-16">
             <div className="flex space-x-6 px-6">
                 <h1 className="text-2xl">Scripts</h1>{' '}
                 <Link
@@ -33,32 +71,7 @@ export const Scripts: React.FC = () => {
                     Create script <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
-            <div>
-                <div className="my-8 overflow-hidden shadow-sm">
-                    <Table columnNames={['Name', 'Engine', 'Updated']}>
-                        {scripts.map((script) => {
-                            return (
-                                <tr>
-                                    <td className="py-4">
-                                        <Link
-                                            to={`/app/scripts/${script.id}`}
-                                            className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
-                                        >
-                                            {script.name}
-                                        </Link>
-                                    </td>
-                                    <td className="pl-4">
-                                        {script.engine} {script.engine_version}
-                                    </td>
-                                    <td className="pl-4">
-                                        {getTimeSince(script.updated_at)}
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </Table>
-                </div>
-            </div>
+            <div className="flex-grow">{innerTable}</div>
         </div>
     )
 }
