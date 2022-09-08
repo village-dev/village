@@ -4,10 +4,13 @@ import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
+import { BarLoader } from 'react-spinners'
 import { ScheduleWithScript } from '../../../api'
 
 export const Schedules: React.FC = () => {
-    const [schedules, setSchedules] = useState<ScheduleWithScript[]>([])
+    const [schedules, setSchedules] = useState<ScheduleWithScript[] | null>(
+        null
+    )
 
     useEffect(() => {
         VillageClient.schedules.listSchedules().then((s) => {
@@ -17,7 +20,18 @@ export const Schedules: React.FC = () => {
 
     let innerTable
 
-    if (schedules.length === 0) {
+    if (schedules === null) {
+        innerTable = (
+            <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+                <h1 className="text-2xl font-semibold text-gray-700">
+                    Loading...
+                </h1>
+                <div className="mt-12 w-64">
+                    <BarLoader width="100%" color="rgb(107 114 128)" />
+                </div>
+            </div>
+        )
+    } else if (schedules.length === 0) {
         innerTable = (
             <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
                 <h1 className="text-2xl font-semibold">No schedules</h1>
