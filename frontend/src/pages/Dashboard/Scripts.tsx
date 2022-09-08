@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { VillageClient } from '@common/VillageClient'
 import { Script } from '../../../api/models/Script'
 import { getTimeSince } from '@common/dates'
@@ -9,6 +9,7 @@ import { HiOutlineArrowRight } from 'react-icons/hi'
 export const Scripts: React.FC = () => {
     const { user } = useUserContext()
     const [scripts, setScripts] = useState<Script[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (!user?.currentWorkspace) return
@@ -16,6 +17,7 @@ export const Scripts: React.FC = () => {
             .listScripts(user?.currentWorkspace.workspace_id)
             .then((s) => {
                 setScripts(s)
+                setLoading(false)
             })
     }, [user?.currentWorkspace])
 
@@ -31,31 +33,45 @@ export const Scripts: React.FC = () => {
                 </Link>
             </div>
             <div>
-                <div className="flex-col space-y-2">
-                    <div className="my-4 flex px-6 font-semibold">
-                        <div className="w-96">
-                            <h2>Script</h2>
-                        </div>
-                        <div className="w-32">
-                            <h2>Created</h2>
-                        </div>
-                    </div>
-                    {scripts.map((script) => {
-                        return (
-                            <Link
-                                key={script.id}
-                                to={script.id}
-                                className="flex border-b-2 border-transparent px-6 hover:border-slate-200 hover:bg-slate-50"
-                            >
-                                <div className="w-96">
-                                    <p>{script.name}</p>
-                                </div>
-                                <div className="w-32">
-                                    <p>{getTimeSince(script.created_at)}</p>
-                                </div>
-                            </Link>
-                        )
-                    })}
+                <div className="my-8 overflow-hidden shadow-sm">
+                    <table className="w-full table-auto border-collapse text-sm">
+                        <thead>
+                            <tr>
+                                <th className="border-b p-4 pl-8 pt-0 pb-3 text-left font-medium text-slate-400 dark:border-slate-600 dark:text-slate-200">
+                                    Script
+                                </th>
+                                <th className="border-b p-4 pt-0 pb-3 text-left font-medium text-slate-400 dark:border-slate-600 dark:text-slate-200">
+                                    Engine
+                                </th>
+                                <th className="border-b p-4 pr-8 pt-0 pb-3 text-left font-medium text-slate-400 dark:border-slate-600 dark:text-slate-200">
+                                    Updated
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white dark:bg-slate-800">
+                            {scripts.map((script) => {
+                                return (
+                                    <tr>
+                                        <td className="py-4">
+                                            <Link
+                                                to={`/app/scripts/${script.id}`}
+                                                className="w-full py-4 pl-8 pr-8 hover:text-emerald-500"
+                                            >
+                                                {script.name}
+                                            </Link>
+                                        </td>
+                                        <td className="pl-4">
+                                            {script.engine}{' '}
+                                            {script.engine_version}
+                                        </td>
+                                        <td className="pl-4">
+                                            {getTimeSince(script.created_at)}
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
