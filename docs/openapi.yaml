@@ -279,8 +279,7 @@ components:
           title: Schedule Id
           type: string
         status:
-          title: Status
-          type: string
+          $ref: '#/components/schemas/RunStatus'
         updated_at:
           format: date-time
           title: Updated At
@@ -290,8 +289,8 @@ components:
       - created_at
       - updated_at
       - build_id
-      - status
       - output
+      - status
       title: Run
       type: object
     RunScriptInput:
@@ -313,6 +312,15 @@ components:
       - script_id
       title: RunScriptInput
       type: object
+    RunStatus:
+      description: An enumeration.
+      enum:
+      - CREATED
+      - RUNNING
+      - SUCCESS
+      - FAILURE
+      title: RunStatus
+      type: string
     RunWithBuilds:
       properties:
         build:
@@ -325,8 +333,7 @@ components:
           title: Id
           type: string
         status:
-          title: Status
-          type: string
+          $ref: '#/components/schemas/RunStatus'
       required:
       - id
       - status
