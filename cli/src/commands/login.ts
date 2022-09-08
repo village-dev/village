@@ -1,4 +1,4 @@
-import { getTokens } from '@common/auth'
+import { getTokens, writeFile } from '@common/auth'
 import { villageClient } from '@common/villageClient'
 import {
     AUTH0_AUDIENCE,
@@ -10,21 +10,10 @@ import {
 import axios from 'axios'
 import chalk from 'chalk'
 import { Command } from 'commander'
-import fs from 'fs'
 import qs from 'qs'
 
-import { dirname } from 'path'
 import { Workspace } from '../../api'
 import { getAuth0UserInfo } from './userinfo'
-
-// see https://stackoverflow.com/questions/16316330/how-to-write-file-if-parent-folder-doesnt-exist
-const writeFile = async (path: string, contents: string, callback) => {
-    await fs.mkdir(dirname(path), { recursive: true }, function (err) {
-        if (err) return callback(err)
-
-        fs.writeFile(path, contents, callback)
-    })
-}
 
 const getRequestAccessTokenOptions = (deviceCode: string) => {
     return {
@@ -141,11 +130,15 @@ export const login = (program: Command) => {
 
                 debug && console.log(data)
 
-                await writeFile(TOKENS_FILE, JSON.stringify(data), () => {
-                    console.log(
-                        chalk.bold.greenBright('Successfully logged in!')
-                    )
-                })
+                await writeFile(
+                    TOKENS_FILE,
+                    JSON.stringify(data, null, 2),
+                    () => {
+                        console.log(
+                            chalk.bold.greenBright('Successfully logged in!')
+                        )
+                    }
+                )
 
                 const { data: userInfo, errors } = await getAuth0UserInfo(data)
                 debug && console.error(errors)

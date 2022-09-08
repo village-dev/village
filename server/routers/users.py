@@ -11,7 +11,7 @@ from prisma.enums import Role
 from prisma.errors import UniqueViolationError
 from prisma.partials import UserWithWorkspaces
 
-from utils.index import ParsedToken, VerifyToken
+from utils.auth import ParsedToken, VerifyToken
 from utils.logger import logger
 
 router = APIRouter(tags=["user"])
@@ -25,6 +25,18 @@ async def verify_token(
 ) -> ParsedToken:
     try:
         result = VerifyToken(token.credentials).verify()
+    except Exception as e:
+        logging.debug(e)
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    return result
+
+
+async def refresh_token(
+    refresh_token: str,
+) -> ParsedToken:
+    try:
+        result = VerifyToken(refresh_token).verify()
     except Exception as e:
         logging.debug(e)
         raise HTTPException(status_code=401, detail="Invalid token")
