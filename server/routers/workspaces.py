@@ -78,7 +78,7 @@ async def create_workspace(
     if workspace.id is None or workspace.id == "":
         workspace.id = await propose_id(workspace.name)
 
-    workspace = await PrismaModels.WorkspaceUsers.prisma().create(
+    userWorkspace = await PrismaModels.WorkspaceUsers.prisma().create(
         data={
             "workspace": {
                 "create": {
@@ -97,7 +97,7 @@ async def create_workspace(
         include={"workspace": True},
     )
 
-    return workspace.workspace
+    return userWorkspace.workspace
 
 
 @router.get(
