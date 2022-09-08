@@ -6,11 +6,11 @@ import { getTimeSince } from '@common/dates'
 import { useUserContext } from '@contexts/UserContext'
 import { HiOutlineArrowRight } from 'react-icons/hi'
 import { Table } from '@components/Table'
+import { BarLoader } from 'react-spinners'
 
 export const Scripts: React.FC = () => {
     const { user } = useUserContext()
-    const [scripts, setScripts] = useState<Script[]>([])
-    const [loading, setLoading] = useState(true)
+    const [scripts, setScripts] = useState<Script[] | null>(null)
 
     useEffect(() => {
         if (!user?.currentWorkspace) return
@@ -18,13 +18,23 @@ export const Scripts: React.FC = () => {
             .listScripts(user?.currentWorkspace.workspace_id)
             .then((s) => {
                 setScripts(s)
-                setLoading(false)
             })
     }, [user?.currentWorkspace])
 
     let innerTable
 
-    if (scripts.length === 0) {
+    if (scripts === null) {
+        innerTable = (
+            <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+                <h1 className="text-2xl font-semibold text-gray-700">
+                    Loading...
+                </h1>
+                <div className="mt-12 w-64">
+                    <BarLoader width="100%" color="rgb(107 114 128)" />
+                </div>
+            </div>
+        )
+    } else if (scripts.length === 0) {
         innerTable = (
             <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
                 <h1 className="text-2xl font-semibold">No scripts</h1>
