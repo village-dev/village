@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { VillageClient } from '@common/VillageClient'
 import { Option, Select } from '@components/Select'
 import { useUserContext } from '@contexts/UserContext'
-import cronstrue from 'cronstrue'
 import cronParser from 'cron-parser'
+import cronstrue from 'cronstrue'
 
 export const NewSchedule: React.FC = () => {
     const [name, setName] = useState('')
@@ -115,12 +115,22 @@ export const NewSchedule: React.FC = () => {
                     </div>
                     <div>
                         <label className={labelStyle}>Script</label>
-                        {scripts.length > 0 && (
+                        {scripts.length > 0 ? (
                             <Select
                                 options={scripts}
                                 selected={selectedScript || scripts[0]}
                                 setSelected={setSelectedScript}
                             />
+                        ) : (
+                            <div className="max-w-max rounded-md bg-gray-100 px-3 py-1.5 text-sm">
+                                No scripts available. Create one{' '}
+                                <Link
+                                    className="font-semibold text-emerald-500"
+                                    to="/app/new-script"
+                                >
+                                    here
+                                </Link>
+                            </div>
                         )}
                     </div>
                     <div>
