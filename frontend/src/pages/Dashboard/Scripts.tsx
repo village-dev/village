@@ -4,6 +4,7 @@ import { VillageClient } from '@common/VillageClient'
 import { Script } from '../../../api/models/Script'
 import { getTimeSince } from '@common/dates'
 import { useUserContext } from '@contexts/UserContext'
+import { HiOutlineArrowRight } from 'react-icons/hi'
 
 export const Scripts: React.FC = () => {
     const { user } = useUserContext()
@@ -24,9 +25,9 @@ export const Scripts: React.FC = () => {
                 <h1 className="text-2xl">Scripts</h1>{' '}
                 <Link
                     to="/app/new-script"
-                    className="rounded-md bg-slate-100 px-2 py-1 hover:bg-slate-200"
+                    className="flex items-center rounded-md bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-slate-200"
                 >
-                    Create Script
+                    Create script <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
             <div>

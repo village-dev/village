@@ -1,6 +1,7 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import React, { useEffect, useState } from 'react'
+import { HiOutlineArrowRight } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 import { ScheduleWithScript } from '../../../api'
 
@@ -15,13 +16,13 @@ export const Schedules: React.FC = () => {
 
     return (
         <div className="flex flex-col space-y-6 px-8 py-16">
-            <div className="flex space-x-6 px-6">
+            <div className="flex items-center space-x-6 px-6">
                 <h1 className="text-2xl">Schedules</h1>{' '}
                 <Link
                     to="/app/new-schedule"
-                    className="rounded-md bg-slate-100 px-2 py-1 hover:bg-slate-200"
+                    className="flex items-center rounded-md bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-slate-200"
                 >
-                    Create Schedule
+                    Create schedule <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
             <div>
