@@ -1779,8 +1779,8 @@
           "created_at",
           "updated_at",
           "build_id",
-          "status",
-          "output"
+          "output",
+          "status"
         ],
         "type": "object",
         "properties": {
@@ -1802,10 +1802,6 @@
             "title": "Build Id",
             "type": "string"
           },
-          "status": {
-            "title": "Status",
-            "type": "string"
-          },
           "output": {
             "title": "Output",
             "type": "string"
@@ -1822,6 +1818,9 @@
           "creator_id": {
             "title": "Creator Id",
             "type": "string"
+          },
+          "status": {
+            "$ref": "#\/components\/schemas\/RunStatus"
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"
@@ -1869,6 +1868,17 @@
         },
         "description": "Script run input"
       },
+      "RunStatus": {
+        "title": "RunStatus",
+        "enum": [
+          "CREATED",
+          "RUNNING",
+          "SUCCESS",
+          "FAILURE"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      },
       "RunWithBuilds": {
         "title": "RunWithBuilds",
         "required": [
@@ -1883,8 +1893,7 @@
             "type": "string"
           },
           "status": {
-            "title": "Status",
-            "type": "string"
+            "$ref": "#\/components\/schemas\/RunStatus"
           },
           "created_at": {
             "title": "Created At",
