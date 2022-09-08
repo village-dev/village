@@ -224,7 +224,7 @@ export const NewSchedule: React.FC = () => {
 
                     <div>
                         <button
-                            className="mt-4 rounded-md bg-emerald-500 px-6 py-2 font-semibold text-white hover:bg-slate-200 disabled:opacity-50"
+                            className="mt-4 rounded-md bg-emerald-500 px-6 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
                             type="button"
                             onClick={submitHandler}
                             disabled={submitting}

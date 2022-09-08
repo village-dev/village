@@ -29,9 +29,9 @@ const engineVersions: { [key in Engine]: Option[] } = {
 }
 
 export const NewScript: React.FC = () => {
-    const [title, setTitle] = useState('')
+    const [name, setName] = useState('')
     const [id, setId] = useState('')
-    const [idAvailable, setIdAvailable] = useState(true)
+    const [idAvailable, setIdAvailable] = useState<boolean | null>(null)
     const [description, setDescription] = useState('')
     const [submitting, setSubmitting] = useState(false)
     const [manualId, setManualId] = useState(false)
@@ -69,15 +69,22 @@ export const NewScript: React.FC = () => {
     ).current
 
     useEffect(() => {
-        !manualId && proposeId(title)
-    }, [title])
+        if (name.length === 0) {
+            setIdAvailable(null)
+        } else {
+            !manualId && proposeId(name)
+        }
+    }, [name])
 
     useEffect(() => {
-        checkId(id)
+        if (id.length === 0) {
+            setIdAvailable(null)
+        } else {
+            checkId(id)
+        }
     }, [id])
 
     const submitHandler = async (): Promise<void> => {
-        // POST TASK
         setSubmitting(true)
         try {
             if (!user?.currentWorkspace?.workspace_id) {
@@ -86,7 +93,7 @@ export const NewScript: React.FC = () => {
 
             VillageClient.scripts
                 .createScript({
-                    name: title,
+                    name: name,
                     id: id === '' ? undefined : id,
                     description,
                     engine: engine.value as Engine,
@@ -104,6 +111,22 @@ export const NewScript: React.FC = () => {
         }
     }
 
+    let idStatus: React.ReactNode | null = null
+
+    if (idAvailable === true) {
+        idStatus = (
+            <p className="mt-1 text-sm text-emerald-500">
+                This ID is available
+            </p>
+        )
+    } else if (idAvailable === false) {
+        idStatus = (
+            <p className="mt-1 text-sm text-red-500">
+                This ID is not available
+            </p>
+        )
+    }
+
     return (
         <div className="flex max-w-screen-sm flex-col space-y-6 px-8 py-16">
             <div className="px-6">
@@ -113,14 +136,13 @@ export const NewScript: React.FC = () => {
                 <form className="flex flex-col space-y-4">
                     <div>
                         <label className="mb-2 block text-sm font-bold text-gray-700">
-                            Title
+                            Name
                         </label>
                         <input
-                            id="title"
                             className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-                            placeholder="Title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div>
@@ -145,15 +167,7 @@ export const NewScript: React.FC = () => {
                             }}
                             disabled={proposingId}
                         />
-                        {idAvailable ? (
-                            <p className="mt-1 text-sm text-emerald-500">
-                                This ID is available
-                            </p>
-                        ) : (
-                            <p className="mt-1 text-sm text-red-500">
-                                This ID is not available
-                            </p>
-                        )}
+                        {idStatus}
                     </div>
                     <div>
                         <label className="mb-2 block text-sm font-bold text-gray-700">
@@ -187,7 +201,7 @@ export const NewScript: React.FC = () => {
                     </div>
                     <div>
                         <button
-                            className="mt-4 rounded-md bg-emerald-500 px-6 py-2 font-semibold text-white hover:bg-slate-200 disabled:opacity-50"
+                            className="mt-4 rounded-md bg-emerald-500 px-6 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
                             type="button"
                             onClick={submitHandler}
                             disabled={submitting}

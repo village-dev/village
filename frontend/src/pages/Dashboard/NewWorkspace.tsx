@@ -13,7 +13,8 @@ export const NewWorkspace: React.FC = () => {
     const [submitting, setSubmitting] = useState(false)
 
     const [id, setId] = useState('')
-    const [idAvailable, setIdAvailable] = useState(true)
+    const [idAvailable, setIdAvailable] = useState<boolean | null>(null)
+
     const [manualId, setManualId] = useState(false)
     const [proposingId, setProposingId] = useState(false)
 
@@ -38,11 +39,19 @@ export const NewWorkspace: React.FC = () => {
     ).current
 
     useEffect(() => {
-        !manualId && proposeId(name)
+        if (name.length === 0) {
+            setIdAvailable(null)
+        } else {
+            !manualId && proposeId(name)
+        }
     }, [name])
 
     useEffect(() => {
-        checkId(id)
+        if (id.length === 0) {
+            setIdAvailable(null)
+        } else {
+            checkId(id)
+        }
     }, [id])
 
     const submitHandler = async (): Promise<void> => {
@@ -70,6 +79,22 @@ export const NewWorkspace: React.FC = () => {
         } finally {
             setSubmitting(false)
         }
+    }
+
+    let idStatus: React.ReactNode | null = null
+
+    if (idAvailable === true) {
+        idStatus = (
+            <p className="mt-1 text-sm text-emerald-500">
+                This ID is available
+            </p>
+        )
+    } else if (idAvailable === false) {
+        idStatus = (
+            <p className="mt-1 text-sm text-red-500">
+                This ID is not available
+            </p>
+        )
     }
 
     return (
@@ -112,19 +137,11 @@ export const NewWorkspace: React.FC = () => {
                             }}
                             disabled={proposingId}
                         />
-                        {idAvailable ? (
-                            <p className="mt-1 text-sm text-emerald-500">
-                                This ID is available
-                            </p>
-                        ) : (
-                            <p className="mt-1 text-sm text-red-500">
-                                This ID is not available
-                            </p>
-                        )}
+                        {idStatus}
                     </div>
                     <div>
                         <button
-                            className="mt-4 rounded-md bg-emerald-500 px-6 py-2 font-semibold text-white hover:bg-slate-200 disabled:opacity-50"
+                            className="mt-4 rounded-md bg-emerald-500 px-6 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
                             type="button"
                             onClick={submitHandler}
                             disabled={submitting}

@@ -75,7 +75,7 @@ export const Schedules: React.FC = () => {
                 <h1 className="text-2xl">Schedules</h1>{' '}
                 <Link
                     to="/app/new-schedule"
-                    className="flex items-center rounded-md bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-slate-200"
+                    className="flex items-center rounded-md bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-emerald-200"
                 >
                     Create schedule <HiOutlineArrowRight className="ml-1" />
                 </Link>
