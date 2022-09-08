@@ -6,6 +6,11 @@ import { Run, Schedule, ScriptWithBuild, Build } from '../../../api'
 import { RunScriptEmbeddable } from './RunScript'
 
 import { BeatLoader } from 'react-spinners'
+import { Tab } from '@headlessui/react'
+
+function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(' ')
+}
 
 export const Builds: React.FC<{ scriptId: string }> = ({ scriptId }) => {
     const [builds, setBuilds] = useState<Build[] | null>(null)
@@ -179,6 +184,12 @@ export const Script: React.FC = () => {
         })
     }, [id])
 
+    const [categories] = useState({
+        Builds: id ? <Builds scriptId={id} /> : <div>Loading...</div>,
+        Runs: id ? <Runs scriptId={id} /> : <div>Loading...</div>,
+        Schedules: id ? <Schedules scriptId={id} /> : <div>Loading...</div>,
+    })
+
     if (id === undefined) {
         return <div>No script selected</div>
     }
@@ -216,17 +227,39 @@ export const Script: React.FC = () => {
                     </div>
                 )}
             </div>
-            <div>
-                <h1 className="px-6 text-2xl">Builds</h1>
-                <Builds scriptId={script.id} />
-            </div>
-            <div>
-                <h1 className="px-6 text-2xl">Runs</h1>
-                <Runs scriptId={script.id} />
-            </div>
-            <div>
-                <h1 className="px-6 text-2xl">Schedules</h1>
-                <Schedules scriptId={script.id} />
+            <div className="w-full py-16 px-6">
+                <Tab.Group>
+                    <Tab.List className="flex max-w-md space-x-1 rounded-xl bg-zinc-100 p-1">
+                        {Object.keys(categories).map((category) => (
+                            <Tab
+                                key={category}
+                                className={({ selected }) =>
+                                    classNames(
+                                        'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-zinc-700',
+                                        ' focus:outline-none',
+                                        selected
+                                            ? 'bg-white shadow'
+                                            : 'text-blue-100 hover:bg-white/80 hover:text-zinc-900'
+                                    )
+                                }
+                            >
+                                {category}
+                            </Tab>
+                        ))}
+                    </Tab.List>
+                    <Tab.Panels>
+                        {Object.values(categories).map((component, idx) => (
+                            <Tab.Panel
+                                key={idx}
+                                className={classNames(
+                                    'mt-4 w-full rounded-xl border bg-white p-3'
+                                )}
+                            >
+                                {component}
+                            </Tab.Panel>
+                        ))}
+                    </Tab.Panels>
+                </Tab.Group>
             </div>
         </div>
     )
