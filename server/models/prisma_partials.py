@@ -13,6 +13,7 @@ Schedule.create_partial(
     "ScheduleWithScript",
     include={
         "id": True,
+        "name": True,
         "created_at": True,
         "updated_at": True,
         "script": True,
