@@ -7,6 +7,7 @@ import { VillageClient } from '@common/VillageClient'
 import { Option, Select } from '@components/Select'
 import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
+import { BeatLoader } from 'react-spinners'
 
 const engineLabels = [
     { value: Engine.PYTHON, label: 'Python' },
@@ -34,6 +35,7 @@ export const NewScript: React.FC = () => {
     const [description, setDescription] = useState('')
     const [submitting, setSubmitting] = useState(false)
     const [manualId, setManualId] = useState(false)
+    const [proposingId, setProposingId] = useState(false)
 
     const { user } = useUserContext()
 
@@ -50,8 +52,10 @@ export const NewScript: React.FC = () => {
 
     const proposeId = useRef(
         debounce(async (title: string) => {
+            setProposingId(true)
             VillageClient.scripts.proposeId(title).then((newId) => {
                 setId(newId)
+                setProposingId(false)
             })
         }, 500)
     ).current
@@ -87,7 +91,7 @@ export const NewScript: React.FC = () => {
                     description,
                     engine: engine.value as Engine,
                     engine_version: engineVersion.value,
-                    workspace_id: user.currentWorkspace?.workspace_id, // TODO: make this the current workspace
+                    workspace_id: user.currentWorkspace?.workspace_id,
                 })
                 .then((s) => {
                     // redirect to script page
@@ -120,8 +124,15 @@ export const NewScript: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label className="mb-2 block text-sm font-bold text-gray-700">
+                        <label className="mb-2 flex items-center text-sm font-bold text-gray-700">
                             Identifier
+                            {proposingId && (
+                                <BeatLoader
+                                    className="ml-2"
+                                    size={8}
+                                    color="rgb(156 163 175)"
+                                />
+                            )}
                         </label>
                         <input
                             id="id"
@@ -132,6 +143,7 @@ export const NewScript: React.FC = () => {
                                 setId(e.target.value)
                                 setManualId(true)
                             }}
+                            disabled={proposingId}
                         />
                         {idAvailable ? (
                             <p className="mt-1 text-sm text-emerald-500">

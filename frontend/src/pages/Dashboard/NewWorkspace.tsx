@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { VillageClient } from '@common/VillageClient'
 import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
+import { BeatLoader } from 'react-spinners'
 
 export const NewWorkspace: React.FC = () => {
     const [name, setName] = useState('')
@@ -14,13 +15,16 @@ export const NewWorkspace: React.FC = () => {
     const [id, setId] = useState('')
     const [idAvailable, setIdAvailable] = useState(true)
     const [manualId, setManualId] = useState(false)
+    const [proposingId, setProposingId] = useState(false)
 
     const { setCurrentWorkspace, setWorkspaces } = useUserContext()
 
     const proposeId = useRef(
         debounce(async (title: string) => {
+            setProposingId(true)
             VillageClient.workspace.proposeId(title).then((newId) => {
                 setId(newId)
+                setProposingId(false)
             })
         }, 500)
     ).current
@@ -87,8 +91,15 @@ export const NewWorkspace: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label className="mb-2 block text-sm font-bold text-gray-700">
-                            Identifier
+                        <label className="mb-2 flex items-center text-sm font-bold text-gray-700">
+                            Identifier{' '}
+                            {proposingId && (
+                                <BeatLoader
+                                    className="ml-2"
+                                    size={8}
+                                    color="rgb(156 163 175)"
+                                />
+                            )}
                         </label>
                         <input
                             id="id"
@@ -99,6 +110,7 @@ export const NewWorkspace: React.FC = () => {
                                 setId(e.target.value)
                                 setManualId(true)
                             }}
+                            disabled={proposingId}
                         />
                         {idAvailable ? (
                             <p className="mt-1 text-sm text-emerald-500">
