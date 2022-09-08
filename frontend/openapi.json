@@ -1474,9 +1474,9 @@
           "created_at",
           "updated_at",
           "script_id",
-          "status",
           "output",
-          "creator_id"
+          "creator_id",
+          "status"
         ],
         "type": "object",
         "properties": {
@@ -1496,10 +1496,6 @@
           },
           "script_id": {
             "title": "Script Id",
-            "type": "string"
-          },
-          "status": {
-            "title": "Status",
             "type": "string"
           },
           "output": {
@@ -1523,6 +1519,9 @@
             "title": "Creator Id",
             "type": "string"
           },
+          "status": {
+            "$ref": "#\/components\/schemas\/BuildStatus"
+          },
           "created_by": {
             "$ref": "#\/components\/schemas\/User"
           },
@@ -1545,6 +1544,17 @@
           }
         },
         "description": "Represents a Build record"
+      },
+      "BuildStatus": {
+        "title": "BuildStatus",
+        "enum": [
+          "CREATED",
+          "BUILDING",
+          "SUCCESS",
+          "FAILURE"
+        ],
+        "type": "string",
+        "description": "An enumeration."
       },
       "CreateScheduleInput": {
         "title": "CreateScheduleInput",

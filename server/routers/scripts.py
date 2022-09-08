@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.security import HTTPBearer
 from prisma import models as PrismaModels
 from prisma import types as PrismaTypes
-from prisma.enums import Engine, ParamType
+from prisma.enums import BuildStatus, Engine, ParamType
 from prisma.errors import UniqueViolationError
 from pydantic import BaseModel
 
@@ -291,7 +291,7 @@ async def build_script(
     build = await PrismaModels.Build.prisma().create(
         {
             "script_id": script_id,
-            "status": "pending",
+            "status": BuildStatus.BUILDING,
             "output": "",
             "params": {
                 "create": [
@@ -356,7 +356,7 @@ async def build_script(
     build = await PrismaModels.Build.prisma().update(
         where={"id": build.id},
         data={
-            "status": "success",
+            "status": BuildStatus.SUCCESS,
             "output": json.dumps(log_stream),
             "completed_at": datetime.now(),
         },
@@ -443,7 +443,7 @@ async def run_script_wrapper(
     user_id: Optional[str] = None,
 ):
     build = await PrismaModels.Build.prisma().find_first(
-        where={"script_id": script.script_id, "status": "success"},
+        where={"script_id": script.script_id, "status": BuildStatus.SUCCESS},
         order={"updated_at": "desc"},
         include={"params": True, "script": True},
     )

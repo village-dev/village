@@ -64,18 +64,18 @@ model Script {
 }
 
 model Build {
-  id            String    @id @default(cuid())
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
+  id            String      @id @default(cuid())
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
   script_id     String
-  status        String
   output        String
   build_command String?
   image         String?
   completed_at  DateTime?
   creator_id    String
-  created_by    User      @relation(fields: [creator_id], references: [id])
-  script        Script    @relation(fields: [script_id], references: [id], onDelete: Cascade)
+  status        BuildStatus
+  created_by    User        @relation(fields: [creator_id], references: [id])
+  script        Script      @relation(fields: [script_id], references: [id], onDelete: Cascade)
   params        Param[]
   runs          Run[]
 }
@@ -126,6 +126,13 @@ model Run {
   build        Build     @relation(fields: [build_id], references: [id], onDelete: Cascade)
   created_by   User?     @relation(fields: [creator_id], references: [id])
   schedule     Schedule? @relation(fields: [schedule_id], references: [id])
+}
+
+enum BuildStatus {
+  CREATED
+  BUILDING
+  SUCCESS
+  FAILURE
 }
 
 enum Role {

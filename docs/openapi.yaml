@@ -58,8 +58,7 @@ components:
           title: Script Id
           type: string
         status:
-          title: Status
-          type: string
+          $ref: '#/components/schemas/BuildStatus'
         updated_at:
           format: date-time
           title: Updated At
@@ -69,11 +68,20 @@ components:
       - created_at
       - updated_at
       - script_id
-      - status
       - output
       - creator_id
+      - status
       title: Build
       type: object
+    BuildStatus:
+      description: An enumeration.
+      enum:
+      - CREATED
+      - BUILDING
+      - SUCCESS
+      - FAILURE
+      title: BuildStatus
+      type: string
     CreateScheduleInput:
       description: Schedule creation model
       properties:
