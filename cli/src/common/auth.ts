@@ -1,6 +1,6 @@
 import { TOKENS_FILE, WORKSPACES_FILE } from '@config'
 import fs from 'fs'
-import { Workspace, WorkspaceUsers } from '../../api'
+import { Workspace } from '../../api'
 
 export const getTokens = ({ debug }: { debug: boolean } = { debug: false }) => {
     return getFile({ filePath: TOKENS_FILE, debug })
@@ -8,7 +8,7 @@ export const getTokens = ({ debug }: { debug: boolean } = { debug: false }) => {
 
 export const getWorkspaces = (
     { debug }: { debug: boolean } = { debug: false }
-): { workspaces: WorkspaceUsers[]; defaultWorkspace: Workspace } => {
+): { defaultWorkspace: Workspace } => {
     return getFile({ filePath: WORKSPACES_FILE, debug })
 }
 
