@@ -14,8 +14,8 @@ import fs from 'fs'
 import qs from 'qs'
 
 import { dirname } from 'path'
+import { Workspace } from '../../api'
 import { getAuth0UserInfo } from './userinfo'
-import { Workspace, WorkspaceUsers } from '../../api'
 
 // see https://stackoverflow.com/questions/16316330/how-to-write-file-if-parent-folder-doesnt-exist
 const writeFile = async (path: string, contents: string, callback) => {
@@ -76,25 +76,22 @@ const pollForAccessToken = (
 
 const initializeUser = async (user: { sub: string }, accessToken: string) => {
     if (!user.sub) return
-    let workspaces: WorkspaceUsers[] = []
     let defaultWorkspace: Workspace | undefined = undefined
     try {
         villageClient.request.config.HEADERS = {
             Authorization: `Bearer ${accessToken}`,
         }
         const res = await villageClient.user.getCurrentUser()
-        // TODO: make sure this isn't null
-        workspaces = res.workspaces ?? []
         defaultWorkspace = res.default_workspace
     } catch (error) {
         if (error.message === 'Not Found') {
             const res = await villageClient.user.createUser(user.sub)
-            workspaces = res.workspaces ?? []
+            defaultWorkspace = res.default_workspace
         }
     }
     await writeFile(
         WORKSPACES_FILE,
-        JSON.stringify({ workspaces, defaultWorkspace }),
+        JSON.stringify({ defaultWorkspace }),
         () => {
             return
         }
