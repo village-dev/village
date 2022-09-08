@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 
-import { Command, program } from 'commander'
-
-import { createScript } from '@commands/init'
 import { deploy } from '@commands/deploy'
+import { deploy_aws } from '@commands/deploy_aws'
+import { createScript } from '@commands/init'
+import { list } from '@commands/list/list'
 import { login } from '@commands/login'
 import { logout } from '@commands/logout'
-import { run } from '@commands/run'
 import { remove } from '@commands/remove'
-import { userinfo } from '@commands/userinfo'
-import { list } from '@commands/list/list'
+import { run } from '@commands/run'
+import { run_aws } from '@commands/run_aws'
 import { setupScript } from '@commands/setup'
-import { chooseWorkspace } from '@commands/workspaces'
 import { token } from '@commands/token'
+import { userinfo } from '@commands/userinfo'
+import { chooseWorkspace } from '@commands/workspaces'
+import { Command, program } from 'commander'
 
 program.name('village')
 
@@ -28,6 +29,8 @@ list(program)
 setupScript(program)
 chooseWorkspace(program)
 token(program)
+run_aws(program)
+deploy_aws(program)
 
 const decorate = (cmd: Command) => {
     if (cmd.commands.length > 0) {

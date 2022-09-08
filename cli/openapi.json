@@ -244,6 +244,100 @@
         ]
       }
     },
+    "\/script\/build-container": {
+      "post": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Build Container",
+        "description": "Build a script, put tarball in S3, create cluster, and build\/put image in ECR.",
+        "operationId": "build_container",
+        "requestBody": {
+          "content": {
+            "multipart\/form-data": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Body_build_container"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Build"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/script\/run-container": {
+      "post": {
+        "tags": [
+          "scripts"
+        ],
+        "summary": "Run Script Container",
+        "description": "Run script on Fargate.",
+        "operationId": "run_container",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/RunScriptInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Run"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "\/script\/run": {
       "post": {
         "tags": [
@@ -1448,6 +1542,25 @@
   },
   "components": {
     "schemas": {
+      "Body_build_container": {
+        "title": "Body_build_container",
+        "required": [
+          "script_id",
+          "context"
+        ],
+        "type": "object",
+        "properties": {
+          "script_id": {
+            "title": "Script Id",
+            "type": "string"
+          },
+          "context": {
+            "title": "Context",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
       "Body_build_script": {
         "title": "Body_build_script",
         "required": [
@@ -1508,6 +1621,10 @@
           },
           "image": {
             "title": "Image",
+            "type": "string"
+          },
+          "image_uri": {
+            "title": "Image Uri",
             "type": "string"
           },
           "completed_at": {
@@ -1779,8 +1896,8 @@
           "created_at",
           "updated_at",
           "build_id",
-          "status",
-          "output"
+          "output",
+          "status"
         ],
         "type": "object",
         "properties": {
@@ -1802,10 +1919,6 @@
             "title": "Build Id",
             "type": "string"
           },
-          "status": {
-            "title": "Status",
-            "type": "string"
-          },
           "output": {
             "title": "Output",
             "type": "string"
@@ -1822,6 +1935,9 @@
           "creator_id": {
             "title": "Creator Id",
             "type": "string"
+          },
+          "status": {
+            "$ref": "#\/components\/schemas\/RunStatus"
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"
@@ -1869,6 +1985,17 @@
         },
         "description": "Script run input"
       },
+      "RunStatus": {
+        "title": "RunStatus",
+        "enum": [
+          "CREATED",
+          "RUNNING",
+          "SUCCESS",
+          "FAILURE"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      },
       "RunWithBuilds": {
         "title": "RunWithBuilds",
         "required": [
@@ -1883,8 +2010,7 @@
             "type": "string"
           },
           "status": {
-            "title": "Status",
-            "type": "string"
+            "$ref": "#\/components\/schemas\/RunStatus"
           },
           "created_at": {
             "title": "Created At",

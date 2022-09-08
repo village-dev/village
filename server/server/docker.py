@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 
 import docker  # type: ignore
 from prisma import models as PrismaModels
-from prisma.enums import Engine
+from prisma.enums import Engine, RunStatus
 
 docker_client = docker.from_env()  # type: ignore
 
@@ -19,7 +19,7 @@ async def execute(
     run = await PrismaModels.Run.prisma().create(
         {
             "build_id": build.id,
-            "status": "pending",
+            "status": RunStatus.RUNNING,
             "output": "",
             "schedule_id": schedule_id,
             "creator_id": executor_id,
@@ -40,7 +40,7 @@ async def execute(
     run = await PrismaModels.Run.prisma().update(
         {
             "output": output,
-            "status": "success",
+            "status": RunStatus.SUCCESS,
             "completed_at": datetime.now(),
         },
         where={"id": run.id},
