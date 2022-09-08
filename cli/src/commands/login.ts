@@ -10,6 +10,7 @@ import {
 import axios from 'axios'
 import chalk from 'chalk'
 import { Command } from 'commander'
+import { existsSync } from 'fs'
 import qs from 'qs'
 
 import { Workspace } from '../../api'
@@ -94,9 +95,9 @@ export const login = (program: Command) => {
         .action(async function () {
             const debug = this.opts().debug
 
-            const tokens = await getTokens({ debug })
+            // check if tokens file exists on disk
 
-            if (tokens !== null) {
+            if (existsSync(TOKENS_FILE)) {
                 console.log(
                     "You're logged in! Run `village logout` to log out first."
                 )
