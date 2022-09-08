@@ -1,5 +1,6 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
+import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
@@ -27,41 +28,31 @@ export const Schedules: React.FC = () => {
             </div>
             <div>
                 <div className="flex-col space-y-2">
-                    <div className="my-4 flex px-6 font-semibold">
-                        <div className="w-96">
-                            <h2>Script</h2>
-                        </div>
-                        <div className="w-32">
-                            <h2>Schedule</h2>
-                        </div>
-                        <div className="w-32">
-                            <h2>Created</h2>
-                        </div>
-                    </div>
-                    {schedules.map((schedule) => {
-                        return (
-                            <Link
-                                key={schedule.id}
-                                to={schedule.id}
-                                className="flex border-b-2 border-transparent px-6 hover:border-slate-200 hover:bg-slate-50"
-                            >
-                                <div className="w-96">
-                                    <p>{schedule.script?.name}</p>
-                                </div>
-                                <div className="w-32">
-                                    <p>
+                    <Table columnNames={['Name', 'Schedule', 'Updated']}>
+                        {schedules.map((schedule) => {
+                            return (
+                                <tr>
+                                    <td className="py-4">
+                                        <Link
+                                            to={`/app/schedules/${schedule.id}`}
+                                            className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                                        >
+                                            {schedule.name}
+                                        </Link>
+                                    </td>
+                                    <td className="pl-4">
                                         {schedule.minute} {schedule.hour}{' '}
                                         {schedule.day_of_month}{' '}
                                         {schedule.month_of_year}{' '}
                                         {schedule.day_of_week}
-                                    </p>
-                                </div>
-                                <div className="w-32">
-                                    <p>{getTimeSince(schedule.created_at)}</p>
-                                </div>
-                            </Link>
-                        )
-                    })}
+                                    </td>
+                                    <td className="pl-4">
+                                        {getTimeSince(schedule.updated_at)}
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </Table>
                 </div>
             </div>
         </div>

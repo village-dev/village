@@ -1978,6 +1978,7 @@
         "title": "ScheduleWithScript",
         "required": [
           "id",
+          "name",
           "created_at",
           "updated_at",
           "minute",
@@ -1990,6 +1991,10 @@
         "properties": {
           "id": {
             "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
             "type": "string"
           },
           "created_at": {
