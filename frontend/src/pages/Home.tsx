@@ -5,18 +5,29 @@ import { NavLink } from 'react-router-dom'
 
 export const Home = () => {
     const footerLinkStyle =
-        'flex items-center font-semibold text-zinc-400 hover:text-black'
+        'flex items-center font-semibold text-zinc-500 hover:text-black'
 
     return (
-        <div className="flex h-screen w-full flex-col items-center justify-center">
+        <div className="flex h-screen w-full flex-col items-center justify-center bg-cream">
             <div className="flex flex-grow flex-col items-center justify-center">
-                <h1 className="text-6xl font-bold">Village</h1>
+                <h1 className="text-6xl font-bold">
+                    Make your <span className="text-emerald-500">scripts</span>{' '}
+                    useful.
+                </h1>
+                <h2 className="mt-8 text-2xl text-gray-600">
+                    Turn your scripts into webapps and cron jobs simply by
+                    deploying them to Village.
+                </h2>
                 <NavLink
                     to="/app"
-                    className="mt-12 flex items-center border border-white px-16 py-2 text-xl font-semibold hover:border-zinc-200"
+                    className="group relative mt-16 px-10 py-3 text-2xl font-semibold "
                 >
-                    Get started
-                    <HiArrowNarrowRight className="ml-1.5" />
+                    <span className="absolute inset-0 h-full w-full translate-x-1 translate-y-1 transform rounded bg-emerald-500 transition duration-300 ease-out group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                    <span className="absolute inset-0 h-full w-full rounded border-2 border-black bg-white "></span>
+                    <span className="relative flex items-center text-black  ">
+                        Get started
+                        <HiArrowNarrowRight className="ml-1.5" />
+                    </span>
                 </NavLink>
             </div>
             <div className="flex w-full flex-grow-0 flex-row items-center justify-center space-x-16 pb-8">
