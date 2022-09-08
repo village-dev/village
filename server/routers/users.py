@@ -46,7 +46,7 @@ async def get_user(
 
     uid = result["sub"]
 
-    logger.info(f"uid: {uid}")
+    logger.debug(f"uid: {uid}")
 
     user: Union[
         UserWithWorkspaces, None
