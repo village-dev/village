@@ -10,6 +10,7 @@ Before doing anything, make sure the following are installed:
 - Yarn
 - Docker
 - Doppler
+- Pulumi
 
 Set up Doppler by running `doppler login` and then `make setup` from the project root. Start the database (a Postgres instance on `:5432`) and Temporal by running `make dev-compose` from the project root.
 
