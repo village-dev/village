@@ -6,7 +6,7 @@ export const token = (program: Command) => {
         .command('token')
         .description('Get user access token')
         .action(async function () {
-            const tokens = getTokens()
+            const tokens = await getTokens()
 
             console.log(tokens.access_token)
         })

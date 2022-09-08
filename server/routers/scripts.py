@@ -30,7 +30,7 @@ from pydantic import BaseModel
 from models.config import Config
 from routers.users import get_user, verify_token
 from server.docker import docker_client, execute  # type: ignore
-from utils.index import ParsedToken  # type: ignore
+from utils.auth import ParsedToken  # type: ignore
 
 router = APIRouter(tags=["scripts"])
 

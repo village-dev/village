@@ -7,7 +7,7 @@ from prisma.enums import Role
 from pydantic import BaseModel
 
 from routers.users import get_user, verify_token
-from utils.index import ParsedToken
+from utils.auth import ParsedToken
 
 router = APIRouter(tags=["workspace"])
 
