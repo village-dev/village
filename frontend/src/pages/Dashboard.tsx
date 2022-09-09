@@ -4,14 +4,15 @@ import { NewSchedule } from '@pages/Dashboard/NewSchedule'
 import { NewScript } from '@pages/Dashboard/NewScript'
 import { NewWorkspace } from '@pages/Dashboard/NewWorkspace'
 import { Profile } from '@pages/Dashboard/Profile'
+import { Run } from '@pages/Dashboard/Run'
 import { Runs } from '@pages/Dashboard/Runs'
 import { RunScriptStandalone } from '@pages/Dashboard/RunScript'
 import { Schedule } from '@pages/Dashboard/Schedule'
 import { Schedules } from '@pages/Dashboard/Schedules'
 import { Script } from '@pages/Dashboard/Script'
 import { Scripts } from '@pages/Dashboard/Scripts'
-import { Workflows } from '@pages/Dashboard/Workflows'
 import { Settings } from '@pages/Dashboard/Settings'
+import { Workflows } from '@pages/Dashboard/Workflows'
 
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
@@ -51,6 +52,7 @@ export const Dashboard: React.FC = () => {
                     <Route path="new-workspace" element={<NewWorkspace />} />
 
                     <Route path="runs">
+                        <Route path=":id" element={<Run />} />
                         <Route path="" element={<Runs />} />
                     </Route>
 

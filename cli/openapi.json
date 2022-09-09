@@ -871,7 +871,7 @@
                   "title": "Response List Runs",
                   "type": "array",
                   "items": {
-                    "$ref": "#\/components\/schemas\/RunWithBuilds"
+                    "$ref": "#\/components\/schemas\/RunWithScript"
                   }
                 }
               }
@@ -910,7 +910,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Run"
+                  "$ref": "#\/components\/schemas\/RunWithScript"
                 }
               }
             }
@@ -2044,8 +2044,8 @@
         "type": "string",
         "description": "An enumeration."
       },
-      "RunWithBuilds": {
-        "title": "RunWithBuilds",
+      "RunWithScript": {
+        "title": "RunWithScript",
         "required": [
           "id",
           "status",

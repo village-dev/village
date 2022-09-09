@@ -1,7 +1,7 @@
 from prisma.models import Run, Schedule, Script, User
 
 Run.create_partial(
-    "RunWithBuilds",
+    "RunWithScript",
     include={
         "id": True,
         "status": True,

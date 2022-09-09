@@ -6,6 +6,7 @@ import { BeatLoader } from 'react-spinners'
 import { ScheduleWithScriptAndRuns } from '../../../api'
 import cronParser from 'cron-parser'
 import cronstrue from 'cronstrue'
+
 export const Schedule = () => {
     const { id } = useParams()
     const [schedule, setSchedule] = useState<ScheduleWithScriptAndRuns | null>(
