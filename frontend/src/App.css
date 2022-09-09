@@ -7,6 +7,17 @@
     src: url('/Inter-VariableFont_slnt,wght.ttf');
 }
 
+@font-face {
+    font-family: 'Asap';
+    src: url('/Asap-VariableFont_wght.ttf');
+}
+
+@font-face {
+    font-family: 'Asap';
+    src: url('/Asap-Italic-VariableFont_wght.ttf');
+    font-style: italic;
+}
+
 :root {
     font-family: Inter, sans-serif;
 
