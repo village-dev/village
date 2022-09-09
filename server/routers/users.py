@@ -10,6 +10,7 @@ from prisma import Prisma
 from prisma.enums import Role
 from prisma.errors import UniqueViolationError
 from prisma.partials import UserWithWorkspaces
+from prisma.types import WorkspaceUsersCreateInput
 
 from utils.auth import ParsedToken, VerifyToken
 from utils.logger import logger
@@ -44,11 +45,11 @@ async def refresh_token(
     return result
 
 
-async def get_user(
+async def verify_token_with_create_user(
     token: Any = Depends(token_auth_scheme),
-) -> UserWithWorkspaces:
+):
     """
-    Create a private script.
+    Get or create a user
     """
     try:
         result = VerifyToken(token.credentials).verify()
@@ -60,30 +61,15 @@ async def get_user(
 
     logger.debug(f"uid: {uid}")
 
-    user: Union[
-        UserWithWorkspaces, None
-    ] = await PrismaModels.User.prisma().find_unique(  # type: ignore
+    user = await PrismaModels.User.prisma().find_unique(  # type: ignore
         where={"id": uid},
         include={
             "workspaces": {"include": {"workspace": True}},
-            "default_workspace": True,
         },
     )
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
 
-    return user
-
-
-@router.post(
-    "/user/create",
-    operation_id="create_user",
-    response_model=PrismaPartials.UserWithWorkspaces,
-)
-async def create_user(user_id: str):
-    """
-    Create a user.
-    """
+    if user is not None and user.workspaces:
+        return user
 
     workspace_name = "Default Workspace"
 
@@ -110,6 +96,32 @@ async def create_user(user_id: str):
         if same_id is not None:
             workspace_id = f"{workspace_id}_1"
 
+    workspace_users_data: WorkspaceUsersCreateInput = {
+        "role": Role.ADMIN,
+        "user": {
+            "connect": {
+                "id": uid,
+            }
+        },
+        "workspace": {
+            "create": {
+                "name": "Default Workspace",
+                "id": workspace_id,
+                "creator_id": uid,
+            }
+        },
+    }
+
+    if user is not None and not user.workspaces:
+        await PrismaModels.WorkspaceUsers.prisma().create(
+            data=workspace_users_data,
+        )
+        user = await PrismaModels.User.prisma().find_unique(
+            where={"id": uid},
+            include={"workspaces": {"include": {"workspace": True}}},
+        )
+        return user
+
     try:
 
         db = Prisma()
@@ -118,39 +130,55 @@ async def create_user(user_id: str):
         async with db.batch_() as batcher:
             batcher.user.create(
                 {
-                    "id": user_id,
+                    "id": uid,
                 }
             )
-            batcher.workspaceusers.create(
-                {
-                    "role": Role.ADMIN,
-                    "user": {
-                        "connect": {
-                            "id": user_id,
-                        }
-                    },
-                    "workspace": {
-                        "create": {
-                            "name": "Default Workspace",
-                            "id": workspace_id,
-                            "creator_id": user_id,
-                            "default_of": {  # type: ignore
-                                "connect": {"id": user_id},
-                            },
-                        }
-                    },
-                }
-            )
+            batcher.workspaceusers.create(workspace_users_data)
 
         await db.disconnect()
 
         user = await PrismaModels.User.prisma().find_unique(
-            where={"id": user_id},
+            where={"id": uid},
             include={"workspaces": {"include": {"workspace": True}}},
         )
         return user
     except UniqueViolationError:
         raise HTTPException(status_code=400, detail="User with this id already exists")
+
+
+async def get_user(
+    token: Any = Depends(verify_token),
+) -> UserWithWorkspaces:
+    """
+    Get user, fail if user DNE.
+    """
+
+    uid = token["sub"]
+
+    logger.info(f"uid: {uid}")
+
+    user: Union[
+        UserWithWorkspaces, None
+    ] = await PrismaModels.User.prisma().find_unique(  # type: ignore
+        where={"id": uid},
+        include={
+            "workspaces": {"include": {"workspace": True}},
+            "default_workspace": True,
+        },
+    )
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+
+@router.post(
+    "/user/create",
+    operation_id="get_or_create_user",
+    response_model=PrismaPartials.UserWithWorkspaces,
+)
+async def get_or_create_user(user: Any = Depends(verify_token_with_create_user)):
+    return user
 
 
 @router.get(

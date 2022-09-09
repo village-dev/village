@@ -338,7 +338,7 @@ components:
       - FAILURE
       title: RunStatus
       type: string
-    RunWithBuilds:
+    RunWithScript:
       properties:
         build:
           $ref: '#/components/schemas/Build'
@@ -355,7 +355,30 @@ components:
       - id
       - status
       - created_at
-      title: RunWithBuilds
+      title: RunWithScript
+      type: object
+    RunWithScriptDetailed:
+      properties:
+        build:
+          $ref: '#/components/schemas/Build'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        output:
+          title: Output
+          type: string
+        status:
+          $ref: '#/components/schemas/RunStatus'
+      required:
+      - id
+      - status
+      - created_at
+      - output
+      title: RunWithScriptDetailed
       type: object
     Schedule:
       description: Represents a Schedule record
@@ -437,6 +460,9 @@ components:
         day_of_week:
           title: Day Of Week
           type: string
+        description:
+          title: Description
+          type: string
         hour:
           title: Hour
           type: string
@@ -451,6 +477,10 @@ components:
           type: string
         name:
           title: Name
+          type: string
+        params:
+          format: json-string
+          title: Params
           type: string
         script:
           $ref: '#/components/schemas/Script'
@@ -469,6 +499,63 @@ components:
       - month_of_year
       - day_of_week
       title: ScheduleWithScript
+      type: object
+    ScheduleWithScriptAndRuns:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        description:
+          title: Description
+          type: string
+        hour:
+          title: Hour
+          type: string
+        id:
+          title: Id
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        name:
+          title: Name
+          type: string
+        params:
+          format: json-string
+          title: Params
+          type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - minute
+      - hour
+      - day_of_month
+      - month_of_year
+      - day_of_week
+      title: ScheduleWithScriptAndRuns
       type: object
     Script:
       description: Represents a Script record
@@ -953,7 +1040,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Run'
+                $ref: '#/components/schemas/RunWithScriptDetailed'
           description: Successful Response
         '422':
           content:
@@ -976,7 +1063,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/RunWithBuilds'
+                  $ref: '#/components/schemas/RunWithScript'
                 title: Response List Runs
                 type: array
           description: Successful Response
@@ -1040,6 +1127,35 @@ paths:
       security:
       - HTTPBearer: []
       summary: Delete Schedule
+      tags:
+      - schedules
+  /schedule/get:
+    get:
+      description: Get a script schedule from the scheduler
+      operationId: get_schedule
+      parameters:
+      - in: query
+        name: schedule_id
+        required: true
+        schema:
+          title: Schedule Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleWithScriptAndRuns'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Schedule
       tags:
       - schedules
   /schedule/list:
@@ -1532,15 +1648,7 @@ paths:
       - scripts
   /user/create:
     post:
-      description: Create a user.
-      operationId: create_user
-      parameters:
-      - in: query
-        name: user_id
-        required: true
-        schema:
-          title: User Id
-          type: string
+      operationId: get_or_create_user
       responses:
         '200':
           content:
@@ -1548,13 +1656,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserWithWorkspaces'
           description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      summary: Create User
+      security:
+      - HTTPBearer: []
+      summary: Get Or Create User
       tags:
       - user
   /users/get:

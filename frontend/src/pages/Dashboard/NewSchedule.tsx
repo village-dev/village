@@ -126,7 +126,7 @@ export const NewSchedule: React.FC = () => {
                                 No scripts available. Create one{' '}
                                 <Link
                                     className="font-semibold text-emerald-500"
-                                    to="/app/new-script"
+                                    to="/app/new/script"
                                 >
                                     here
                                 </Link>

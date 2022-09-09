@@ -871,7 +871,7 @@
                   "title": "Response List Runs",
                   "type": "array",
                   "items": {
-                    "$ref": "#\/components\/schemas\/RunWithBuilds"
+                    "$ref": "#\/components\/schemas\/RunWithScript"
                   }
                 }
               }
@@ -910,7 +910,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Run"
+                  "$ref": "#\/components\/schemas\/RunWithScriptDetailed"
                 }
               }
             }
@@ -1196,22 +1196,22 @@
         ]
       }
     },
-    "\/user\/create": {
-      "post": {
+    "\/schedule\/get": {
+      "get": {
         "tags": [
-          "user"
+          "schedules"
         ],
-        "summary": "Create User",
-        "description": "Create a user.",
-        "operationId": "create_user",
+        "summary": "Get Schedule",
+        "description": "Get a script schedule from the scheduler",
+        "operationId": "get_schedule",
         "parameters": [
           {
             "required": true,
             "schema": {
-              "title": "User Id",
+              "title": "Schedule Id",
               "type": "string"
             },
-            "name": "user_id",
+            "name": "schedule_id",
             "in": "query"
           }
         ],
@@ -1221,7 +1221,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/UserWithWorkspaces"
+                  "$ref": "#\/components\/schemas\/ScheduleWithScriptAndRuns"
                 }
               }
             }
@@ -1236,7 +1236,38 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/user\/create": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get Or Create User",
+        "operationId": "get_or_create_user",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/UserWithWorkspaces"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "\/users\/get": {
@@ -1996,8 +2027,8 @@
         "type": "string",
         "description": "An enumeration."
       },
-      "RunWithBuilds": {
-        "title": "RunWithBuilds",
+      "RunWithScript": {
+        "title": "RunWithScript",
         "required": [
           "id",
           "status",
@@ -2016,6 +2047,37 @@
             "title": "Created At",
             "type": "string",
             "format": "date-time"
+          },
+          "build": {
+            "$ref": "#\/components\/schemas\/Build"
+          }
+        }
+      },
+      "RunWithScriptDetailed": {
+        "title": "RunWithScriptDetailed",
+        "required": [
+          "id",
+          "status",
+          "created_at",
+          "output"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#\/components\/schemas\/RunStatus"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "output": {
+            "title": "Output",
+            "type": "string"
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"
@@ -2165,6 +2227,89 @@
           "day_of_week": {
             "title": "Day Of Week",
             "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "params": {
+            "title": "Params",
+            "type": "string",
+            "format": "json-string"
+          }
+        }
+      },
+      "ScheduleWithScriptAndRuns": {
+        "title": "ScheduleWithScriptAndRuns",
+        "required": [
+          "id",
+          "name",
+          "created_at",
+          "updated_at",
+          "minute",
+          "hour",
+          "day_of_month",
+          "month_of_year",
+          "day_of_week"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          },
+          "params": {
+            "title": "Params",
+            "type": "string",
+            "format": "json-string"
           }
         }
       },

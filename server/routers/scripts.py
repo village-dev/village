@@ -738,7 +738,7 @@ async def run_script_wrapper(
         include={"params": True, "script": True},
     )
 
-    if build is None or build.status != "success":
+    if build is None or build.status != BuildStatus.SUCCESS:
         raise HTTPException(status_code=404, detail="No builds found")
 
     params = [] if build.params is None else build.params

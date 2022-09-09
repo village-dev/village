@@ -7,7 +7,9 @@ import {
 import axios from 'axios'
 import fs from 'fs'
 import { dirname } from 'path'
+import inquirer from 'inquirer'
 import { Workspace } from '../../api'
+import { villageClient } from './villageClient'
 
 interface RefreshResponse {
     access_token: string
@@ -71,9 +73,27 @@ export const getTokens = async (
     return tokens
 }
 
-export const getWorkspaces = (
-    { debug }: { debug: boolean } = { debug: false }
-): { defaultWorkspace: Workspace } => {
+export const setWorkspaces = async ({
+    workspaces,
+    debug,
+}: {
+    workspaces: { defaultWorkspace: string }
+    debug: boolean
+}) => {
+    await writeFile(
+        WORKSPACES_FILE,
+        JSON.stringify(workspaces, null, 2),
+        (err) => {
+            debug && console.log('Error writing workspaces file', err)
+        }
+    )
+}
+
+export const getWorkspaces = ({
+    debug,
+}: {
+    debug: boolean
+}): { defaultWorkspace: Workspace } => {
     return getFile({ filePath: WORKSPACES_FILE, debug })
 }
 
@@ -90,6 +110,61 @@ export const getFile = (
     } catch (err) {
         debug && console.log(err)
         return null
+    }
+}
+
+export const getCurrentWorkspaceId = async (): Promise<string> => {
+    const workspaces = await getFile({
+        filePath: WORKSPACES_FILE,
+        debug: false,
+    })
+
+    if (workspaces) {
+        return JSON.parse(workspaces).defaultWorkspace
+    }
+
+    const { workspace, error } = await promptForCurrentWorkspace()
+    if (workspace) {
+        return workspace
+    }
+    throw new Error(error)
+}
+
+export const promptForCurrentWorkspace: () => Promise<{
+    error?: any
+    workspace?: string
+}> = async function () {
+    const tokens = await getTokens()
+    const { access_token } = tokens
+
+    try {
+        villageClient.request.config.HEADERS = {
+            Authorization: `Bearer ${access_token}`,
+        }
+        let workspaces: Workspace[] = []
+        try {
+            workspaces = await villageClient.workspace.listUserWorkspaces()
+        } catch (error) {
+            await warnUnauthenticated(error)
+        }
+        try {
+            const { workspace } = await inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'workspace',
+                    message: 'Choose a default workspace',
+                    choices: workspaces.map((workspace) => ({
+                        name: workspace.name,
+                        value: workspace.id,
+                    })),
+                },
+            ])
+            return { workspace }
+        } catch (error) {
+            return { error }
+        }
+    } catch (error) {
+        return { error }
     }
 }
 

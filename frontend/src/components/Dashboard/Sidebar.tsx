@@ -16,6 +16,7 @@ import React, { createRef, Fragment, useState } from 'react'
 import { FiLogOut, FiPlus } from 'react-icons/fi'
 import { RiSettings4Line } from 'react-icons/ri'
 import { NavLink } from 'react-router-dom'
+import { WorkspaceService } from '../../../api'
 
 /**
  * This assumes that a user always has at least one workspace.
@@ -23,6 +24,8 @@ import { NavLink } from 'react-router-dom'
  */
 function WorkspaceListBox() {
     const { user, setCurrentWorkspace } = useUserContext()
+
+    const numWorkspaces = user?.workspaces?.length ?? 0
 
     return (
         <div className="relative w-full">
@@ -49,15 +52,15 @@ function WorkspaceListBox() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {(user?.workspaces ?? []).map((workspace) => (
+                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        {(user?.workspaces ?? []).map((workspace, idx) => (
                             <Listbox.Option
                                 key={workspace.workspace_id}
                                 value={workspace}
                                 className={({ active }) =>
-                                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                    `relative cursor-default select-none py-3 px-4 ${
                                         active
-                                            ? 'bg-amber-100 text-amber-900'
+                                            ? 'bg-emerald-100 text-emerald-900'
                                             : 'text-gray-900'
                                     }`
                                 }
@@ -139,7 +142,10 @@ export const Sidebar: React.FC = () => {
                         className="rounded-lg border bg-white px-1 pt-2 pb-1 shadow dark:border-zinc-500 dark:bg-zinc-800"
                         ref={userOptionsRef}
                     >
-                        <NavLink to="/settings" className={profileButtonStyle}>
+                        <NavLink
+                            to="/app/settings"
+                            className={profileButtonStyle}
+                        >
                             <RiSettings4Line className="mr-3 text-xl text-black dark:text-white" />{' '}
                             Settings
                         </NavLink>
@@ -158,7 +164,7 @@ export const Sidebar: React.FC = () => {
                     <WorkspaceListBox />
                 </div>
                 <NavLink
-                    to="/app/new-workspace"
+                    to="/app/new/workspace"
                     className="rounded-lg border p-2 text-xl text-zinc-400 shadow-md"
                 >
                     <FiPlus />
@@ -167,7 +173,7 @@ export const Sidebar: React.FC = () => {
             {/* Middle links */}
             <div className="mt-6 flex flex-col space-y-2">
                 <NavLink
-                    to="/app/new-script"
+                    to="/app/new/script"
                     className="flex items-center rounded-md px-2 py-2 font-semibold text-emerald-500 hover:bg-emerald-50"
                 >
                     <PlusIcon

@@ -31,10 +31,3 @@ CLI (`/cli`):
 
 - Install dependencies by running `yarn install`
 - Build and link the CLI by running `yarn build`
-
-Auth0 (`/auth0`):
-
-- Currently, this houses an Auth0 action that triggers on registration of a new user
-- To run this with a local setup, use a reverse proxy such as ngrok.
-- Start the db & server locally and run `ngrok http 8000`
-- Set `PROXY_ADDRESS` and deploy the action from Auth0 > Actions > Library > Post User Registration

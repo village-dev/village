@@ -13,7 +13,7 @@ router = APIRouter(tags=["runs"])
 @router.get(
     "/run/list",
     operation_id="list_runs",
-    response_model=List[PrismaPartials.RunWithBuilds],
+    response_model=List[PrismaPartials.RunWithScript],
 )
 async def list_runs(user: PrismaModels.User = Depends(get_user)):
     """
@@ -65,7 +65,11 @@ async def check_run_access(user_id: str, run_id: str):
     return
 
 
-@router.get("/run/get", operation_id="get_run", response_model=PrismaModels.Run)
+@router.get(
+    "/run/get",
+    operation_id="get_run",
+    response_model=PrismaPartials.RunWithScriptDetailed,
+)
 async def get_run(run_id: str, user: PrismaModels.User = Depends(get_user)):
     """
     Get a run.
@@ -73,7 +77,10 @@ async def get_run(run_id: str, user: PrismaModels.User = Depends(get_user)):
 
     await check_run_access(user.id, run_id)
 
-    run = await PrismaModels.Run.prisma().find_first(where={"id": run_id})
+    run = await PrismaModels.Run.prisma().find_unique(
+        where={"id": run_id},
+        include={"build": {"include": {"script": True}}},
+    )
 
     if run is None:
         raise HTTPException(status_code=404, detail="Run not found")
