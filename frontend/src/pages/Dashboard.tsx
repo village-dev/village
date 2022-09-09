@@ -47,9 +47,11 @@ export const Dashboard: React.FC = () => {
                         <Route path="" element={<Schedules />} />
                     </Route>
 
-                    <Route path="new-script" element={<NewScript />} />
-                    <Route path="new-schedule" element={<NewSchedule />} />
-                    <Route path="new-workspace" element={<NewWorkspace />} />
+                    <Route path="new">
+                        <Route path="script" element={<NewScript />} />
+                        <Route path="schedule" element={<NewSchedule />} />
+                        <Route path="workspace" element={<NewWorkspace />} />
+                    </Route>
 
                     <Route path="runs">
                         <Route path=":id" element={<Run />} />
