@@ -8,19 +8,36 @@ import { BarLoader } from 'react-spinners'
 import { ScheduleWithScript } from '../../../api'
 
 export const Schedules: React.FC = () => {
-    const [schedules, setSchedules] = useState<ScheduleWithScript[] | null>(
-        null
-    )
+    const [schedules, setSchedules] = useState<ScheduleWithScript[]>([])
+    const [query, setQuery] = useState('')
+    const [filteredSchedules, setFilteredSchedules] = useState<
+        ScheduleWithScript[]
+    >([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         VillageClient.schedules.listSchedules().then((s) => {
             setSchedules(s)
+            setLoading(false)
         })
     }, [])
 
+    useEffect(() => {
+        setFilteredSchedules(
+            schedules.filter((schedule) => {
+                const script = schedule.script
+
+                return (
+                    script?.name.toLowerCase().includes(query.toLowerCase()) ||
+                    script?.id.toLowerCase().includes(query.toLowerCase())
+                )
+            })
+        )
+    }, [query])
+
     let innerTable
 
-    if (schedules === null) {
+    if (loading) {
         innerTable = (
             <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
                 <h1 className="text-2xl font-semibold text-gray-700">
@@ -41,31 +58,61 @@ export const Schedules: React.FC = () => {
             </div>
         )
     } else {
+        let searchResults
+
+        if (filteredSchedules.length === 0) {
+            searchResults = (
+                <tr>
+                    <td colSpan={3} align="center" className="py-16 ">
+                        <h1 className="text-lg font-semibold text-gray-400">
+                            No schedules found
+                        </h1>
+                    </td>
+                </tr>
+            )
+        } else {
+            searchResults = schedules.map((schedule) => {
+                return (
+                    <tr>
+                        <td className="py-4">
+                            <Link
+                                to={`/app/schedules/${schedule.id}`}
+                                className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                            >
+                                {schedule.name}
+                            </Link>
+                        </td>
+                        <td className="pl-4">
+                            {schedule.minute} {schedule.hour}{' '}
+                            {schedule.day_of_month} {schedule.month_of_year}{' '}
+                            {schedule.day_of_week}
+                        </td>
+                        <td className="pl-4">
+                            {getTimeSince(schedule.updated_at)}
+                        </td>
+                    </tr>
+                )
+            })
+        }
+
         innerTable = (
-            <Table columnNames={['Name', 'Schedule', 'Updated']}>
-                {schedules.map((schedule) => {
-                    return (
-                        <tr>
-                            <td className="py-4">
-                                <Link
-                                    to={`/app/schedules/${schedule.id}`}
-                                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
-                                >
-                                    {schedule.name}
-                                </Link>
-                            </td>
-                            <td className="pl-4">
-                                {schedule.minute} {schedule.hour}{' '}
-                                {schedule.day_of_month} {schedule.month_of_year}{' '}
-                                {schedule.day_of_week}
-                            </td>
-                            <td className="pl-4">
-                                {getTimeSince(schedule.updated_at)}
-                            </td>
-                        </tr>
-                    )
-                })}
-            </Table>
+            <>
+                <div className="px-6">
+                    <input
+                        type="text"
+                        onChange={(e) => {
+                            setQuery(e.target.value)
+                        }}
+                        className=" mb-4 w-full rounded-lg border-2 border-gray-200 px-3 py-2 focus:border-gray-400 focus:outline-none"
+                        placeholder="Search"
+                    />
+                </div>
+                <div className="mx-6 mt-4">
+                    <Table columnNames={['Name', 'Schedule', 'Updated']}>
+                        {searchResults}
+                    </Table>
+                </div>
+            </>
         )
     }
 
