@@ -27,8 +27,8 @@ export function ListDropdown({
         setShowOptions(false)
     })
 
-    const [referenceElement, setReferenceElement] = useState(null)
-    const [popperElement, setPopperElement] = useState(null)
+    const [referenceElement, setReferenceElement] = useState(undefined)
+    const [popperElement, setPopperElement] = useState(undefined)
     const [arrowElement, setArrowElement] = useState(null)
     const { styles, attributes } = usePopper(referenceElement, popperElement, {
         modifiers: [{ name: 'arrow', options: { element: arrowElement } }],

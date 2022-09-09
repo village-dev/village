@@ -104,7 +104,10 @@ export const Schedules: React.FC = () => {
                                         icon: (
                                             <MdDeleteOutline className="mr-2 text-xl" />
                                         ),
-                                        handler: () => {},
+                                        handler: () => {
+                                            // TODO: Delete schedule
+                                            console.log('Delete')
+                                        },
                                     },
                                 ]}
                             />
