@@ -1,12 +1,15 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import { Input } from '@components/Input'
+import { ListDropdown } from '@components/ListDropdown'
 import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 import { BarLoader } from 'react-spinners'
 import { ScheduleWithScript } from '../../../api'
+import { MdDeleteOutline } from 'react-icons/md'
+import { AiTwotoneCalendar } from 'react-icons/ai'
 
 export const Schedules: React.FC = () => {
     const [schedules, setSchedules] = useState<ScheduleWithScript[]>([])
@@ -92,6 +95,20 @@ export const Schedules: React.FC = () => {
                         <td className="pl-4">
                             {getTimeSince(schedule.updated_at)}
                         </td>
+                        <td>
+                            <ListDropdown
+                                options={[
+                                    {
+                                        id: 'delete',
+                                        name: 'Delete',
+                                        icon: (
+                                            <MdDeleteOutline className="mr-2 text-xl" />
+                                        ),
+                                        handler: () => {},
+                                    },
+                                ]}
+                            />
+                        </td>
                     </tr>
                 )
             })
@@ -109,7 +126,7 @@ export const Schedules: React.FC = () => {
                     />
                 </div>
                 <div className="mx-6 mt-4">
-                    <Table columnNames={['Name', 'Schedule', 'Updated']}>
+                    <Table columnNames={['Name', 'Schedule', 'Updated', '']}>
                         {searchResults}
                     </Table>
                 </div>
