@@ -7,6 +7,7 @@ import { RunScriptEmbeddable } from './RunScript'
 
 import { BeatLoader } from 'react-spinners'
 import { Tab } from '@headlessui/react'
+import { RiExternalLinkLine } from 'react-icons/ri'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -214,7 +215,16 @@ export const Script: React.FC = () => {
                 </h3>
                 {isDeployed ? (
                     <div className="rounded-lg border p-8">
-                        <h1 className="text-2xl">Run Script</h1>
+                        <h1 className="flex items-center text-2xl">
+                            Run Script
+                            <Link
+                                to={`/app/run/${script.id}`}
+                                className="ml-2"
+                                target="_blank"
+                            >
+                                <RiExternalLinkLine />
+                            </Link>
+                        </h1>
                         <RunScriptEmbeddable script={script} />
                     </div>
                 ) : (
