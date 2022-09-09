@@ -71,7 +71,7 @@ model Build {
   output        String
   build_command String?
   image         String?
-  image_uri String?
+  image_uri     String?
   completed_at  DateTime?
   creator_id    String
   status        BuildStatus

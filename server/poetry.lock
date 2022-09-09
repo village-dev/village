@@ -1158,6 +1158,18 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "slack-sdk"
+version = "3.18.3"
+description = "The Slack API Platform SDK for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6.0"
+
+[package.extras]
+optional = ["aiodns (>1.0)", "aiohttp (>=3.7.3,<4)", "boto3 (<=2)", "SQLAlchemy (>=1,<2)", "websockets (>=10,<11)", "websocket-client (>=1,<2)"]
+testing = ["pytest (>=6.2.5,<7)", "pytest-asyncio (<1)", "Flask-Sockets (>=0.2,<1)", "Flask (>=1,<2)", "Werkzeug (<2)", "itsdangerous (==1.1.0)", "Jinja2 (==3.0.3)", "pytest-cov (>=2,<3)", "codecov (>=2,<3)", "flake8 (>=5,<6)", "black (==22.8.0)", "click (==8.0.4)", "psutil (>=5,<6)", "databases (>=0.5)", "boto3 (<=2)", "moto (>=3,<4)"]
+
+[[package]]
 name = "sniffio"
 version = "1.3.0"
 description = "Sniff out which async library your code is running under"
@@ -1351,7 +1363,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0818e100016907f1b6002268fc28a02473020f63e73828bfd106e49de7fc62f2"
+content-hash = "95e80fe727ba01a67fe8767efadfebcd407ef2d351c1d91d5d7cc87de6c41e27"
 
 [metadata.files]
 aiofiles = [
@@ -1919,6 +1931,10 @@ six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
+slack-sdk = [
+    {file = "slack_sdk-3.18.3-py2.py3-none-any.whl", hash = "sha256:d28a661a7fde37c1763e594be19899a51e76ce7c480172c9cf22e217a72731c3"},
+    {file = "slack_sdk-3.18.3.tar.gz", hash = "sha256:1bac09ed465bf9a0a120afce495b328969af7f032fe38cacbadace3dc1e49709"},
+]
 sniffio = [
     {file = "sniffio-1.3.0-py3-none-any.whl", hash = "sha256:eecefdce1e5bbfb7ad2eeaabf7c1eeb404d7757c379bd1f7e5cce9d8bf425384"},
     {file = "sniffio-1.3.0.tar.gz", hash = "sha256:e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101"},
@@ -2028,10 +2044,6 @@ uvicorn = [
 ]
 village-temporalio = [
     {file = "village-temporalio-0.1b2.tar.gz", hash = "sha256:3ec8a4dceba0013940b3bfbad9b221fe5e5a72bdfeac194c31b311563ae106dd"},
-    {file = "village_temporalio-0.1b2-cp37-abi3-macosx_10_16_x86_64.whl", hash = "sha256:0ad41f8e4547063918ec226aefdd09871b735faa46ef721813028f3eef20f08b"},
-    {file = "village_temporalio-0.1b2-cp37-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:7a6f614f15122b3a414d6e012247476ff185ea270174b24fb22d75c3da4562a5"},
-    {file = "village_temporalio-0.1b2-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:a42f56f64dce47b11eae33c8d2a8657a4fe019f28bd61dc1245e28d5b0cc6ff9"},
-    {file = "village_temporalio-0.1b2-cp37-abi3-win_amd64.whl", hash = "sha256:fcbc3fb8a052b80f86b95ba359df66cd3508b37011319dfb70658d1860da0536"},
     {file = "village_temporalio-0.1b2-cp38-cp38-macosx_12_0_arm64.whl", hash = "sha256:f8f3a17cc58d306f2642b51307d9b8b7226176f59d5cc948025acb773135f6b3"},
 ]
 wcwidth = [

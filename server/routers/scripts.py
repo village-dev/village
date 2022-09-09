@@ -26,6 +26,7 @@ from prisma.enums import BuildStatus, Engine, ParamType, RunStatus
 from prisma.errors import UniqueViolationError
 from pulumi import automation as auto
 from pydantic import BaseModel
+from slack_sdk.webhook import WebhookClient
 
 from models.config import Config
 from routers.users import get_user, verify_token
@@ -615,7 +616,7 @@ async def run_script_container(
         include={"params": True, "script": True},
     )
 
-    if build is None or build.status != "success":
+    if build is None or build.status != BuildStatus.SUCCESS:
         raise HTTPException(status_code=404, detail="No builds found")
 
     params = [] if build.params is None else build.params
