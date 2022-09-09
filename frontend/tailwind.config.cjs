@@ -4,6 +4,7 @@ module.exports = {
     theme: {
         fontFamily: {
             sans: ['Inter', 'sans-serif'],
+            display: ['Asap'],
         },
     },
     plugins: [],
