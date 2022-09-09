@@ -1,4 +1,4 @@
-import { getTokens, warnUnauthenticated } from '@common/auth'
+import { warnUnauthenticated } from '@common/auth'
 import { villageClient } from '@common/villageClient'
 import { Command } from 'commander'
 import inquirer from 'inquirer'
@@ -10,13 +10,8 @@ export const chooseWorkspace = (program: Command) => {
         .description('Choose workspace')
         .action(async function () {
             const debug: boolean = this.opts().debug
-            const tokens = await getTokens({ debug })
-            const { access_token } = tokens
 
             try {
-                villageClient.request.config.HEADERS = {
-                    Authorization: `Bearer ${access_token}`,
-                }
                 let workspaces: Workspace[] = []
                 try {
                     workspaces =
