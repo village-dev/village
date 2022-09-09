@@ -4,12 +4,12 @@ import { Table } from '@components/Table'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BarLoader } from 'react-spinners'
-import { RunWithBuilds } from '../../../api'
+import { RunWithScript } from '../../../api'
 
 export const Runs: React.FC = () => {
-    const [runs, setRuns] = useState<RunWithBuilds[]>([])
+    const [runs, setRuns] = useState<RunWithScript[]>([])
     const [query, setQuery] = useState('')
-    const [filteredRuns, setFilteredRuns] = useState<RunWithBuilds[]>([])
+    const [filteredRuns, setFilteredRuns] = useState<RunWithScript[]>([])
 
     const [loading, setLoading] = useState(true)
 

@@ -338,7 +338,7 @@ components:
       - FAILURE
       title: RunStatus
       type: string
-    RunWithBuilds:
+    RunWithScript:
       properties:
         build:
           $ref: '#/components/schemas/Build'
@@ -355,7 +355,30 @@ components:
       - id
       - status
       - created_at
-      title: RunWithBuilds
+      title: RunWithScript
+      type: object
+    RunWithScriptDetailed:
+      properties:
+        build:
+          $ref: '#/components/schemas/Build'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        output:
+          title: Output
+          type: string
+        status:
+          $ref: '#/components/schemas/RunStatus'
+      required:
+      - id
+      - status
+      - created_at
+      - output
+      title: RunWithScriptDetailed
       type: object
     Schedule:
       description: Represents a Schedule record
@@ -1017,7 +1040,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Run'
+                $ref: '#/components/schemas/RunWithScriptDetailed'
           description: Successful Response
         '422':
           content:
@@ -1040,7 +1063,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/RunWithBuilds'
+                  $ref: '#/components/schemas/RunWithScript'
                 title: Response List Runs
                 type: array
           description: Successful Response
