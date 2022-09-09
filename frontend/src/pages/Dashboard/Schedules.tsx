@@ -1,5 +1,6 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
+import { Input } from '@components/Input'
 import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight } from 'react-icons/hi'
@@ -99,12 +100,11 @@ export const Schedules: React.FC = () => {
         innerTable = (
             <>
                 <div className="px-6">
-                    <input
+                    <Input
                         type="text"
                         onChange={(e) => {
                             setQuery(e.target.value)
                         }}
-                        className=" mb-4 w-full rounded-lg border-2 border-gray-200 px-3 py-2 focus:border-gray-400 focus:outline-none"
                         placeholder="Search"
                     />
                 </div>
