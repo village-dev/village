@@ -11,6 +11,7 @@ import { Schedules } from '@pages/Dashboard/Schedules'
 import { Script } from '@pages/Dashboard/Script'
 import { Scripts } from '@pages/Dashboard/Scripts'
 import { Workflows } from '@pages/Dashboard/Workflows'
+import { Settings } from '@pages/Dashboard/Settings'
 
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
@@ -32,6 +33,8 @@ export const Dashboard: React.FC = () => {
                 <Routes>
                     <Route path="" element={<Scripts />} />
                     <Route path="profile" element={<Profile />} />
+
+                    <Route path="settings" element={<Settings />} />
 
                     <Route path="scripts">
                         <Route path=":id" element={<Script />} />

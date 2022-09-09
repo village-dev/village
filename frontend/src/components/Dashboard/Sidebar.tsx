@@ -139,7 +139,10 @@ export const Sidebar: React.FC = () => {
                         className="rounded-lg border bg-white px-1 pt-2 pb-1 shadow dark:border-zinc-500 dark:bg-zinc-800"
                         ref={userOptionsRef}
                     >
-                        <NavLink to="/settings" className={profileButtonStyle}>
+                        <NavLink
+                            to="/app/settings"
+                            className={profileButtonStyle}
+                        >
                             <RiSettings4Line className="mr-3 text-xl text-black dark:text-white" />{' '}
                             Settings
                         </NavLink>
