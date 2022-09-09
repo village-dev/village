@@ -164,7 +164,7 @@ export const Sidebar: React.FC = () => {
                     <WorkspaceListBox />
                 </div>
                 <NavLink
-                    to="/app/new-workspace"
+                    to="/app/new/workspace"
                     className="rounded-lg border p-2 text-xl text-zinc-400 shadow-md"
                 >
                     <FiPlus />
@@ -173,7 +173,7 @@ export const Sidebar: React.FC = () => {
             {/* Middle links */}
             <div className="mt-6 flex flex-col space-y-2">
                 <NavLink
-                    to="/app/new-script"
+                    to="/app/new/script"
                     className="flex items-center rounded-md px-2 py-2 font-semibold text-emerald-500 hover:bg-emerald-50"
                 >
                     <PlusIcon

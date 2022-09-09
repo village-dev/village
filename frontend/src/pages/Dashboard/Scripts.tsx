@@ -120,7 +120,7 @@ export const Scripts: React.FC = () => {
             <div className="flex space-x-6 px-6">
                 <h1 className="text-2xl">Scripts</h1>{' '}
                 <Link
-                    to="/app/new-script"
+                    to="/app/new/script"
                     className="flex items-center rounded-md bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-emerald-200"
                 >
                     Create script <HiOutlineArrowRight className="ml-1" />
