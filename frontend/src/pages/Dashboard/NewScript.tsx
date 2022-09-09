@@ -8,6 +8,8 @@ import { Option, Select } from '@components/Select'
 import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
 import { BeatLoader } from 'react-spinners'
+import { Input } from '@components/Input'
+import { Textarea } from '@components/TextArea'
 
 const engineLabels = [
     { value: Engine.PYTHON, label: 'Python' },
@@ -138,8 +140,7 @@ export const NewScript: React.FC = () => {
                         <label className="mb-2 block text-sm font-bold text-gray-700">
                             Name
                         </label>
-                        <input
-                            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                        <Input
                             placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -156,9 +157,8 @@ export const NewScript: React.FC = () => {
                                 />
                             )}
                         </label>
-                        <input
+                        <Input
                             id="id"
-                            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
                             placeholder="Identifier"
                             value={id}
                             onChange={(e) => {
@@ -173,9 +173,7 @@ export const NewScript: React.FC = () => {
                         <label className="mb-2 block text-sm font-bold text-gray-700">
                             Description
                         </label>
-                        <textarea
-                            id="title"
-                            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                        <Textarea
                             placeholder="Description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}

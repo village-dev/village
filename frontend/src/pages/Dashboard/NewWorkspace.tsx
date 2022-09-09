@@ -5,6 +5,7 @@ import { VillageClient } from '@common/VillageClient'
 import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
 import { BeatLoader } from 'react-spinners'
+import { Input } from '@components/Input'
 
 export const NewWorkspace: React.FC = () => {
     const [name, setName] = useState('')
@@ -108,8 +109,7 @@ export const NewWorkspace: React.FC = () => {
                         <label className="mb-2 block text-sm font-bold text-gray-700">
                             Name
                         </label>
-                        <input
-                            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                        <Input
                             placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -126,9 +126,8 @@ export const NewWorkspace: React.FC = () => {
                                 />
                             )}
                         </label>
-                        <input
+                        <Input
                             id="id"
-                            className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
                             placeholder="Identifier"
                             value={id}
                             onChange={(e) => {
