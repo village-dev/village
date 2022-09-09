@@ -12,7 +12,7 @@ import { run_aws } from '@commands/run_aws'
 import { setupScript } from '@commands/setup'
 import { token } from '@commands/token'
 import { userinfo } from '@commands/userinfo'
-import { chooseWorkspace } from '@commands/workspaces'
+import { chooseWorkspace } from '@commands/workspace'
 import { Command, program } from 'commander'
 
 program.name('village')

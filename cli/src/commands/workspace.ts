@@ -1,4 +1,4 @@
-import { getTokens, warnUnauthenticated } from '@common/auth'
+import { setWorkspaces, warnUnauthenticated } from '@common/auth'
 import { villageClient } from '@common/villageClient'
 import { Command } from 'commander'
 import inquirer from 'inquirer'
@@ -10,13 +10,8 @@ export const chooseWorkspace = (program: Command) => {
         .description('Choose workspace')
         .action(async function () {
             const debug: boolean = this.opts().debug
-            const tokens = await getTokens({ debug })
-            const { access_token } = tokens
 
             try {
-                villageClient.request.config.HEADERS = {
-                    Authorization: `Bearer ${access_token}`,
-                }
                 let workspaces: Workspace[] = []
                 try {
                     workspaces =
@@ -37,12 +32,25 @@ export const chooseWorkspace = (program: Command) => {
                             })),
                         },
                     ])
-                    .then(async ({ workspace }) => {
+                    .then(async ({ workspace }: { workspace: string }) => {
                         const success =
                             await villageClient.workspace.setDefaultWorkspace(
                                 workspace
                             )
                         success && console.log('Default workspace updated')
+
+                        const defaultWorkspace = workspaces.find(
+                            (w) => w.id === workspace
+                        )
+
+                        if (defaultWorkspace === undefined) {
+                            throw new Error('Unable to set default workspace')
+                        }
+
+                        setWorkspaces({
+                            workspaces: { defaultWorkspace },
+                            debug,
+                        })
                     })
                     .catch((err) => {
                         debug && console.error(err)

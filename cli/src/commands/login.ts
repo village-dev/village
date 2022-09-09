@@ -1,4 +1,4 @@
-import { getTokens, writeFile } from '@common/auth'
+import { getTokens, setWorkspaces, writeFile } from '@common/auth'
 import { villageClient } from '@common/villageClient'
 import {
     AUTH0_AUDIENCE,
@@ -79,13 +79,12 @@ const initializeUser = async (user: { sub: string }, accessToken: string) => {
             defaultWorkspace = res.default_workspace
         }
     }
-    await writeFile(
-        WORKSPACES_FILE,
-        JSON.stringify({ defaultWorkspace }),
-        () => {
-            return
-        }
-    )
+
+    if (defaultWorkspace === undefined) {
+        throw new Error('Unable to initialize user. No default workspace.')
+    } else {
+        setWorkspaces({ workspaces: { defaultWorkspace }, debug: false })
+    }
 }
 
 export const login = (program: Command) => {

@@ -7,7 +7,7 @@ import {
 import axios from 'axios'
 import fs from 'fs'
 import { dirname } from 'path'
-import { Workspace } from '../../api'
+import { Workspace, WorkspaceUsers } from '../../api'
 
 interface RefreshResponse {
     access_token: string
@@ -71,9 +71,27 @@ export const getTokens = async (
     return tokens
 }
 
-export const getWorkspaces = (
-    { debug }: { debug: boolean } = { debug: false }
-): { defaultWorkspace: Workspace } => {
+export const setWorkspaces = async ({
+    workspaces,
+    debug,
+}: {
+    workspaces: { defaultWorkspace: Workspace }
+    debug: boolean
+}) => {
+    await writeFile(
+        WORKSPACES_FILE,
+        JSON.stringify(workspaces, null, 2),
+        (err) => {
+            debug && console.log('Error writing workspaces file', err)
+        }
+    )
+}
+
+export const getWorkspaces = ({
+    debug,
+}: {
+    debug: boolean
+}): { defaultWorkspace: Workspace } => {
     return getFile({ filePath: WORKSPACES_FILE, debug })
 }
 
