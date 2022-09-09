@@ -1648,15 +1648,7 @@ paths:
       - scripts
   /user/create:
     post:
-      description: Create a user.
-      operationId: create_user
-      parameters:
-      - in: query
-        name: user_id
-        required: true
-        schema:
-          title: User Id
-          type: string
+      operationId: get_or_create_user
       responses:
         '200':
           content:
@@ -1664,13 +1656,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserWithWorkspaces'
           description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      summary: Create User
+      security:
+      - HTTPBearer: []
+      summary: Get Or Create User
       tags:
       - user
   /users/get:

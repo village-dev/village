@@ -1,4 +1,4 @@
-import { getTokens, writeFile } from '@common/auth'
+import { writeFile } from '@common/auth'
 import { villageClient } from '@common/villageClient'
 import {
     AUTH0_AUDIENCE,
@@ -7,13 +7,12 @@ import {
     TOKENS_FILE,
     WORKSPACES_FILE,
 } from '@config'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import chalk from 'chalk'
 import { Command } from 'commander'
 import { existsSync } from 'fs'
 import qs from 'qs'
 
-import { Workspace } from '../../api'
 import { getAuth0UserInfo } from './userinfo'
 
 const getRequestAccessTokenOptions = (deviceCode: string) => {
@@ -36,7 +35,11 @@ const pollForAccessToken = (
     return new Promise((resolve, reject) => {
         const interval = setInterval(() => {
             axios
-                .request(getRequestAccessTokenOptions(deviceCode))
+                .request(
+                    getRequestAccessTokenOptions(
+                        deviceCode
+                    ) as AxiosRequestConfig
+                )
                 .then((response) => {
                     if (response.data.access_token) {
                         clearInterval(interval)
@@ -66,18 +69,15 @@ const pollForAccessToken = (
 
 const initializeUser = async (user: { sub: string }, accessToken: string) => {
     if (!user.sub) return
-    let defaultWorkspace: Workspace | undefined = undefined
+    let defaultWorkspace: string | undefined = undefined
     try {
         villageClient.request.config.HEADERS = {
             Authorization: `Bearer ${accessToken}`,
         }
-        const res = await villageClient.user.getCurrentUser()
-        defaultWorkspace = res.default_workspace
+        const res = await villageClient.user.getOrCreateUser()
+        defaultWorkspace = (res.workspaces ?? [])[0].workspace_id
     } catch (error) {
-        if (error.message === 'Not Found') {
-            const res = await villageClient.user.createUser(user.sub)
-            defaultWorkspace = res.default_workspace
-        }
+        console.error(error)
     }
     await writeFile(
         WORKSPACES_FILE,

@@ -1,4 +1,4 @@
-import { useAuth0, User } from '@auth0/auth0-react'
+import { useAuth0 } from '@auth0/auth0-react'
 import { VillageClient } from '@common/VillageClient'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { WorkspaceUsers } from '../../api'
@@ -34,7 +34,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
             VillageClient.request.config.HEADERS = {
                 Authorization: `Bearer ${token}`,
             }
-            const res = await VillageClient.user.getCurrentUser()
+            const res = await VillageClient.user.getOrCreateUser()
 
             setUser({
                 id: res.id,
@@ -42,17 +42,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
                 currentWorkspace: res.workspaces?.[0],
             })
         } catch (error: any) {
-            if (error.message === 'Not Found') {
-                // TODO: move server-side
-                if (!auth0User?.sub) return
-                const res = await VillageClient.user.createUser(auth0User?.sub)
-
-                setUser({
-                    id: res.id,
-                    workspaces: res.workspaces ?? [],
-                    currentWorkspace: res.workspaces?.[0],
-                })
-            }
+            console.error(error)
         }
     }, [getAccessTokenSilently])
 

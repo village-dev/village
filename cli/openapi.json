@@ -1249,20 +1249,8 @@
         "tags": [
           "user"
         ],
-        "summary": "Create User",
-        "description": "Create a user.",
-        "operationId": "create_user",
-        "parameters": [
-          {
-            "required": true,
-            "schema": {
-              "title": "User Id",
-              "type": "string"
-            },
-            "name": "user_id",
-            "in": "query"
-          }
-        ],
+        "summary": "Get Or Create User",
+        "operationId": "get_or_create_user",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1273,18 +1261,13 @@
                 }
               }
             }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/HTTPValidationError"
-                }
-              }
-            }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "\/users\/get": {
