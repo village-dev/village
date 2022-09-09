@@ -1196,6 +1196,54 @@
         ]
       }
     },
+    "\/schedule\/get": {
+      "get": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Get Schedule",
+        "description": "Get a script schedule from the scheduler",
+        "operationId": "get_schedule",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Schedule Id",
+              "type": "string"
+            },
+            "name": "schedule_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/ScheduleWithScriptAndRuns"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "\/user\/create": {
       "post": {
         "tags": [
@@ -2165,6 +2213,89 @@
           "day_of_week": {
             "title": "Day Of Week",
             "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "params": {
+            "title": "Params",
+            "type": "string",
+            "format": "json-string"
+          }
+        }
+      },
+      "ScheduleWithScriptAndRuns": {
+        "title": "ScheduleWithScriptAndRuns",
+        "required": [
+          "id",
+          "name",
+          "created_at",
+          "updated_at",
+          "minute",
+          "hour",
+          "day_of_month",
+          "month_of_year",
+          "day_of_week"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          },
+          "params": {
+            "title": "Params",
+            "type": "string",
+            "format": "json-string"
           }
         }
       },

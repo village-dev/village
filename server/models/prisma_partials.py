@@ -22,6 +22,26 @@ Schedule.create_partial(
         "day_of_month": True,
         "month_of_year": True,
         "day_of_week": True,
+        "description": True,
+        "params": True,
+    },
+)
+Schedule.create_partial(
+    "ScheduleWithScriptAndRuns",
+    include={
+        "id": True,
+        "name": True,
+        "created_at": True,
+        "updated_at": True,
+        "script": True,
+        "description": True,
+        "minute": True,
+        "hour": True,
+        "day_of_month": True,
+        "month_of_year": True,
+        "day_of_week": True,
+        "runs": True,
+        "params": True,
     },
 )
 Script.create_partial(
