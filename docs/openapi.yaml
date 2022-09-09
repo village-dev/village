@@ -310,6 +310,20 @@ components:
       - status
       title: Run
       type: object
+    RunScheduleInput:
+      description: Schedule run model
+      properties:
+        schedule_id:
+          title: Schedule Id
+          type: string
+        token:
+          title: Token
+          type: string
+      required:
+      - schedule_id
+      - token
+      title: RunScheduleInput
+      type: object
     RunScriptInput:
       description: Script run input
       properties:
@@ -430,6 +444,9 @@ components:
         script_id:
           title: Script Id
           type: string
+        token_hash:
+          title: Token Hash
+          type: string
         updated_at:
           format: date-time
           title: Updated At
@@ -446,6 +463,7 @@ components:
       - month_of_year
       - creator_id
       - name
+      - token_hash
       title: Schedule
       type: object
     ScheduleWithScript:
@@ -1181,13 +1199,12 @@ paths:
     post:
       description: Execute a script based on its schedule entry
       operationId: run_schedule
-      parameters:
-      - in: query
-        name: schedule_id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunScheduleInput'
         required: true
-        schema:
-          title: Schedule Id
-          type: string
       responses:
         '200':
           content:

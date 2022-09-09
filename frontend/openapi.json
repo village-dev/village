@@ -1082,17 +1082,16 @@
         "summary": "Run Schedule",
         "description": "Execute a script based on its schedule entry",
         "operationId": "run_schedule",
-        "parameters": [
-          {
-            "required": true,
-            "schema": {
-              "title": "Schedule Id",
-              "type": "string"
-            },
-            "name": "schedule_id",
-            "in": "query"
-          }
-        ],
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/RunScheduleInput"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1982,6 +1981,25 @@
         },
         "description": "Represents a Run record"
       },
+      "RunScheduleInput": {
+        "title": "RunScheduleInput",
+        "required": [
+          "schedule_id",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "schedule_id": {
+            "title": "Schedule Id",
+            "type": "string"
+          },
+          "token": {
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "description": "Schedule run model"
+      },
       "RunScriptInput": {
         "title": "RunScriptInput",
         "required": [
@@ -2097,7 +2115,8 @@
           "minute",
           "month_of_year",
           "creator_id",
-          "name"
+          "name",
+          "token_hash"
         ],
         "type": "object",
         "properties": {
@@ -2154,6 +2173,10 @@
           },
           "name": {
             "title": "Name",
+            "type": "string"
+          },
+          "token_hash": {
+            "title": "Token Hash",
             "type": "string"
           },
           "created_by": {

@@ -1,9 +1,11 @@
 import json
+import secrets
 from typing import Dict, List, Optional, Union, cast
 
 import prisma.models as PrismaModels
 import prisma.partials as PrismaPartials
 from fastapi import APIRouter, Depends, HTTPException
+from passlib.context import CryptContext
 from prisma.fields import Json
 from pydantic import BaseModel
 from temporalio.client import Client
@@ -11,9 +13,26 @@ from temporalio.client import Client
 from config import TEMPORAL_SERVER
 from routers.scripts import RunScriptInput, check_script_access, run_script_wrapper
 from routers.users import get_user
-from worker import RunScript
+from worker import RunScheduledInput, RunScript
 
 router = APIRouter(tags=["schedules"])
+
+
+token_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def hash_token(token: str):
+    """
+    Hash a token for storing.
+    """
+    return token_context.hash(token)
+
+
+def verify_token(hashed_token: str, token: str):
+    """
+    Verify a stored token against one provided by schedule.
+    """
+    return token_context.verify(token, hashed_token)
 
 
 class CreateScheduleInput(BaseModel):
@@ -49,6 +68,9 @@ async def create_schedule(
     if schedule.params is None:
         schedule.params = {}
 
+    token = secrets.token_hex(32)
+    token_hash = hash_token(token)
+
     db_schedule = await PrismaModels.Schedule.prisma().create(
         {
             "script_id": schedule.script_id,
@@ -61,6 +83,7 @@ async def create_schedule(
             "month_of_year": schedule.month_of_year,
             "params": Json(schedule.params),
             "creator_id": user.id,
+            "token_hash": token_hash,
         }
     )
 
@@ -70,7 +93,7 @@ async def create_schedule(
     # Execute a workflow
     await client.start_workflow(
         RunScript.run,
-        db_schedule.id,
+        RunScheduledInput(schedule_id=db_schedule.id, token=token),
         id=db_schedule.id,
         task_queue="main-queue",
         cron_schedule=f"{schedule.minute} {schedule.hour} {schedule.day_of_month} {schedule.month_of_year} {schedule.day_of_week}",
@@ -153,28 +176,39 @@ async def update_schedule(
     return db_schedule
 
 
-# TODO: create internal token for this call
+class RunScheduleInput(BaseModel):
+    """
+    Schedule run model
+    """
+
+    schedule_id: str
+    token: str
+
+
 @router.post(
     "/schedule/run", operation_id="run_schedule", response_model=PrismaModels.Run
 )
-async def run_schedule(schedule_id: str):
+async def run_schedule(schedule_request: RunScheduleInput):
     """
     Execute a script based on its schedule entry
     """
 
     schedule = await PrismaModels.Schedule.prisma().find_unique(
-        where={"id": schedule_id}
+        where={"id": schedule_request.schedule_id}
     )
 
     if schedule is None:
         raise HTTPException(status_code=404, detail="Script not found")
+
+    if not verify_token(schedule.token_hash, schedule_request.token):
+        raise HTTPException(status_code=403, detail="Invalid token")
 
     # TODO: declare params type somewhere
     params = cast(Optional[Dict[str, Union[str, int, float, bool]]], schedule.params)
 
     run_inputs = RunScriptInput(script_id=schedule.script_id, params=params)
 
-    run = await run_script_wrapper(run_inputs, schedule_id=schedule_id)
+    run = await run_script_wrapper(run_inputs, schedule_id=schedule.id)
 
     return run
 

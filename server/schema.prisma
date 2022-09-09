@@ -71,7 +71,7 @@ model Build {
   output        String
   build_command String?
   image         String?
-  image_uri String?
+  image_uri     String?
   completed_at  DateTime?
   creator_id    String
   status        BuildStatus
@@ -109,6 +109,7 @@ model Schedule {
   creator_id    String
   description   String?
   name          String
+  token_hash      String
   created_by    User     @relation(fields: [creator_id], references: [id])
   script        Script   @relation(fields: [script_id], references: [id], onDelete: Cascade)
   runs          Run[]
