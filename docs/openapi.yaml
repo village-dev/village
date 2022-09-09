@@ -437,6 +437,9 @@ components:
         day_of_week:
           title: Day Of Week
           type: string
+        description:
+          title: Description
+          type: string
         hour:
           title: Hour
           type: string
@@ -451,6 +454,10 @@ components:
           type: string
         name:
           title: Name
+          type: string
+        params:
+          format: json-string
+          title: Params
           type: string
         script:
           $ref: '#/components/schemas/Script'
@@ -469,6 +476,63 @@ components:
       - month_of_year
       - day_of_week
       title: ScheduleWithScript
+      type: object
+    ScheduleWithScriptAndRuns:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        description:
+          title: Description
+          type: string
+        hour:
+          title: Hour
+          type: string
+        id:
+          title: Id
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        name:
+          title: Name
+          type: string
+        params:
+          format: json-string
+          title: Params
+          type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - minute
+      - hour
+      - day_of_month
+      - month_of_year
+      - day_of_week
+      title: ScheduleWithScriptAndRuns
       type: object
     Script:
       description: Represents a Script record
@@ -1040,6 +1104,35 @@ paths:
       security:
       - HTTPBearer: []
       summary: Delete Schedule
+      tags:
+      - schedules
+  /schedule/get:
+    get:
+      description: Get a script schedule from the scheduler
+      operationId: get_schedule
+      parameters:
+      - in: query
+        name: schedule_id
+        required: true
+        schema:
+          title: Schedule Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleWithScriptAndRuns'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Schedule
       tags:
       - schedules
   /schedule/list:

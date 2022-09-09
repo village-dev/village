@@ -31,7 +31,7 @@ export const Runs: React.FC = () => {
                 )
             })
         )
-    }, [query])
+    }, [query, runs])
 
     let innerTable
 

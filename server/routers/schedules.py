@@ -227,3 +227,26 @@ async def delete_schedule(
         raise HTTPException(status_code=404, detail="Schedule not found")
 
     return schedule
+
+
+@router.get(
+    "/schedule/get",
+    operation_id="get_schedule",
+    response_model=PrismaPartials.ScheduleWithScriptAndRuns,
+)
+async def get_schedule(schedule_id: str, user: PrismaModels.User = Depends(get_user)):
+    """
+    Get a script schedule from the scheduler
+    """
+    await check_schedule_access(user.id, schedule_id)
+
+    schedule = await PrismaModels.Schedule.prisma().find_unique(
+        where={"id": schedule_id}, include={"script": True, "runs": True}
+    )
+
+    schedule.params = json.dumps(schedule.params)  # type: ignore
+
+    if schedule is None:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+
+    return schedule

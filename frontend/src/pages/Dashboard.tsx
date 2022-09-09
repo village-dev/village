@@ -2,16 +2,18 @@ import { Sidebar } from '@components/Dashboard/Sidebar'
 import { useUserContext } from '@contexts/UserContext'
 import { NewSchedule } from '@pages/Dashboard/NewSchedule'
 import { NewScript } from '@pages/Dashboard/NewScript'
+import { NewWorkspace } from '@pages/Dashboard/NewWorkspace'
 import { Profile } from '@pages/Dashboard/Profile'
 import { Runs } from '@pages/Dashboard/Runs'
 import { RunScriptStandalone } from '@pages/Dashboard/RunScript'
+import { Schedule } from '@pages/Dashboard/Schedule'
 import { Schedules } from '@pages/Dashboard/Schedules'
 import { Script } from '@pages/Dashboard/Script'
 import { Scripts } from '@pages/Dashboard/Scripts'
 import { Workflows } from '@pages/Dashboard/Workflows'
+
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { NewWorkspace } from './Dashboard/NewWorkspace'
 
 export const Dashboard: React.FC = () => {
     const { refreshUser } = useUserContext()
@@ -37,7 +39,7 @@ export const Dashboard: React.FC = () => {
                     </Route>
 
                     <Route path="schedules">
-                        {/* <Route path=":id" element={<Schedule />} /> */}
+                        <Route path=":id" element={<Schedule />} />
                         <Route path="" element={<Schedules />} />
                     </Route>
 

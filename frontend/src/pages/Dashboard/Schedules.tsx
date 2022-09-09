@@ -29,11 +29,12 @@ export const Schedules: React.FC = () => {
 
                 return (
                     script?.name.toLowerCase().includes(query.toLowerCase()) ||
-                    script?.id.toLowerCase().includes(query.toLowerCase())
+                    script?.id.toLowerCase().includes(query.toLowerCase()) ||
+                    schedule.name.toLowerCase().includes(query.toLowerCase())
                 )
             })
         )
-    }, [query])
+    }, [query, schedules])
 
     let innerTable
 

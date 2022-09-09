@@ -34,7 +34,7 @@ export const Scripts: React.FC = () => {
                 )
             })
         )
-    }, [query])
+    }, [query, scripts])
 
     let innerTable
 
