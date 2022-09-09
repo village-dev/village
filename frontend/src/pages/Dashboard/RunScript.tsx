@@ -313,7 +313,7 @@ export const RunScriptStandalone = () => {
     if (!script) return null
 
     return (
-        <div className="w-[24em] space-y-6 px-8 py-16">
+        <div className="max-w-screen-md space-y-6 px-8 py-16">
             <h1 className="text-2xl">Run Script</h1>
             <RunScriptEmbeddable script={script} />
         </div>
