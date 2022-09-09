@@ -113,7 +113,7 @@ export const Runs: React.FC = () => {
             <div className="px-6">
                 <h1 className="text-2xl">Runs</h1>
             </div>
-            <div className="flex-grow">{innerTable}</div>
+            <div className="h-full flex-grow">{innerTable}</div>
         </div>
     )
 }
