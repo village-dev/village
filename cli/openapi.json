@@ -910,7 +910,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/RunWithScript"
+                  "$ref": "#\/components\/schemas\/RunWithScriptDetailed"
                 }
               }
             }
@@ -2064,6 +2064,37 @@
             "title": "Created At",
             "type": "string",
             "format": "date-time"
+          },
+          "build": {
+            "$ref": "#\/components\/schemas\/Build"
+          }
+        }
+      },
+      "RunWithScriptDetailed": {
+        "title": "RunWithScriptDetailed",
+        "required": [
+          "id",
+          "status",
+          "created_at",
+          "output"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#\/components\/schemas\/RunStatus"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "output": {
+            "title": "Output",
+            "type": "string"
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"

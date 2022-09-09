@@ -2,11 +2,11 @@ import { VillageClient } from '@common/VillageClient'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { BeatLoader } from 'react-spinners'
-import { Run as RunType } from '../../../api'
+import { RunWithScriptDetailed } from '../../../api'
 
 export const Run = () => {
     const { id } = useParams()
-    const [run, setRun] = useState<RunType | null>(null)
+    const [run, setRun] = useState<RunWithScriptDetailed | null>(null)
 
     useEffect(() => {
         if (id === undefined) return

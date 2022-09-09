@@ -9,6 +9,16 @@ Run.create_partial(
         "build": {"include": {"script": True}},
     },
 )
+Run.create_partial(
+    "RunWithScriptDetailed",
+    include={
+        "id": True,
+        "status": True,
+        "created_at": True,
+        "output": True,
+        "build": {"include": {"script": True}},
+    },
+)
 Schedule.create_partial(
     "ScheduleWithScript",
     include={

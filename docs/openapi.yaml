@@ -357,6 +357,29 @@ components:
       - created_at
       title: RunWithScript
       type: object
+    RunWithScriptDetailed:
+      properties:
+        build:
+          $ref: '#/components/schemas/Build'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        output:
+          title: Output
+          type: string
+        status:
+          $ref: '#/components/schemas/RunStatus'
+      required:
+      - id
+      - status
+      - created_at
+      - output
+      title: RunWithScriptDetailed
+      type: object
     Schedule:
       description: Represents a Schedule record
       properties:
@@ -1017,7 +1040,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RunWithScript'
+                $ref: '#/components/schemas/RunWithScriptDetailed'
           description: Successful Response
         '422':
           content:

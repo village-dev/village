@@ -66,7 +66,9 @@ async def check_run_access(user_id: str, run_id: str):
 
 
 @router.get(
-    "/run/get", operation_id="get_run", response_model=PrismaPartials.RunWithScript
+    "/run/get",
+    operation_id="get_run",
+    response_model=PrismaPartials.RunWithScriptDetailed,
 )
 async def get_run(run_id: str, user: PrismaModels.User = Depends(get_user)):
     """
