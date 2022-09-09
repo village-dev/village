@@ -9,7 +9,7 @@ import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
 import { BeatLoader } from 'react-spinners'
 import { Input } from '@components/Input'
-import { Textarea } from '@components/TextArea'
+import { Textarea } from '@components/Textarea'
 
 const engineLabels = [
     { value: Engine.PYTHON, label: 'Python' },
