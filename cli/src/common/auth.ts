@@ -73,9 +73,27 @@ export const getTokens = async (
     return tokens
 }
 
-export const getWorkspaces = (
-    { debug }: { debug: boolean } = { debug: false }
-): { defaultWorkspace: Workspace } => {
+export const setWorkspaces = async ({
+    workspaces,
+    debug,
+}: {
+    workspaces: { defaultWorkspace: string }
+    debug: boolean
+}) => {
+    await writeFile(
+        WORKSPACES_FILE,
+        JSON.stringify(workspaces, null, 2),
+        (err) => {
+            debug && console.log('Error writing workspaces file', err)
+        }
+    )
+}
+
+export const getWorkspaces = ({
+    debug,
+}: {
+    debug: boolean
+}): { defaultWorkspace: Workspace } => {
     return getFile({ filePath: WORKSPACES_FILE, debug })
 }
 
@@ -96,7 +114,10 @@ export const getFile = (
 }
 
 export const getCurrentWorkspaceId = async (): Promise<string> => {
-    const workspaces = await getFile({ filePath: WORKSPACES_FILE, debug: false })
+    const workspaces = await getFile({
+        filePath: WORKSPACES_FILE,
+        debug: false,
+    })
 
     if (workspaces) {
         return JSON.parse(workspaces).defaultWorkspace
@@ -108,7 +129,6 @@ export const getCurrentWorkspaceId = async (): Promise<string> => {
     }
     throw new Error(error)
 }
-
 
 export const promptForCurrentWorkspace: () => Promise<{
     error?: any

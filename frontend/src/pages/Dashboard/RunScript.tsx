@@ -1,4 +1,5 @@
 import { VillageClient } from '@common/VillageClient'
+import { Input } from '@components/Input'
 import { Select } from '@components/Select'
 import { Switch } from '@headlessui/react'
 import moment from 'moment'
@@ -18,28 +19,12 @@ interface InputProps {
     setValue: (v: string) => void
 }
 
-export const Input: React.FC<InputProps> = ({ value, setValue }) => {
-    return (
-        <>
-            <input
-                className="w-full rounded-lg border px-3 py-2"
-                type="text"
-                value={value}
-                onChange={(e) => {
-                    const newValue = e.target.value
-                    setValue(newValue)
-                }}
-            />
-        </>
-    )
-}
 export const StringInput: React.FC<{
     value: string | null
     setValue: (v: string) => void
 }> = ({ value, setValue }) => {
     return (
-        <input
-            className="w-full rounded-lg border px-3 py-2"
+        <Input
             value={value ?? ''}
             onChange={(e) => {
                 setValue(e.target.value)
@@ -68,14 +53,28 @@ export const FloatInput: React.FC<{
     value: string | null
     setValue: (v: string) => void
 }> = ({ value, setValue }) => {
-    return <Input value={value ?? ''} setValue={setValue} />
+    return (
+        <Input
+            value={value ?? ''}
+            onChange={(e) => {
+                setValue(e.target.value)
+            }}
+        />
+    )
 }
 
 export const IntegerInput: React.FC<{
     value: string | null
     setValue: (v: string) => void
 }> = ({ value, setValue }) => {
-    return <Input value={value ?? ''} setValue={setValue} />
+    return (
+        <Input
+            value={value ?? ''}
+            onChange={(e) => {
+                setValue(e.target.value)
+            }}
+        />
+    )
 }
 
 export const BooleanInput: React.FC<{
@@ -313,7 +312,7 @@ export const RunScriptStandalone = () => {
     if (!script) return null
 
     return (
-        <div className="w-[24em] space-y-6 px-8 py-16">
+        <div className="max-w-screen-md space-y-6 px-8 py-16">
             <h1 className="text-2xl">Run Script</h1>
             <RunScriptEmbeddable script={script} />
         </div>
