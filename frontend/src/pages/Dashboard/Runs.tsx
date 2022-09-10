@@ -32,7 +32,7 @@ const NoResults: React.FC = () => {
 const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
     const run = data
     return (
-        <tr>
+        <tr key={run.id}>
             <td className="py-4">
                 <Link
                     to={`/app/runs/${run.id}`}

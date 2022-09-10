@@ -29,7 +29,10 @@ const NoResults: React.FC = () => {
 const ScriptRow: React.FC<{ data: Script; idx: number }> = ({ data, idx }) => {
     const script = data
     return (
-        <tr className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}>
+        <tr
+            key={script.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="group">
                 <Link to={`/app/scripts/${script.id}`}>
                     <div className="h-full w-full truncate py-4 pl-4 pr-8">
