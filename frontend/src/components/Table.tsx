@@ -35,20 +35,20 @@ export const Table: TableComponent = ({
     let innerTable
 
     if (loading) {
-        innerTable = (
-            <tr>
-                <td colSpan={columnNames.length} align="center">
-                    <div className="mx-6 flex h-full flex-col items-center justify-center py-16">
-                        <h1 className="text-2xl font-semibold text-gray-700">
-                            Loading...
-                        </h1>
-                        <div className="mt-12 w-64">
-                            <BarLoader width="100%" color="rgb(107 114 128)" />
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        )
+        innerTable = [null, null, null].map(() => {
+            const arr = new Array(columnNames.length).fill(null)
+            return (
+                <tr>
+                    {arr.map(() => {
+                        return (
+                            <td className="py-4 px-4">
+                                <div className="h-4 w-full animate-pulse rounded bg-gray-300"></div>
+                            </td>
+                        )
+                    })}
+                </tr>
+            )
+        })
     } else {
         if (rowData.length === 0) {
             innerTable = (
