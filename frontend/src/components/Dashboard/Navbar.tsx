@@ -1,4 +1,4 @@
-import { ReactComponent as LogoIcon } from '@components/logo.svg'
+import { ReactComponent as LogoIcon } from 'logo.svg'
 import { ProfileButton } from '@components/Dashboard/ProfileButton'
 import { WorkspaceListBox } from '@components/Dashboard/WorkspaceListBox'
 
