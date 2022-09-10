@@ -7,7 +7,8 @@ import { useEffect, useMemo, useState } from 'react'
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import { useParams } from 'react-router-dom'
-import { Param, ParamType, ScriptWithBuild } from '../../../api'
+import { BeatLoader } from 'react-spinners'
+import { Param, ParamType, ScriptWithMeta } from '../../../api'
 
 interface Option {
     value: string
@@ -201,7 +202,7 @@ export const ParamInput: React.FC<{
 
 type ParsedParams = Record<string, string | number | boolean>
 
-export const RunScriptEmbeddable: React.FC<{ script: ScriptWithBuild }> = ({
+export const RunScriptEmbeddable: React.FC<{ script: ScriptWithMeta }> = ({
     script,
 }) => {
     const [scriptParams, setScriptParams] = useState<Param[]>([])
@@ -298,7 +299,7 @@ export const RunScriptEmbeddable: React.FC<{ script: ScriptWithBuild }> = ({
 
 export const RunScriptStandalone = () => {
     const { id } = useParams()
-    const [script, setScript] = useState<ScriptWithBuild | null>(null)
+    const [script, setScript] = useState<ScriptWithMeta | null>(null)
 
     useEffect(() => {
         if (id === undefined) return
@@ -309,7 +310,13 @@ export const RunScriptStandalone = () => {
         })
     }, [])
 
-    if (!script) return null
+    if (script === null) {
+        return (
+            <div className="flex h-full w-full items-center justify-center">
+                <BeatLoader color="rgb(52 211 153)" />
+            </div>
+        )
+    }
 
     return (
         <div className="max-w-screen-md space-y-6 px-8 py-16">
