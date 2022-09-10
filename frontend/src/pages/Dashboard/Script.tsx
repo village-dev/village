@@ -2,32 +2,18 @@ import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Run, Schedule, ScriptWithMeta, Build } from '../../../api'
+import { Build, Run, Schedule, ScriptWithMeta } from '../../../api'
 import { RunScriptEmbeddable } from './RunScript'
 
-import { BeatLoader } from 'react-spinners'
 import { Tab } from '@headlessui/react'
 import { RiExternalLinkLine } from 'react-icons/ri'
+import { BeatLoader } from 'react-spinners'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export const Builds: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-    const [builds, setBuilds] = useState<Build[] | null>(null)
-    // const [, setRunning] = useState(false)
-    // const [runId, setRunId] = useState<string | null>(null)
-
-    useEffect(() => {
-        VillageClient.scripts.getScriptBuilds(scriptId).then((b) => {
-            setBuilds(b)
-        })
-    }, [scriptId])
-
-    if (builds === null) {
-        return <div>Loading...</div>
-    }
-
+export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
     return (
         <div className="flex-col space-y-2">
             <div className="my-4 flex px-6 font-semibold">
@@ -64,19 +50,7 @@ export const Builds: React.FC<{ scriptId: string }> = ({ scriptId }) => {
     )
 }
 
-export const Runs: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-    const [runs, setRuns] = useState<Run[] | null>(null)
-
-    useEffect(() => {
-        VillageClient.scripts.getScriptRuns(scriptId).then((r) => {
-            setRuns(r)
-        })
-    }, [scriptId])
-
-    if (runs === null) {
-        return <div>Loading...</div>
-    }
-
+export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
     return (
         <div className="flex-col space-y-2">
             <div className="my-4 flex px-6 font-semibold">
@@ -113,23 +87,9 @@ export const Runs: React.FC<{ scriptId: string }> = ({ scriptId }) => {
     )
 }
 
-export const Schedules: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-    const [schedules, setSchedules] = useState<Schedule[] | null>(null)
-
-    useEffect(() => {
-        VillageClient.scripts.getScriptSchedules(scriptId).then((r) => {
-            setSchedules(r)
-        })
-    }, [scriptId])
-
-    if (schedules === null) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                Loading...
-            </div>
-        )
-    }
-
+export const Schedules: React.FC<{ schedules: Schedule[] }> = ({
+    schedules,
+}) => {
     return (
         <div className="flex-col space-y-2">
             <div className="my-4 flex px-6 font-semibold">
@@ -183,11 +143,23 @@ export const Script: React.FC = () => {
         })
     }, [id])
 
-    const [categories] = useState({
-        Builds: id ? <Builds scriptId={id} /> : <div>Loading...</div>,
-        Runs: id ? <Runs scriptId={id} /> : <div>Loading...</div>,
-        Schedules: id ? <Schedules scriptId={id} /> : <div>Loading...</div>,
-    })
+    const categories = {
+        Builds: script ? (
+            <Builds builds={script.builds ?? []} />
+        ) : (
+            <div>Loading...</div>
+        ),
+        Runs: script ? (
+            <Runs runs={script.runs ?? []} />
+        ) : (
+            <div>Loading...</div>
+        ),
+        Schedules: script ? (
+            <Schedules schedules={script.schedules ?? []} />
+        ) : (
+            <div>Loading...</div>
+        ),
+    }
 
     if (id === undefined) {
         return <div>No script selected</div>
@@ -247,7 +219,7 @@ export const Script: React.FC = () => {
                                         ' focus:outline-none',
                                         selected
                                             ? 'bg-white shadow'
-                                            : 'text-blue-100 hover:bg-white/80 hover:text-zinc-900'
+                                            : ' hover:bg-white/80 hover:text-zinc-900'
                                     )
                                 }
                             >
