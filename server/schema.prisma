@@ -29,7 +29,7 @@ model Workspace {
   updated_at DateTime?        @updatedAt
   name       String
   creator_id String
-  created_by User             @relation("created_by", fields: [creator_id], references: [id])
+  created_by User             @relation("created_by", fields: [creator_id], references: [id], onDelete: Cascade)
   scripts    Script[]
   default_of User[]           @relation("default_workspace")
   users      WorkspaceUsers[]
@@ -41,8 +41,8 @@ model WorkspaceUsers {
   workspace_id String
   user_id      String
   role         Role
-  user         User      @relation(fields: [user_id], references: [id])
-  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  workspace    Workspace @relation(fields: [workspace_id], references: [id], onDelete: Cascade)
 
   @@id([workspace_id, user_id])
 }
@@ -60,6 +60,7 @@ model Script {
   created_by     User       @relation(fields: [creator_id], references: [id])
   workspace      Workspace  @relation(fields: [workspace_id], references: [id])
   builds         Build[]
+  runs           Run[]
   schedules      Schedule[]
 }
 
@@ -109,6 +110,7 @@ model Schedule {
   creator_id    String
   description   String?
   name          String
+  token_hash    String
   created_by    User     @relation(fields: [creator_id], references: [id])
   script        Script   @relation(fields: [script_id], references: [id], onDelete: Cascade)
   runs          Run[]
@@ -119,6 +121,7 @@ model Run {
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   build_id     String
+  script_id    String
   output       String
   completed_at DateTime?
   schedule_id  String?
@@ -127,6 +130,7 @@ model Run {
   build        Build     @relation(fields: [build_id], references: [id], onDelete: Cascade)
   created_by   User?     @relation(fields: [creator_id], references: [id])
   schedule     Schedule? @relation(fields: [schedule_id], references: [id])
+  script       Script    @relation(fields: [script_id], references: [id], onDelete: Cascade)
 }
 
 enum BuildStatus {

@@ -5,7 +5,7 @@ import logging
 
 import ujson
 import yaml
-from fastapi import FastAPI, Request, status
+from fastapi import APIRouter, FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -13,49 +13,6 @@ from prisma import Prisma
 
 from config import ALLOWED_ORIGINS
 from routers import builds, runs, schedules, scripts, slack, users, workspaces
-
-app = FastAPI(title="Village API", docs_url="/")
-
-prisma = Prisma(auto_register=True)
-
-
-@app.on_event("startup")  # type: ignore
-async def startup() -> None:
-    # logging.getLogger("uvicorn").handlers.clear()
-    await prisma.connect()
-
-
-@app.on_event("shutdown")  # type: ignore
-async def shutdown() -> None:
-    if prisma.is_connected():
-        await prisma.disconnect()
-
-
-@app.exception_handler(RequestValidationError)  # type: ignore
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    exc_str = f"{exc}".replace("\n", " ").replace("   ", " ")
-    logging.error(f"{request}: {exc_str}")
-    content = {"status_code": 10422, "message": exc_str, "data": None}
-    return JSONResponse(
-        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
-    )
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.include_router(scripts.router)
-app.include_router(builds.router)
-app.include_router(runs.router)
-app.include_router(schedules.router)
-app.include_router(users.router)
-app.include_router(workspaces.router)
-app.include_router(slack.router)
 
 tags_meta = [
     {
@@ -84,6 +41,52 @@ tags_meta = [
     },
 ]
 
+app = FastAPI(title="Village API", docs_url="/", openapi_tags=tags_meta)
+
+prisma = Prisma(auto_register=True)
+
+
+@app.on_event("startup")  # type: ignore
+async def startup() -> None:
+    await prisma.connect()
+
+
+@app.on_event("shutdown")  # type: ignore
+async def shutdown() -> None:
+    if prisma.is_connected():
+        await prisma.disconnect()
+
+
+@app.exception_handler(RequestValidationError)  # type: ignore
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    exc_str = f"{exc}".replace("\n", " ").replace("   ", " ")
+    logging.error(f"{request}: {exc_str}")
+    content = {"status_code": 10422, "message": exc_str, "data": None}
+    return JSONResponse(
+        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+    )
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+def add_router(router: APIRouter):
+    app.include_router(router)
+
+
+add_router(scripts.router)
+add_router(builds.router)
+add_router(runs.router)
+add_router(schedules.router)
+add_router(users.router)
+add_router(workspaces.router)
+add_router(slack.router)
 
 openapi = app.openapi()
 

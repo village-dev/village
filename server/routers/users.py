@@ -13,6 +13,7 @@ from prisma.partials import UserWithWorkspaces
 from prisma.types import WorkspaceUsersCreateInput
 
 from utils.auth import ParsedToken, VerifyToken
+from utils.ids import propose_workspace_id_internal
 from utils.logger import logger
 
 router = APIRouter(tags=["user"])
@@ -58,44 +59,22 @@ async def verify_token_with_create_user(
         raise HTTPException(status_code=401, detail="Invalid token")
 
     uid = result["sub"]
-
     logger.debug(f"uid: {uid}")
 
-    user = await PrismaModels.User.prisma().find_unique(  # type: ignore
+    user = await PrismaModels.User.prisma().find_unique(
         where={"id": uid},
         include={
             "workspaces": {"include": {"workspace": True}},
         },
     )
 
+    # if user exists and has a default workspace, return
     if user is not None and user.workspaces:
         return user
 
+    # user-workspace creator
     workspace_name = "Default Workspace"
-
-    # generate default id by replacing non-alphanumeric characters with underscores and lowercasing
-    workspace_id = re.sub("[^0-9a-zA-Z]+", "_", workspace_name).lower()
-
-    # if script with this id already exists, append a number to the id
-    prefix_scripts = await PrismaModels.Workspace.prisma().find_many(
-        order={"id": "desc"}, where={"id": {"startswith": workspace_id + "_"}}
-    )
-    same_id = await PrismaModels.Workspace.prisma().find_unique(
-        where={"id": workspace_id}
-    )
-
-    prefix_script_ids = [s.id[len(workspace_id) + 1 :] for s in prefix_scripts]
-    script_nums = [int(s) for s in prefix_script_ids if s.isnumeric()]
-    next_num = None if not script_nums else max(script_nums) + 1
-
-    if next_num is not None:
-
-        workspace_id = f"{workspace_id}_{next_num}"
-
-    else:
-        if same_id is not None:
-            workspace_id = f"{workspace_id}_1"
-
+    workspace_id = await propose_workspace_id_internal(workspace_name)
     workspace_users_data: WorkspaceUsersCreateInput = {
         "role": Role.ADMIN,
         "user": {
@@ -105,14 +84,16 @@ async def verify_token_with_create_user(
         },
         "workspace": {
             "create": {
-                "name": "Default Workspace",
+                "name": workspace_name,
                 "id": workspace_id,
                 "creator_id": uid,
             }
         },
     }
 
+    # if user exists and has no workspaces, create one
     if user is not None and not user.workspaces:
+
         await PrismaModels.WorkspaceUsers.prisma().create(
             data=workspace_users_data,
         )
@@ -122,6 +103,7 @@ async def verify_token_with_create_user(
         )
         return user
 
+    # if user doesn't exist and has no workspaces, create both
     try:
 
         db = Prisma()

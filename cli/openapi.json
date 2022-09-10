@@ -10,9 +10,9 @@
         "tags": [
           "scripts"
         ],
-        "summary": "Propose Id",
+        "summary": "Propose Script Id",
         "description": "Propose a script ID based on the name.",
-        "operationId": "propose_id",
+        "operationId": "propose_script_id",
         "parameters": [
           {
             "required": true,
@@ -30,7 +30,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "title": "Response Propose Id",
+                  "title": "Response Propose Script Id",
                   "type": "string"
                 }
               }
@@ -59,9 +59,9 @@
         "tags": [
           "scripts"
         ],
-        "summary": "Check Id",
+        "summary": "Check Script Id",
         "description": "Check if a script ID is available.",
-        "operationId": "check_id",
+        "operationId": "check_script_id",
         "parameters": [
           {
             "required": true,
@@ -79,7 +79,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "title": "Response Check Id",
+                  "title": "Response Check Script Id",
                   "type": "boolean"
                 }
               }
@@ -462,7 +462,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/ScriptWithBuild"
+                  "$ref": "#\/components\/schemas\/ScriptWithMeta"
                 }
               }
             }
@@ -1082,17 +1082,16 @@
         "summary": "Run Schedule",
         "description": "Execute a script based on its schedule entry",
         "operationId": "run_schedule",
-        "parameters": [
-          {
-            "required": true,
-            "schema": {
-              "title": "Schedule Id",
-              "type": "string"
-            },
-            "name": "schedule_id",
-            "in": "query"
-          }
-        ],
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/RunScheduleInput"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1302,9 +1301,9 @@
         "tags": [
           "workspace"
         ],
-        "summary": "Propose Id",
-        "description": "Propose a script ID based on the name.",
-        "operationId": "propose_id",
+        "summary": "Propose Workspace Id",
+        "description": "Propose a workspace ID based on the name.",
+        "operationId": "propose_workspace_id",
         "parameters": [
           {
             "required": true,
@@ -1322,7 +1321,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "title": "Response Propose Id",
+                  "title": "Response Propose Workspace Id",
                   "type": "string"
                 }
               }
@@ -1351,9 +1350,9 @@
         "tags": [
           "workspace"
         ],
-        "summary": "Check Id",
+        "summary": "Check Workspace Id",
         "description": "Check if a script ID is available.",
-        "operationId": "check_id",
+        "operationId": "check_workspace_id",
         "parameters": [
           {
             "required": true,
@@ -1371,7 +1370,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "title": "Response Check Id",
+                  "title": "Response Check Workspace Id",
                   "type": "boolean"
                 }
               }
@@ -1974,6 +1973,7 @@
           "created_at",
           "updated_at",
           "build_id",
+          "script_id",
           "output",
           "status"
         ],
@@ -1995,6 +1995,10 @@
           },
           "build_id": {
             "title": "Build Id",
+            "type": "string"
+          },
+          "script_id": {
+            "title": "Script Id",
             "type": "string"
           },
           "output": {
@@ -2025,9 +2029,31 @@
           },
           "schedule": {
             "$ref": "#\/components\/schemas\/Schedule"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
           }
         },
         "description": "Represents a Run record"
+      },
+      "RunScheduleInput": {
+        "title": "RunScheduleInput",
+        "required": [
+          "schedule_id",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "schedule_id": {
+            "title": "Schedule Id",
+            "type": "string"
+          },
+          "token": {
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "description": "Schedule run model"
       },
       "RunScriptInput": {
         "title": "RunScriptInput",
@@ -2144,7 +2170,8 @@
           "minute",
           "month_of_year",
           "creator_id",
-          "name"
+          "name",
+          "token_hash"
         ],
         "type": "object",
         "properties": {
@@ -2201,6 +2228,10 @@
           },
           "name": {
             "title": "Name",
+            "type": "string"
+          },
+          "token_hash": {
+            "title": "Token Hash",
             "type": "string"
           },
           "created_by": {
@@ -2425,6 +2456,13 @@
               "$ref": "#\/components\/schemas\/Build"
             }
           },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          },
           "schedules": {
             "title": "Schedules",
             "type": "array",
@@ -2435,8 +2473,8 @@
         },
         "description": "Represents a Script record"
       },
-      "ScriptWithBuild": {
-        "title": "ScriptWithBuild",
+      "ScriptWithMeta": {
+        "title": "ScriptWithMeta",
         "required": [
           "id",
           "name",
@@ -2475,6 +2513,20 @@
             "type": "array",
             "items": {
               "$ref": "#\/components\/schemas\/Build"
+            }
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          },
+          "schedules": {
+            "title": "Schedules",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schedule"
             }
           },
           "engine_version": {
@@ -2811,5 +2863,31 @@
         "scheme": "bearer"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "scripts",
+      "description": "Scripts"
+    },
+    {
+      "name": "builds",
+      "description": "Builds"
+    },
+    {
+      "name": "runs",
+      "description": "Runs"
+    },
+    {
+      "name": "schedules",
+      "description": "Schedules"
+    },
+    {
+      "name": "users",
+      "description": "Users"
+    },
+    {
+      "name": "workspaces",
+      "description": "Workspaces"
+    }
+  ]
 }

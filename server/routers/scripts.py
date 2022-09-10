@@ -31,7 +31,8 @@ from slack_sdk.webhook import WebhookClient
 from models.config import Config
 from routers.users import get_user, verify_token
 from server.docker import docker_client, execute  # type: ignore
-from utils.auth import ParsedToken  # type: ignore
+from utils.auth import ParsedToken
+from utils.ids import propose_script_id_internal  # type: ignore
 
 router = APIRouter(tags=["scripts"])
 
@@ -89,8 +90,8 @@ async def check_script_access(user_id: str, script_id: str):
     return
 
 
-@router.get("/scripts/propose_id", operation_id="propose_id", response_model=str)
-async def propose_id(
+@router.get("/scripts/propose_id", operation_id="propose_script_id", response_model=str)
+async def propose_script_id(
     name: str,
     token: ParsedToken = Depends(verify_token),  # to require authentication
 ):
@@ -98,31 +99,11 @@ async def propose_id(
     Propose a script ID based on the name.
     """
 
-    # generate default id by replacing non-alphanumeric characters with underscores and lowercasing
-    script_id = re.sub("[^0-9a-zA-Z]+", "_", name).lower()
-
-    # if script with this id already exists, append a number to the id
-    prefix_scripts = await PrismaModels.Script.prisma().find_many(
-        order={"id": "desc"}, where={"id": {"startswith": script_id + "_"}}
-    )
-    same_id = await PrismaModels.Script.prisma().find_unique(where={"id": script_id})
-
-    prefix_script_ids = [s.id[len(script_id) + 1 :] for s in prefix_scripts]
-    script_nums = [int(s) for s in prefix_script_ids if s.isnumeric()]
-    next_num = None if not script_nums else max(script_nums) + 1
-
-    if next_num is not None:
-        script_id = f"{script_id}_{next_num}"
-
-    else:
-        if same_id is not None:
-            script_id = f"{script_id}_1"
-
-    return script_id
+    return propose_script_id_internal(name)
 
 
-@router.get("/scripts/check_id", operation_id="check_id", response_model=bool)
-async def check_id(
+@router.get("/scripts/check_id", operation_id="check_script_id", response_model=bool)
+async def check_script_id(
     id: str,
     token: ParsedToken = Depends(verify_token),  # to require authentication
 ):
@@ -152,7 +133,7 @@ async def create_script(
     script_id = script.id
 
     if script_id is None or script_id == "":
-        script_id = await propose_id(script.name)
+        script_id = await propose_script_id_internal(script.name)
 
     try:
         created_script = await PrismaModels.Script.prisma().create(
@@ -663,6 +644,7 @@ async def run_script_container(
 
     run = await PrismaModels.Run.prisma().create(
         {
+            "script_id": script.script_id,
             "build_id": build.id,
             "status": RunStatus.RUNNING,
             "output": "",
@@ -795,7 +777,7 @@ async def list_scripts(workspace_id: str, user: PrismaModels.User = Depends(get_
 @router.get(
     "/script/get",
     operation_id="get_script",
-    response_model=PrismaPartials.ScriptWithBuild,
+    response_model=PrismaPartials.ScriptWithMeta,
 )
 async def get_script(script_id: str, user: PrismaModels.User = Depends(get_user)):
     """
@@ -808,10 +790,15 @@ async def get_script(script_id: str, user: PrismaModels.User = Depends(get_user)
         where={"id": script_id},
         include={
             "builds": {
-                "take": 1,
                 "order_by": {"updated_at": "desc"},
                 "include": {"params": True},
-            }
+            },
+            "runs": {
+                "order_by": {"updated_at": "desc"},
+            },
+            "schedules": {
+                "order_by": {"updated_at": "desc"},
+            },
         },
     )
 

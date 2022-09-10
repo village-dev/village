@@ -295,6 +295,11 @@ components:
         schedule_id:
           title: Schedule Id
           type: string
+        script:
+          $ref: '#/components/schemas/Script'
+        script_id:
+          title: Script Id
+          type: string
         status:
           $ref: '#/components/schemas/RunStatus'
         updated_at:
@@ -306,9 +311,24 @@ components:
       - created_at
       - updated_at
       - build_id
+      - script_id
       - output
       - status
       title: Run
+      type: object
+    RunScheduleInput:
+      description: Schedule run model
+      properties:
+        schedule_id:
+          title: Schedule Id
+          type: string
+        token:
+          title: Token
+          type: string
+      required:
+      - schedule_id
+      - token
+      title: RunScheduleInput
       type: object
     RunScriptInput:
       description: Script run input
@@ -430,6 +450,9 @@ components:
         script_id:
           title: Script Id
           type: string
+        token_hash:
+          title: Token Hash
+          type: string
         updated_at:
           format: date-time
           title: Updated At
@@ -446,6 +469,7 @@ components:
       - month_of_year
       - creator_id
       - name
+      - token_hash
       title: Schedule
       type: object
     ScheduleWithScript:
@@ -588,6 +612,11 @@ components:
         name:
           title: Name
           type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
         schedules:
           items:
             $ref: '#/components/schemas/Schedule'
@@ -614,7 +643,7 @@ components:
       - creator_id
       title: Script
       type: object
-    ScriptWithBuild:
+    ScriptWithMeta:
       properties:
         builds:
           items:
@@ -639,6 +668,16 @@ components:
         name:
           title: Name
           type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        schedules:
+          items:
+            $ref: '#/components/schemas/Schedule'
+          title: Schedules
+          type: array
         updated_at:
           format: date-time
           title: Updated At
@@ -655,7 +694,7 @@ components:
       - engine_version
       - description
       - workspace_id
-      title: ScriptWithBuild
+      title: ScriptWithMeta
       type: object
     UpdateScheduleInput:
       description: Schedule update model
@@ -1181,13 +1220,12 @@ paths:
     post:
       description: Execute a script based on its schedule entry
       operationId: run_schedule
-      parameters:
-      - in: query
-        name: schedule_id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunScheduleInput'
         required: true
-        schema:
-          title: Schedule Id
-          type: string
       responses:
         '200':
           content:
@@ -1393,7 +1431,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScriptWithBuild'
+                $ref: '#/components/schemas/ScriptWithMeta'
           description: Successful Response
         '422':
           content:
@@ -1589,7 +1627,7 @@ paths:
   /scripts/check_id:
     get:
       description: Check if a script ID is available.
-      operationId: check_id
+      operationId: check_script_id
       parameters:
       - in: query
         name: id
@@ -1602,7 +1640,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Check Id
+                title: Response Check Script Id
                 type: boolean
           description: Successful Response
         '422':
@@ -1613,13 +1651,13 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Check Id
+      summary: Check Script Id
       tags:
       - scripts
   /scripts/propose_id:
     get:
       description: Propose a script ID based on the name.
-      operationId: propose_id
+      operationId: propose_script_id
       parameters:
       - in: query
         name: name
@@ -1632,7 +1670,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Propose Id
+                title: Response Propose Script Id
                 type: string
           description: Successful Response
         '422':
@@ -1643,7 +1681,7 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Propose Id
+      summary: Propose Script Id
       tags:
       - scripts
   /slack/oauth/callback:
@@ -1815,7 +1853,7 @@ paths:
   /workspaces/check_id:
     get:
       description: Check if a script ID is available.
-      operationId: check_id
+      operationId: check_workspace_id
       parameters:
       - in: query
         name: id
@@ -1828,7 +1866,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Check Id
+                title: Response Check Workspace Id
                 type: boolean
           description: Successful Response
         '422':
@@ -1839,13 +1877,13 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Check Id
+      summary: Check Workspace Id
       tags:
       - workspace
   /workspaces/propose_id:
     get:
-      description: Propose a script ID based on the name.
-      operationId: propose_id
+      description: Propose a workspace ID based on the name.
+      operationId: propose_workspace_id
       parameters:
       - in: query
         name: name
@@ -1858,7 +1896,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Propose Id
+                title: Response Propose Workspace Id
                 type: string
           description: Successful Response
         '422':
@@ -1869,6 +1907,19 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Propose Id
+      summary: Propose Workspace Id
       tags:
       - workspace
+tags:
+- description: Scripts
+  name: scripts
+- description: Builds
+  name: builds
+- description: Runs
+  name: runs
+- description: Schedules
+  name: schedules
+- description: Users
+  name: users
+- description: Workspaces
+  name: workspaces

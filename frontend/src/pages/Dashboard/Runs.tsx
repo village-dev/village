@@ -4,13 +4,68 @@ import { Input } from '@components/Input'
 import { Table } from '@components/Table'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BarLoader } from 'react-spinners'
 import { RunWithScript } from '../../../api'
+
+const NoRuns: React.FC = () => {
+    return (
+        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+            <h1 className="text-2xl font-semibold">No runs</h1>
+            <p className="mt-8 text-gray-600">
+                Run scripts to see the results here
+            </p>
+        </div>
+    )
+}
+
+const NoResults: React.FC = () => {
+    return (
+        <tr>
+            <td colSpan={3} align="center" className="py-16 ">
+                <h1 className="text-lg font-semibold text-gray-400">
+                    No runs found
+                </h1>
+            </td>
+        </tr>
+    )
+}
+
+const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
+    const run = data
+    return (
+        <tr>
+            <td className="py-4">
+                <Link
+                    to={`/app/runs/${run.id}`}
+                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                >
+                    {run.build?.script?.name}
+                </Link>
+            </td>
+            <td className="pl-4">{run.status}</td>
+            <td className="pl-4">{getTimeSince(run.created_at)}</td>
+        </tr>
+    )
+}
+
+const searchFilter = ({
+    query,
+    data,
+}: {
+    query: string
+    data: RunWithScript
+}) => {
+    const run = data
+    const script = run.build?.script
+
+    return (
+        script?.name.toLowerCase().includes(query.toLowerCase()) ||
+        script?.id.toLowerCase().includes(query.toLowerCase()) ||
+        run.status.toLowerCase().includes(query.toLowerCase())
+    )
+}
 
 export const Runs: React.FC = () => {
     const [runs, setRuns] = useState<RunWithScript[]>([])
-    const [query, setQuery] = useState('')
-    const [filteredRuns, setFilteredRuns] = useState<RunWithScript[]>([])
 
     const [loading, setLoading] = useState(true)
 
@@ -21,99 +76,22 @@ export const Runs: React.FC = () => {
         })
     }, [])
 
-    useEffect(() => {
-        setFilteredRuns(
-            runs.filter((run) => {
-                const script = run.build?.script
-
-                return (
-                    script?.name.toLowerCase().includes(query.toLowerCase()) ||
-                    script?.id.toLowerCase().includes(query.toLowerCase())
-                )
-            })
-        )
-    }, [query, runs])
-
-    let innerTable
-
-    if (loading) {
-        innerTable = (
-            <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-                <h1 className="text-2xl font-semibold text-gray-700">
-                    Loading...
-                </h1>
-                <div className="mt-12 w-64">
-                    <BarLoader width="100%" color="rgb(107 114 128)" />
-                </div>
-            </div>
-        )
-    } else if (runs.length === 0) {
-        innerTable = (
-            <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-                <h1 className="text-2xl font-semibold">No runs</h1>
-                <p className="mt-8 text-gray-600">
-                    Run scripts to see the results here
-                </p>
-            </div>
-        )
-    } else {
-        let searchResults
-
-        if (filteredRuns.length === 0) {
-            searchResults = (
-                <tr>
-                    <td colSpan={3} align="center" className="py-16 ">
-                        <h1 className="text-lg font-semibold text-gray-400">
-                            No runs found
-                        </h1>
-                    </td>
-                </tr>
-            )
-        } else {
-            searchResults = filteredRuns.map((run) => {
-                return (
-                    <tr>
-                        <td className="py-4">
-                            <Link
-                                to={`/app/runs/${run.id}`}
-                                className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
-                            >
-                                {run.build?.script?.name}
-                            </Link>
-                        </td>
-                        <td className="pl-4">{run.status}</td>
-                        <td className="pl-4">{getTimeSince(run.created_at)}</td>
-                    </tr>
-                )
-            })
-        }
-
-        innerTable = (
-            <>
-                <div className="px-6">
-                    <Input
-                        type="text"
-                        onChange={(e) => {
-                            setQuery(e.target.value)
-                        }}
-                        placeholder="Search"
-                    />
-                </div>
-                <div className="mx-6 mt-4">
-                    <Table columnNames={['Script', 'Status', 'Created']}>
-                        {searchResults}
-                    </Table>
-                </div>
-            </>
-        )
-    }
-
     return (
         <div className="flex h-full flex-col space-y-6 px-8 py-16">
             <div className="px-6">
                 <h1 className="text-2xl">Runs</h1>
             </div>
-            <div className="h-full flex-grow">{innerTable}</div>
+            <div className="h-full flex-grow">
+                <Table
+                    loading={loading}
+                    emptyState={<NoRuns />}
+                    noResultsState={<NoResults />}
+                    columnNames={['Name', 'Schedule', 'Updated', '']}
+                    rowData={runs}
+                    RowRenderer={RunRow}
+                    searchFilter={searchFilter}
+                />
+            </div>
         </div>
     )
 }

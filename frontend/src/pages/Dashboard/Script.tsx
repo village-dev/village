@@ -2,179 +2,254 @@ import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Run, Schedule, ScriptWithBuild, Build } from '../../../api'
+import { Build, Run, Schedule, ScriptWithMeta } from '../../../api'
 import { RunScriptEmbeddable } from './RunScript'
 
-import { BeatLoader } from 'react-spinners'
 import { Tab } from '@headlessui/react'
 import { RiExternalLinkLine } from 'react-icons/ri'
+import { BeatLoader } from 'react-spinners'
+import { Table } from '@components/Table'
+import { ListDropdown } from '@components/ListDropdown'
+import { MdDeleteOutline } from 'react-icons/md'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export const Builds: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-    const [builds, setBuilds] = useState<Build[] | null>(null)
-    // const [, setRunning] = useState(false)
-    // const [runId, setRunId] = useState<string | null>(null)
-
-    useEffect(() => {
-        VillageClient.scripts.getScriptBuilds(scriptId).then((b) => {
-            setBuilds(b)
-        })
-    }, [scriptId])
-
-    if (builds === null) {
-        return <div>Loading...</div>
-    }
-
+const NoBuilds: React.FC = () => {
     return (
-        <div className="flex-col space-y-2">
-            <div className="my-4 flex px-6 font-semibold">
-                <div className="w-64">
-                    <h2>Build ID</h2>
-                </div>
-                <div className="w-96">
-                    <h2>Status</h2>
-                </div>
-                <div className="w-32">
-                    <h2>Time</h2>
-                </div>
-            </div>
-            {builds.map((build) => {
-                return (
-                    <Link
-                        key={build.id}
-                        to={`/build/${build.id}`}
-                        className="flex border-b-2 border-transparent px-6 hover:border-slate-200 hover:bg-slate-50"
-                    >
-                        <div className="w-64">
-                            <p>{build.id}</p>
-                        </div>
-                        <div className="w-96">
-                            <p>{build.status}</p>
-                        </div>
-                        <div className="w-32">
-                            <p>{getTimeSince(build.created_at)}</p>
-                        </div>
-                    </Link>
-                )
-            })}
+        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+            <h1 className="text-2xl font-semibold">No builds</h1>
+            <p className="mt-8 text-gray-600">
+                Deploy scripts to see the results here
+            </p>
         </div>
     )
 }
 
-export const Runs: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-    const [runs, setRuns] = useState<Run[] | null>(null)
+const NoBuildResults: React.FC = () => {
+    return (
+        <tr>
+            <td colSpan={3} align="center" className="py-16 ">
+                <h1 className="text-lg font-semibold text-gray-400">
+                    No builds found
+                </h1>
+            </td>
+        </tr>
+    )
+}
 
-    useEffect(() => {
-        VillageClient.scripts.getScriptRuns(scriptId).then((r) => {
-            setRuns(r)
-        })
-    }, [scriptId])
+const BuildRow: React.FC<{ data: Build }> = ({ data }) => {
+    const build = data
+    return (
+        <tr>
+            <td className="py-4">
+                <Link
+                    to={`/app/builds/${build.id}`}
+                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                >
+                    {build.id}
+                </Link>
+            </td>
+            <td className="pl-4">{build.status}</td>
+            <td className="pl-4">{getTimeSince(build.created_at)}</td>
+        </tr>
+    )
+}
 
-    if (runs === null) {
-        return <div>Loading...</div>
-    }
+const searchBuildsFilter = ({
+    query,
+    data,
+}: {
+    query: string
+    data: Build
+}) => {
+    const build = data
 
     return (
+        build.id.toLowerCase().includes(query.toLowerCase()) ||
+        build.status.toLowerCase().includes(query.toLowerCase())
+    )
+}
+
+export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
+    return (
         <div className="flex-col space-y-2">
-            <div className="my-4 flex px-6 font-semibold">
-                <div className="w-64">
-                    <h2>Run ID</h2>
-                </div>
-                <div className="w-96">
-                    <h2>Status</h2>
-                </div>
-                <div className="w-32">
-                    <h2>Time</h2>
-                </div>
-            </div>
-            {runs.map((run) => {
-                return (
-                    <Link
-                        key={run.id}
-                        to={`/build/${run.id}`}
-                        className="flex border-b-2 border-transparent px-6 hover:border-slate-200 hover:bg-slate-50"
-                    >
-                        <div className="w-64">
-                            <p>{run.id}</p>
-                        </div>
-                        <div className="w-96">
-                            <p>{run.status}</p>
-                        </div>
-                        <div className="w-32">
-                            <p>{getTimeSince(run.created_at)}</p>
-                        </div>
-                    </Link>
-                )
-            })}
+            <Table
+                loading={false}
+                emptyState={<NoBuilds />}
+                noResultsState={<NoBuildResults />}
+                columnNames={['Name', 'Schedule', 'Updated', '']}
+                rowData={builds}
+                RowRenderer={BuildRow}
+                searchFilter={searchBuildsFilter}
+            />
         </div>
     )
 }
 
-export const Schedules: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-    const [schedules, setSchedules] = useState<Schedule[] | null>(null)
+const NoRuns: React.FC = () => {
+    return (
+        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+            <h1 className="text-2xl font-semibold">No runs</h1>
+            <p className="mt-8 text-gray-600">
+                Run scripts to see the results here
+            </p>
+        </div>
+    )
+}
 
-    useEffect(() => {
-        VillageClient.scripts.getScriptSchedules(scriptId).then((r) => {
-            setSchedules(r)
-        })
-    }, [scriptId])
+const NoRunResults: React.FC = () => {
+    return (
+        <tr>
+            <td colSpan={3} align="center" className="py-16 ">
+                <h1 className="text-lg font-semibold text-gray-400">
+                    No runs found
+                </h1>
+            </td>
+        </tr>
+    )
+}
 
-    if (schedules === null) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                Loading...
-            </div>
-        )
-    }
+const RunRow: React.FC<{ data: Run }> = ({ data }) => {
+    const run = data
+    return (
+        <tr>
+            <td className="py-4">
+                <Link
+                    to={`/app/runs/${run.id}`}
+                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                >
+                    {run.id}
+                </Link>
+            </td>
+            <td className="pl-4">{run.status}</td>
+            <td className="pl-4">{getTimeSince(run.created_at)}</td>
+        </tr>
+    )
+}
+
+const searchRunsFilter = ({ query, data }: { query: string; data: Run }) => {
+    const run = data
+    const script = run.build?.script
 
     return (
+        script?.name.toLowerCase().includes(query.toLowerCase()) ||
+        script?.id.toLowerCase().includes(query.toLowerCase()) ||
+        run.status.toLowerCase().includes(query.toLowerCase())
+    )
+}
+
+export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
+    return (
         <div className="flex-col space-y-2">
-            <div className="my-4 flex px-6 font-semibold">
-                <div className="w-64">
-                    <h2>Schedule ID</h2>
-                </div>
-                <div className="w-96">
-                    <h2>Schedule</h2>
-                </div>
-                <div className="w-32">
-                    <h2>Time</h2>
-                </div>
-            </div>
-            {schedules.map((schedule) => {
-                return (
-                    <Link
-                        key={schedule.id}
-                        to={`/build/${schedule.id}`}
-                        className="flex border-b-2 border-transparent px-6 hover:border-slate-200 hover:bg-slate-50"
-                    >
-                        <div className="w-64">
-                            <p>{schedule.id}</p>
-                        </div>
-                        <div className="w-96">
-                            <p>
-                                {schedule.minute} {schedule.hour}{' '}
-                                {schedule.day_of_month} {schedule.month_of_year}{' '}
-                                {schedule.day_of_week}
-                            </p>
-                        </div>
-                        <div className="w-32">
-                            <p>{getTimeSince(schedule.created_at)}</p>
-                        </div>
-                    </Link>
-                )
-            })}
+            <Table
+                loading={false}
+                emptyState={<NoRuns />}
+                noResultsState={<NoRunResults />}
+                columnNames={['Name', 'Schedule', 'Updated', '']}
+                rowData={runs}
+                RowRenderer={RunRow}
+                searchFilter={searchRunsFilter}
+            />
+        </div>
+    )
+}
+
+const NoSchedules: React.FC = () => {
+    return (
+        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+            <h1 className="text-2xl font-semibold">No schedules</h1>
+            <p className="mt-8 text-gray-600">
+                Create a schedule to run a script at specific times
+            </p>
+        </div>
+    )
+}
+
+const NoScheduleResults: React.FC = () => {
+    return (
+        <h1 className="text-lg font-semibold text-gray-400">
+            No schedules found
+        </h1>
+    )
+}
+
+const searchSchedulesFilter = ({
+    query,
+    data,
+}: {
+    query: string
+    data: Schedule
+}) => {
+    const schedule = data
+    const script = schedule.script
+
+    return (
+        script?.name.toLowerCase().includes(query.toLowerCase()) ||
+        script?.id.toLowerCase().includes(query.toLowerCase()) ||
+        schedule.name.toLowerCase().includes(query.toLowerCase())
+    )
+}
+
+const ScheduleRow: React.FC<{ data: Schedule }> = ({ data }) => {
+    const schedule = data
+
+    return (
+        <tr>
+            <td className="py-4">
+                <Link
+                    to={`/app/schedules/${schedule.id}`}
+                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                >
+                    {schedule.name}
+                </Link>
+            </td>
+            <td className="pl-4">
+                {schedule.minute} {schedule.hour} {schedule.day_of_month}{' '}
+                {schedule.month_of_year} {schedule.day_of_week}
+            </td>
+            <td className="pl-4">{getTimeSince(schedule.updated_at)}</td>
+            <td>
+                <ListDropdown
+                    options={[
+                        {
+                            id: 'delete',
+                            name: 'Delete',
+                            icon: <MdDeleteOutline className="mr-2 text-xl" />,
+                            handler: () => {
+                                // TODO: Delete schedule
+                                console.log('Delete')
+                            },
+                        },
+                    ]}
+                />
+            </td>
+        </tr>
+    )
+}
+
+export const Schedules: React.FC<{ schedules: Schedule[] }> = ({
+    schedules,
+}) => {
+    return (
+        <div className="flex-col space-y-2">
+            <Table
+                loading={false}
+                emptyState={<NoSchedules />}
+                noResultsState={<NoScheduleResults />}
+                columnNames={['Name', 'Schedule', 'Updated', '']}
+                rowData={schedules}
+                RowRenderer={ScheduleRow}
+                searchFilter={searchSchedulesFilter}
+            />
         </div>
     )
 }
 
 export const Script: React.FC = () => {
     const { id } = useParams()
-    const [script, setScript] = useState<ScriptWithBuild | null>(null)
-    // const [, setRunning] = useState(false)
-    // const [runId, setRunId] = useState<string | null>(null)
+    const [script, setScript] = useState<ScriptWithMeta | null>(null)
 
     useEffect(() => {
         if (id === undefined) return
@@ -185,11 +260,23 @@ export const Script: React.FC = () => {
         })
     }, [id])
 
-    const [categories] = useState({
-        Builds: id ? <Builds scriptId={id} /> : <div>Loading...</div>,
-        Runs: id ? <Runs scriptId={id} /> : <div>Loading...</div>,
-        Schedules: id ? <Schedules scriptId={id} /> : <div>Loading...</div>,
-    })
+    const categories = {
+        Builds: script ? (
+            <Builds builds={script.builds ?? []} />
+        ) : (
+            <div>Loading...</div>
+        ),
+        Runs: script ? (
+            <Runs runs={script.runs ?? []} />
+        ) : (
+            <div>Loading...</div>
+        ),
+        Schedules: script ? (
+            <Schedules schedules={script.schedules ?? []} />
+        ) : (
+            <div>Loading...</div>
+        ),
+    }
 
     if (id === undefined) {
         return <div>No script selected</div>
@@ -249,7 +336,7 @@ export const Script: React.FC = () => {
                                         ' focus:outline-none',
                                         selected
                                             ? 'bg-white shadow'
-                                            : 'text-blue-100 hover:bg-white/80 hover:text-zinc-900'
+                                            : ' hover:bg-white/80 hover:text-zinc-900'
                                     )
                                 }
                             >
