@@ -40,7 +40,8 @@
         "react-icons": "^4.4.0",
         "react-popper": "^2.3.0",
         "react-router-dom": "^6.3.0",
-        "react-spinners": "^0.13.4"
+        "react-spinners": "^0.13.4",
+        "vite-plugin-svgr": "^2.2.1"
     },
     "devDependencies": {
         "@types/react": "^18.0.17",
@@ -59,6 +60,6 @@
         "typescript": "^4.8.2",
         "vite": "^3.0.7",
         "vite-tsconfig-paths": "^3.5.0",
-        "vivid-studio": "^0.4.6"
+        "vivid-studio": "^0.6.6"
     }
 }
