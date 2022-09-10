@@ -76,6 +76,8 @@ export const Dashboard: React.FC = () => {
                         </Route>
 
                         <Route path="workflows" element={<Workflows />} />
+
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>
             </div>
