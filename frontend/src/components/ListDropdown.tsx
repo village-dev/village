@@ -38,7 +38,7 @@ export function ListDropdown({
     return (
         <div className="text-left">
             <button
-                className="rounded-lg p-2 hover:bg-zinc-100 dark:hover:bg-zinc-600"
+                className="rounded-lg p-2 hover:bg-zinc-100"
                 type="button"
                 onClick={() => {
                     setShowOptions(true)
@@ -68,7 +68,7 @@ export function ListDropdown({
                         leaveTo="opacity-0 scale-95"
                     >
                         <div
-                            className="w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-800"
+                            className="w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none "
                             role="menu"
                             aria-orientation="vertical"
                             aria-labelledby="menu-button"
@@ -78,7 +78,7 @@ export function ListDropdown({
                                 <div className="py-1" role="none" key={o.id}>
                                     <button
                                         type="button"
-                                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-zinc-700"
+                                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 "
                                         role="menuitem"
                                         id="menu-item-1"
                                         onClick={o.handler}
