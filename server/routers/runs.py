@@ -24,16 +24,10 @@ async def list_runs(user: PrismaModels.User = Depends(get_user)):
         order={"created_at": "desc"},
         include={"build": {"include": {"script": True}}},
         where={
-            "build": {
+            "script": {
                 "is": {
-                    "script": {
-                        "is": {
-                            "workspace": {
-                                "is": {
-                                    "users": {"some": {"user_id": {"equals": user.id}}}
-                                }
-                            }
-                        }
+                    "workspace": {
+                        "is": {"users": {"some": {"user_id": {"equals": user.id}}}}
                     }
                 }
             }
@@ -55,7 +49,7 @@ async def check_run_access(user_id: str, run_id: str):
         )
 
     try:
-        await check_script_access(user_id, run.build.script_id)
+        await check_script_access(user_id, run.script_id)
     except HTTPException:
         # Intercept the exception and throw a new one
         raise HTTPException(

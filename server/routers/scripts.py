@@ -662,6 +662,7 @@ async def run_script_container(
 
     run = await PrismaModels.Run.prisma().create(
         {
+            "script_id": script.script_id,
             "build_id": build.id,
             "status": RunStatus.RUNNING,
             "output": "",
@@ -794,7 +795,7 @@ async def list_scripts(workspace_id: str, user: PrismaModels.User = Depends(get_
 @router.get(
     "/script/get",
     operation_id="get_script",
-    response_model=PrismaPartials.ScriptWithBuild,
+    response_model=PrismaPartials.ScriptWithMeta,
 )
 async def get_script(script_id: str, user: PrismaModels.User = Depends(get_user)):
     """
@@ -807,10 +808,15 @@ async def get_script(script_id: str, user: PrismaModels.User = Depends(get_user)
         where={"id": script_id},
         include={
             "builds": {
-                "take": 1,
                 "order_by": {"updated_at": "desc"},
                 "include": {"params": True},
-            }
+            },
+            "runs": {
+                "order_by": {"updated_at": "desc"},
+            },
+            "schedules": {
+                "order_by": {"updated_at": "desc"},
+            },
         },
     )
 

@@ -2,7 +2,7 @@ import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Run, Schedule, ScriptWithBuild, Build } from '../../../api'
+import { Run, Schedule, ScriptWithMeta, Build } from '../../../api'
 import { RunScriptEmbeddable } from './RunScript'
 
 import { BeatLoader } from 'react-spinners'
@@ -172,9 +172,7 @@ export const Schedules: React.FC<{ scriptId: string }> = ({ scriptId }) => {
 
 export const Script: React.FC = () => {
     const { id } = useParams()
-    const [script, setScript] = useState<ScriptWithBuild | null>(null)
-    // const [, setRunning] = useState(false)
-    // const [runId, setRunId] = useState<string | null>(null)
+    const [script, setScript] = useState<ScriptWithMeta | null>(null)
 
     useEffect(() => {
         if (id === undefined) return
