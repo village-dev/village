@@ -18,6 +18,7 @@ Server (`/server`):
 - Install dependencies by running `poetry install`
 - Set up the database by running `poetry run prisma db push`
 - Start the server by running `make dev`
+- For Temporal to work, start the worker by running `poetry run python worker.py` (not necessary otherwise)
 
 Frontend (`/frontend`):
 
