@@ -91,16 +91,14 @@ export const Table: TableComponent = ({
                     <tr>
                         {columnNames.map((name) => {
                             return (
-                                <th className="border-b p-4 pt-0 pb-3 text-left font-medium text-slate-400 dark:border-slate-600 dark:text-slate-200">
+                                <th className="border-b p-4 pt-0 pb-3 text-left font-medium text-slate-400">
                                     {name}
                                 </th>
                             )
                         })}
                     </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-slate-800">
-                    {innerTable}
-                </tbody>
+                <tbody className="bg-white">{innerTable}</tbody>
             </table>
         </>
     )

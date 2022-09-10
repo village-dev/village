@@ -16,6 +16,78 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
+const NoBuilds: React.FC = () => {
+    return (
+        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+            <h1 className="text-2xl font-semibold">No builds</h1>
+            <p className="mt-8 text-gray-600">
+                Deploy scripts to see the results here
+            </p>
+        </div>
+    )
+}
+
+const NoBuildResults: React.FC = () => {
+    return (
+        <tr>
+            <td colSpan={3} align="center" className="py-16 ">
+                <h1 className="text-lg font-semibold text-gray-400">
+                    No builds found
+                </h1>
+            </td>
+        </tr>
+    )
+}
+
+const BuildRow: React.FC<{ data: Build }> = ({ data }) => {
+    const build = data
+    return (
+        <tr>
+            <td className="py-4">
+                <Link
+                    to={`/app/builds/${build.id}`}
+                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                >
+                    {build.id}
+                </Link>
+            </td>
+            <td className="pl-4">{build.status}</td>
+            <td className="pl-4">{getTimeSince(build.created_at)}</td>
+        </tr>
+    )
+}
+
+const searchBuildsFilter = ({
+    query,
+    data,
+}: {
+    query: string
+    data: Build
+}) => {
+    const build = data
+
+    return (
+        build.id.toLowerCase().includes(query.toLowerCase()) ||
+        build.status.toLowerCase().includes(query.toLowerCase())
+    )
+}
+
+export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
+    return (
+        <div className="flex-col space-y-2">
+            <Table
+                loading={false}
+                emptyState={<NoBuilds />}
+                noResultsState={<NoBuildResults />}
+                columnNames={['Name', 'Schedule', 'Updated', '']}
+                rowData={builds}
+                RowRenderer={BuildRow}
+                searchFilter={searchBuildsFilter}
+            />
+        </div>
+    )
+}
+
 const NoRuns: React.FC = () => {
     return (
         <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
@@ -65,43 +137,6 @@ const searchRunsFilter = ({ query, data }: { query: string; data: Run }) => {
         script?.name.toLowerCase().includes(query.toLowerCase()) ||
         script?.id.toLowerCase().includes(query.toLowerCase()) ||
         run.status.toLowerCase().includes(query.toLowerCase())
-    )
-}
-
-export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
-    return (
-        <div className="flex-col space-y-2">
-            <div className="my-4 flex px-6 font-semibold">
-                <div className="w-64">
-                    <h2>Build ID</h2>
-                </div>
-                <div className="w-96">
-                    <h2>Status</h2>
-                </div>
-                <div className="w-32">
-                    <h2>Time</h2>
-                </div>
-            </div>
-            {builds.map((build) => {
-                return (
-                    <Link
-                        key={build.id}
-                        to={`/build/${build.id}`}
-                        className="flex border-b-2 border-transparent px-6 hover:border-slate-200 hover:bg-slate-50"
-                    >
-                        <div className="w-64">
-                            <p>{build.id}</p>
-                        </div>
-                        <div className="w-96">
-                            <p>{build.status}</p>
-                        </div>
-                        <div className="w-32">
-                            <p>{getTimeSince(build.created_at)}</p>
-                        </div>
-                    </Link>
-                )
-            })}
-        </div>
     )
 }
 
