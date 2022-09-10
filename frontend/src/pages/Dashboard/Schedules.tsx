@@ -5,18 +5,87 @@ import { ListDropdown } from '@components/ListDropdown'
 import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight } from 'react-icons/hi'
-import { Link } from 'react-router-dom'
-import { BarLoader } from 'react-spinners'
-import { ScheduleWithScript } from '../../../api'
 import { MdDeleteOutline } from 'react-icons/md'
-import { AiTwotoneCalendar } from 'react-icons/ai'
+import { Link } from 'react-router-dom'
+import { ScheduleWithScript } from '../../../api'
+
+const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
+    const schedule = data
+
+    console.log(schedule)
+
+    return (
+        <tr>
+            <td className="py-4">
+                <Link
+                    to={`/app/schedules/${schedule.id}`}
+                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                >
+                    {schedule.name}
+                </Link>
+            </td>
+            <td className="pl-4">
+                {schedule.minute} {schedule.hour} {schedule.day_of_month}{' '}
+                {schedule.month_of_year} {schedule.day_of_week}
+            </td>
+            <td className="pl-4">{getTimeSince(schedule.updated_at)}</td>
+            <td>
+                <ListDropdown
+                    options={[
+                        {
+                            id: 'delete',
+                            name: 'Delete',
+                            icon: <MdDeleteOutline className="mr-2 text-xl" />,
+                            handler: () => {
+                                // TODO: Delete schedule
+                                console.log('Delete')
+                            },
+                        },
+                    ]}
+                />
+            </td>
+        </tr>
+    )
+}
+
+const NoSchedules: React.FC = () => {
+    return (
+        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+            <h1 className="text-2xl font-semibold">No schedules</h1>
+            <p className="mt-8 text-gray-600">
+                Create a schedule to run a script at specific times
+            </p>
+        </div>
+    )
+}
+
+const NoResults: React.FC = () => {
+    return (
+        <h1 className="text-lg font-semibold text-gray-400">
+            No schedules found
+        </h1>
+    )
+}
+
+const searchFilter = ({
+    query,
+    data,
+}: {
+    query: string
+    data: ScheduleWithScript
+}) => {
+    const schedule = data
+    const script = schedule.script
+
+    return (
+        script?.name.toLowerCase().includes(query.toLowerCase()) ||
+        script?.id.toLowerCase().includes(query.toLowerCase()) ||
+        schedule.name.toLowerCase().includes(query.toLowerCase())
+    )
+}
 
 export const Schedules: React.FC = () => {
     const [schedules, setSchedules] = useState<ScheduleWithScript[]>([])
-    const [query, setQuery] = useState('')
-    const [filteredSchedules, setFilteredSchedules] = useState<
-        ScheduleWithScript[]
-    >([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -25,117 +94,6 @@ export const Schedules: React.FC = () => {
             setLoading(false)
         })
     }, [])
-
-    useEffect(() => {
-        setFilteredSchedules(
-            schedules.filter((schedule) => {
-                const script = schedule.script
-
-                return (
-                    script?.name.toLowerCase().includes(query.toLowerCase()) ||
-                    script?.id.toLowerCase().includes(query.toLowerCase()) ||
-                    schedule.name.toLowerCase().includes(query.toLowerCase())
-                )
-            })
-        )
-    }, [query, schedules])
-
-    let innerTable
-
-    if (loading) {
-        innerTable = (
-            <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-                <h1 className="text-2xl font-semibold text-gray-700">
-                    Loading...
-                </h1>
-                <div className="mt-12 w-64">
-                    <BarLoader width="100%" color="rgb(107 114 128)" />
-                </div>
-            </div>
-        )
-    } else if (schedules.length === 0) {
-        innerTable = (
-            <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-                <h1 className="text-2xl font-semibold">No schedules</h1>
-                <p className="mt-8 text-gray-600">
-                    Create a schedule to run a script at specific times
-                </p>
-            </div>
-        )
-    } else {
-        let searchResults
-
-        if (filteredSchedules.length === 0) {
-            searchResults = (
-                <tr>
-                    <td colSpan={3} align="center" className="py-16 ">
-                        <h1 className="text-lg font-semibold text-gray-400">
-                            No schedules found
-                        </h1>
-                    </td>
-                </tr>
-            )
-        } else {
-            searchResults = schedules.map((schedule) => {
-                return (
-                    <tr>
-                        <td className="py-4">
-                            <Link
-                                to={`/app/schedules/${schedule.id}`}
-                                className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
-                            >
-                                {schedule.name}
-                            </Link>
-                        </td>
-                        <td className="pl-4">
-                            {schedule.minute} {schedule.hour}{' '}
-                            {schedule.day_of_month} {schedule.month_of_year}{' '}
-                            {schedule.day_of_week}
-                        </td>
-                        <td className="pl-4">
-                            {getTimeSince(schedule.updated_at)}
-                        </td>
-                        <td>
-                            <ListDropdown
-                                options={[
-                                    {
-                                        id: 'delete',
-                                        name: 'Delete',
-                                        icon: (
-                                            <MdDeleteOutline className="mr-2 text-xl" />
-                                        ),
-                                        handler: () => {
-                                            // TODO: Delete schedule
-                                            console.log('Delete')
-                                        },
-                                    },
-                                ]}
-                            />
-                        </td>
-                    </tr>
-                )
-            })
-        }
-
-        innerTable = (
-            <>
-                <div className="px-6">
-                    <Input
-                        type="text"
-                        onChange={(e) => {
-                            setQuery(e.target.value)
-                        }}
-                        placeholder="Search"
-                    />
-                </div>
-                <div className="mx-6 mt-4">
-                    <Table columnNames={['Name', 'Schedule', 'Updated', '']}>
-                        {searchResults}
-                    </Table>
-                </div>
-            </>
-        )
-    }
 
     return (
         <div className="flex h-full flex-col space-y-6 px-8 py-16">
@@ -148,7 +106,19 @@ export const Schedules: React.FC = () => {
                     Create schedule <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
-            <div className="h-full flex-grow">{innerTable}</div>
+            <div className="h-full flex-grow">
+                <div className="mx-6 mt-4">
+                    <Table
+                        loading={loading}
+                        emptyState={<NoSchedules />}
+                        noResultsState={<NoResults />}
+                        columnNames={['Name', 'Schedule', 'Updated', '']}
+                        rowData={schedules}
+                        RowRenderer={ScheduleRow}
+                        searchFilter={searchFilter}
+                    />
+                </div>
+            </div>
         </div>
     )
 }
