@@ -1,7 +1,7 @@
 generator db {
   provider               = "prisma-client-py"
-  interface              = "asyncio"
   partial_type_generator = "models/prisma_partials.py"
+  interface              = "asyncio"
 }
 
 datasource db {
@@ -29,7 +29,7 @@ model Workspace {
   updated_at DateTime?        @updatedAt
   name       String
   creator_id String
-  created_by User             @relation("created_by", fields: [creator_id], references: [id])
+  created_by User             @relation("created_by", fields: [creator_id], references: [id], onDelete: Cascade)
   scripts    Script[]
   default_of User[]           @relation("default_workspace")
   users      WorkspaceUsers[]
@@ -41,8 +41,8 @@ model WorkspaceUsers {
   workspace_id String
   user_id      String
   role         Role
-  user         User      @relation(fields: [user_id], references: [id])
-  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  workspace    Workspace @relation(fields: [workspace_id], references: [id], onDelete: Cascade)
 
   @@id([workspace_id, user_id])
 }

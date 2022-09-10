@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { VillageClient } from '@common/VillageClient'
+import { Input } from '@components/Input'
 import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
 import { BeatLoader } from 'react-spinners'
-import { Input } from '@components/Input'
 
 export const NewWorkspace: React.FC = () => {
     const [name, setName] = useState('')
@@ -24,7 +24,7 @@ export const NewWorkspace: React.FC = () => {
     const proposeId = useRef(
         debounce(async (title: string) => {
             setProposingId(true)
-            VillageClient.workspace.proposeId(title).then((newId) => {
+            VillageClient.workspace.proposeWorkspaceId(title).then((newId) => {
                 setId(newId)
                 setProposingId(false)
             })
@@ -33,7 +33,7 @@ export const NewWorkspace: React.FC = () => {
 
     const checkId = useRef(
         debounce(async (id: string) => {
-            VillageClient.workspace.checkId(id).then((available) => {
+            VillageClient.workspace.checkWorkspaceId(id).then((available) => {
                 setIdAvailable(available)
             })
         }, 500)
