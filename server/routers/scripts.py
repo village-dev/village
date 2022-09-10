@@ -98,7 +98,7 @@ async def propose_script_id(
     Propose a script ID based on the name.
     """
 
-    return propose_script_id_internal(name)
+    return await propose_script_id_internal(name)
 
 
 @router.get("/scripts/check_id", operation_id="check_script_id", response_model=bool)
@@ -845,10 +845,6 @@ async def get_script_schedules(
     schedules = await PrismaModels.Schedule.prisma().find_many(
         where={"script_id": script_id}, order={"updated_at": "desc"}
     )
-
-    # patch JSON serialization bug with Pydantic and Prisma
-    for schedule in schedules:
-        schedule.params = json.dumps(schedule.params)  # type: ignore
 
     return schedules
 

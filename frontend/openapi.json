@@ -2166,11 +2166,6 @@
             "title": "Month Of Year",
             "type": "string"
           },
-          "params": {
-            "title": "Params",
-            "type": "string",
-            "format": "json-string"
-          },
           "creator_id": {
             "title": "Creator Id",
             "type": "string"
@@ -2199,9 +2194,60 @@
             "items": {
               "$ref": "#\/components\/schemas\/Run"
             }
+          },
+          "params": {
+            "title": "Params",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/ScheduleParam"
+            }
           }
         },
         "description": "Represents a Schedule record"
+      },
+      "ScheduleParam": {
+        "title": "ScheduleParam",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "key",
+          "value",
+          "schedule_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          },
+          "schedule_id": {
+            "title": "Schedule Id",
+            "type": "string"
+          },
+          "schedule": {
+            "$ref": "#\/components\/schemas\/Schedule"
+          }
+        },
+        "description": "Represents a ScheduleParam record"
       },
       "ScheduleWithScript": {
         "title": "ScheduleWithScript",
@@ -2265,8 +2311,10 @@
           },
           "params": {
             "title": "Params",
-            "type": "string",
-            "format": "json-string"
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/ScheduleParam"
+            }
           }
         }
       },
@@ -2339,8 +2387,10 @@
           },
           "params": {
             "title": "Params",
-            "type": "string",
-            "format": "json-string"
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/ScheduleParam"
+            }
           }
         }
       },
