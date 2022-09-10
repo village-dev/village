@@ -94,28 +94,26 @@ export const Schedules: React.FC = () => {
     }, [])
 
     return (
-        <div className="flex h-full flex-col space-y-6 px-8 py-16">
+        <div className="flex h-full flex-col space-y-6 px-8 py-4">
             <div className="flex items-center space-x-6 px-6">
                 <h1 className="text-2xl">Schedules</h1>{' '}
                 <Link
                     to="/app/new/schedule"
-                    className="flex items-center rounded-md bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-emerald-200"
+                    className="flex items-center rounded-md bg-lightgreen px-3 py-1.5 text-sm font-semibold text-green hover:bg-emerald-200"
                 >
                     Create schedule <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
-            <div className="h-full flex-grow">
-                <div className="mx-6 mt-4">
-                    <Table
-                        loading={loading}
-                        emptyState={<NoSchedules />}
-                        noResultsState={<NoResults />}
-                        columnNames={['Name', 'Schedule', 'Updated', '']}
-                        rowData={schedules}
-                        RowRenderer={ScheduleRow}
-                        searchFilter={searchFilter}
-                    />
-                </div>
+            <div className="h-full flex-grow px-6">
+                <Table
+                    loading={loading}
+                    emptyState={<NoSchedules />}
+                    noResultsState={<NoResults />}
+                    columnNames={['Name', 'Schedule', 'Updated', '']}
+                    rowData={schedules}
+                    RowRenderer={ScheduleRow}
+                    searchFilter={searchFilter}
+                />
             </div>
         </div>
     )
