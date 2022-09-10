@@ -12,8 +12,6 @@ import { ScheduleWithScript } from '../../../api'
 const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
     const schedule = data
 
-    console.log(schedule)
-
     return (
         <tr>
             <td className="py-4">
