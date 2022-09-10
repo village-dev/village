@@ -295,6 +295,11 @@ components:
         schedule_id:
           title: Schedule Id
           type: string
+        script:
+          $ref: '#/components/schemas/Script'
+        script_id:
+          title: Script Id
+          type: string
         status:
           $ref: '#/components/schemas/RunStatus'
         updated_at:
@@ -306,6 +311,7 @@ components:
       - created_at
       - updated_at
       - build_id
+      - script_id
       - output
       - status
       title: Run
@@ -606,6 +612,11 @@ components:
         name:
           title: Name
           type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
         schedules:
           items:
             $ref: '#/components/schemas/Schedule'
@@ -632,7 +643,7 @@ components:
       - creator_id
       title: Script
       type: object
-    ScriptWithBuild:
+    ScriptWithMeta:
       properties:
         builds:
           items:
@@ -657,6 +668,16 @@ components:
         name:
           title: Name
           type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        schedules:
+          items:
+            $ref: '#/components/schemas/Schedule'
+          title: Schedules
+          type: array
         updated_at:
           format: date-time
           title: Updated At
@@ -673,7 +694,7 @@ components:
       - engine_version
       - description
       - workspace_id
-      title: ScriptWithBuild
+      title: ScriptWithMeta
       type: object
     UpdateScheduleInput:
       description: Schedule update model
@@ -1410,7 +1431,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScriptWithBuild'
+                $ref: '#/components/schemas/ScriptWithMeta'
           description: Successful Response
         '422':
           content:

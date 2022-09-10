@@ -462,7 +462,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/ScriptWithBuild"
+                  "$ref": "#\/components\/schemas\/ScriptWithMeta"
                 }
               }
             }
@@ -1926,6 +1926,7 @@
           "created_at",
           "updated_at",
           "build_id",
+          "script_id",
           "output",
           "status"
         ],
@@ -1947,6 +1948,10 @@
           },
           "build_id": {
             "title": "Build Id",
+            "type": "string"
+          },
+          "script_id": {
+            "title": "Script Id",
             "type": "string"
           },
           "output": {
@@ -1977,6 +1982,9 @@
           },
           "schedule": {
             "$ref": "#\/components\/schemas\/Schedule"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
           }
         },
         "description": "Represents a Run record"
@@ -2401,6 +2409,13 @@
               "$ref": "#\/components\/schemas\/Build"
             }
           },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          },
           "schedules": {
             "title": "Schedules",
             "type": "array",
@@ -2411,8 +2426,8 @@
         },
         "description": "Represents a Script record"
       },
-      "ScriptWithBuild": {
-        "title": "ScriptWithBuild",
+      "ScriptWithMeta": {
+        "title": "ScriptWithMeta",
         "required": [
           "id",
           "name",
@@ -2451,6 +2466,20 @@
             "type": "array",
             "items": {
               "$ref": "#\/components\/schemas\/Build"
+            }
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          },
+          "schedules": {
+            "title": "Schedules",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schedule"
             }
           },
           "engine_version": {

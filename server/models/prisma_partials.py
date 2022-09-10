@@ -55,7 +55,7 @@ Schedule.create_partial(
     },
 )
 Script.create_partial(
-    "ScriptWithBuild",
+    "ScriptWithMeta",
     include={
         "id": True,
         "name": True,
@@ -63,6 +63,8 @@ Script.create_partial(
         "updated_at": True,
         "engine": True,
         "builds": True,
+        "runs": True,
+        "schedules": True,
         "engine_version": True,
         "description": True,
         "workspace_id": True,

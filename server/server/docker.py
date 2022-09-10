@@ -18,6 +18,7 @@ async def execute(
 
     run = await PrismaModels.Run.prisma().create(
         {
+            "script_id": build.script_id,
             "build_id": build.id,
             "status": RunStatus.RUNNING,
             "output": "",
