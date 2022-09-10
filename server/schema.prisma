@@ -29,7 +29,7 @@ model Workspace {
   updated_at DateTime?        @updatedAt
   name       String
   creator_id String
-  created_by User             @relation("created_by", fields: [creator_id], references: [id])
+  created_by User             @relation("created_by", fields: [creator_id], references: [id], onDelete: Cascade)
   scripts    Script[]
   default_of User[]           @relation("default_workspace")
   users      WorkspaceUsers[]
@@ -41,8 +41,8 @@ model WorkspaceUsers {
   workspace_id String
   user_id      String
   role         Role
-  user         User      @relation(fields: [user_id], references: [id])
-  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  workspace    Workspace @relation(fields: [workspace_id], references: [id], onDelete: Cascade)
 
   @@id([workspace_id, user_id])
 }
@@ -96,24 +96,34 @@ model Param {
   build       Build     @relation(fields: [build_id], references: [id], onDelete: Cascade)
 }
 
+model ScheduleParam {
+  id          String   @id @default(cuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  key         String
+  value       String
+  schedule_id String
+  schedule    Schedule @relation(fields: [schedule_id], references: [id], onDelete: Cascade)
+}
+
 model Schedule {
-  id            String   @id @default(cuid())
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id            String          @id @default(cuid())
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
   script_id     String
   day_of_month  String
   day_of_week   String
   hour          String
   minute        String
   month_of_year String
-  params        Json?
   creator_id    String
   description   String?
   name          String
   token_hash    String
-  created_by    User     @relation(fields: [creator_id], references: [id])
-  script        Script   @relation(fields: [script_id], references: [id], onDelete: Cascade)
+  created_by    User            @relation(fields: [creator_id], references: [id])
+  script        Script          @relation(fields: [script_id], references: [id], onDelete: Cascade)
   runs          Run[]
+  params        ScheduleParam[]
 }
 
 model Run {

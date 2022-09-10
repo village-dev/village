@@ -14,6 +14,7 @@ import { Script } from '@pages/Dashboard/Script'
 import { Scripts } from '@pages/Dashboard/Scripts'
 import { Settings } from '@pages/Dashboard/Settings'
 import { Workflows } from '@pages/Dashboard/Workflows'
+import { NotFound } from '@pages/NotFound'
 
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'

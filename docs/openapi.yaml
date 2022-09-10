@@ -1664,7 +1664,7 @@ paths:
   /scripts/check_id:
     get:
       description: Check if a script ID is available.
-      operationId: check_id
+      operationId: check_script_id
       parameters:
       - in: query
         name: id
@@ -1677,7 +1677,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Check Id
+                title: Response Check Script Id
                 type: boolean
           description: Successful Response
         '422':
@@ -1688,13 +1688,13 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Check Id
+      summary: Check Script Id
       tags:
       - scripts
   /scripts/propose_id:
     get:
       description: Propose a script ID based on the name.
-      operationId: propose_id
+      operationId: propose_script_id
       parameters:
       - in: query
         name: name
@@ -1707,7 +1707,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Propose Id
+                title: Response Propose Script Id
                 type: string
           description: Successful Response
         '422':
@@ -1718,7 +1718,7 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Propose Id
+      summary: Propose Script Id
       tags:
       - scripts
   /user/create:
@@ -1861,7 +1861,7 @@ paths:
   /workspaces/check_id:
     get:
       description: Check if a script ID is available.
-      operationId: check_id
+      operationId: check_workspace_id
       parameters:
       - in: query
         name: id
@@ -1874,7 +1874,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Check Id
+                title: Response Check Workspace Id
                 type: boolean
           description: Successful Response
         '422':
@@ -1885,13 +1885,13 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Check Id
+      summary: Check Workspace Id
       tags:
       - workspace
   /workspaces/propose_id:
     get:
-      description: Propose a script ID based on the name.
-      operationId: propose_id
+      description: Propose a workspace ID based on the name.
+      operationId: propose_workspace_id
       parameters:
       - in: query
         name: name
@@ -1904,7 +1904,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response Propose Id
+                title: Response Propose Workspace Id
                 type: string
           description: Successful Response
         '422':
@@ -1915,6 +1915,19 @@ paths:
           description: Validation Error
       security:
       - HTTPBearer: []
-      summary: Propose Id
+      summary: Propose Workspace Id
       tags:
       - workspace
+tags:
+- description: Scripts
+  name: scripts
+- description: Builds
+  name: builds
+- description: Runs
+  name: runs
+- description: Schedules
+  name: schedules
+- description: Users
+  name: users
+- description: Workspaces
+  name: workspaces
