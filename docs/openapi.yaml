@@ -437,9 +437,10 @@ components:
           title: Name
           type: string
         params:
-          format: json-string
+          items:
+            $ref: '#/components/schemas/ScheduleParam'
           title: Params
-          type: string
+          type: array
         runs:
           items:
             $ref: '#/components/schemas/Run'
@@ -472,6 +473,40 @@ components:
       - token_hash
       title: Schedule
       type: object
+    ScheduleParam:
+      description: Represents a ScheduleParam record
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        key:
+          title: Key
+          type: string
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        schedule_id:
+          title: Schedule Id
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        value:
+          title: Value
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - key
+      - value
+      - schedule_id
+      title: ScheduleParam
+      type: object
     ScheduleWithScript:
       properties:
         created_at:
@@ -503,9 +538,10 @@ components:
           title: Name
           type: string
         params:
-          format: json-string
+          items:
+            $ref: '#/components/schemas/ScheduleParam'
           title: Params
-          type: string
+          type: array
         script:
           $ref: '#/components/schemas/Script'
         updated_at:
@@ -555,9 +591,10 @@ components:
           title: Name
           type: string
         params:
-          format: json-string
+          items:
+            $ref: '#/components/schemas/ScheduleParam'
           title: Params
-          type: string
+          type: array
         runs:
           items:
             $ref: '#/components/schemas/Run'

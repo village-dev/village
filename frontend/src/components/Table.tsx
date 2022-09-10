@@ -8,7 +8,7 @@ interface TableProps<T> {
     emptyState: React.ReactNode
     noResultsState: React.ReactNode
     rowData: T[]
-    RowRenderer: React.FC<{ data: T; idx?: number }>
+    RowRenderer: React.FC<{ data: T; idx: number }>
     searchFilter: ({ data, query }: { data: T; query: string }) => boolean
     columnWidths?: string[] // class names for widths
 }
