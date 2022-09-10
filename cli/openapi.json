@@ -1569,6 +1569,53 @@
           }
         ]
       }
+    },
+    "\/slack\/oauth\/callback": {
+      "get": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "Oauth Callback",
+        "operationId": "oauth_callback_slack_oauth_callback_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Code"
+            },
+            "name": "code",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "State"
+            },
+            "name": "state",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

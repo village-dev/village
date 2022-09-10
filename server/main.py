@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 from prisma import Prisma
 
 from config import ALLOWED_ORIGINS
-from routers import builds, runs, schedules, scripts, users, workspaces
+from routers import builds, runs, schedules, scripts, slack, users, workspaces
 
 app = FastAPI(title="Village API", docs_url="/")
 
@@ -55,6 +55,7 @@ app.include_router(runs.router)
 app.include_router(schedules.router)
 app.include_router(users.router)
 app.include_router(workspaces.router)
+app.include_router(slack.router)
 
 tags_meta = [
     {

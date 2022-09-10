@@ -1646,6 +1646,35 @@ paths:
       summary: Propose Id
       tags:
       - scripts
+  /slack/oauth/callback:
+    get:
+      operationId: oauth_callback_slack_oauth_callback_get
+      parameters:
+      - in: query
+        name: code
+        required: true
+        schema:
+          title: Code
+      - in: query
+        name: state
+        required: true
+        schema:
+          title: State
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Oauth Callback
+      tags:
+      - slack
   /user/create:
     post:
       operationId: get_or_create_user

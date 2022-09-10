@@ -6,3 +6,5 @@ ALLOWED_ORIGINS = [os.getenv("FRONTEND_URL")] + [
 ]
 
 TEMPORAL_SERVER = os.getenv("TEMPORAL_SERVER", "localhost:7233")
+
+SLACK_CLIENT_ID = os.getenv("SLACK_CLIENT_ID")
