@@ -2816,5 +2816,31 @@
         "scheme": "bearer"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "scripts",
+      "description": "Scripts"
+    },
+    {
+      "name": "builds",
+      "description": "Builds"
+    },
+    {
+      "name": "runs",
+      "description": "Runs"
+    },
+    {
+      "name": "schedules",
+      "description": "Schedules"
+    },
+    {
+      "name": "users",
+      "description": "Users"
+    },
+    {
+      "name": "workspaces",
+      "description": "Workspaces"
+    }
+  ]
 }

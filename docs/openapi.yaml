@@ -1881,3 +1881,16 @@ paths:
       summary: Propose Id
       tags:
       - workspace
+tags:
+- description: Scripts
+  name: scripts
+- description: Builds
+  name: builds
+- description: Runs
+  name: runs
+- description: Schedules
+  name: schedules
+- description: Users
+  name: users
+- description: Workspaces
+  name: workspaces
