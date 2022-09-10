@@ -63,6 +63,9 @@ async def create_schedule(
     Add a script schedule to the scheduler
     """
 
+    # TODO: Validate cron expression
+    # TODO: partial for params
+
     await check_script_access(user.id, schedule.script_id)
 
     if schedule.params is None:
@@ -81,25 +84,32 @@ async def create_schedule(
             "hour": schedule.hour,
             "minute": schedule.minute,
             "month_of_year": schedule.month_of_year,
-            "params": Json(schedule.params),
+            "params": {
+                "create": [
+                    {"key": key, "value": value}
+                    for key, value in schedule.params.items()
+                ]
+            },
             "creator_id": user.id,
             "token_hash": token_hash,
-        }
+        },
+        include={"params": True},
     )
 
     # Create client connected to server at the given address
     client = await Client.connect(TEMPORAL_SERVER)
 
     # Execute a workflow
-    await client.start_workflow(
-        RunScript.run,
-        RunScheduledInput(schedule_id=db_schedule.id, token=token),
-        id=db_schedule.id,
-        task_queue="main-queue",
-        cron_schedule=f"{schedule.minute} {schedule.hour} {schedule.day_of_month} {schedule.month_of_year} {schedule.day_of_week}",
-    )
-
-    db_schedule.params = json.dumps(db_schedule.params)  # type: ignore
+    try:
+        await client.start_workflow(
+            RunScript.run,
+            RunScheduledInput(schedule_id=db_schedule.id, token=token),
+            id=db_schedule.id,
+            task_queue="main-queue",
+            cron_schedule=f"{schedule.minute} {schedule.hour} {schedule.day_of_month} {schedule.month_of_year} {schedule.day_of_week}",
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
     return db_schedule
 
@@ -166,7 +176,12 @@ async def update_schedule(
             "hour": schedule.hour,
             "minute": schedule.minute,
             "month_of_year": schedule.month_of_year,
-            "params": Json(schedule.params),
+            "params": {
+                "create": [
+                    {"key": key, "value": value}
+                    for key, value in schedule.params.items()
+                ]
+            },
         },
     )
 
@@ -194,7 +209,8 @@ async def run_schedule(schedule_request: RunScheduleInput):
     """
 
     schedule = await PrismaModels.Schedule.prisma().find_unique(
-        where={"id": schedule_request.schedule_id}
+        where={"id": schedule_request.schedule_id},
+        include={"params": True},
     )
 
     if schedule is None:
@@ -203,8 +219,12 @@ async def run_schedule(schedule_request: RunScheduleInput):
     if not verify_token(schedule.token_hash, schedule_request.token):
         raise HTTPException(status_code=403, detail="Invalid token")
 
-    # TODO: declare params type somewhere
-    params = cast(Optional[Dict[str, Union[str, int, float, bool]]], schedule.params)
+    if schedule.params is None:
+        schedule.params = []
+
+    params_dict = {param.key: param.value for param in schedule.params}
+
+    params = cast(Optional[Dict[str, Union[str, int, float, bool]]], params_dict)
 
     run_inputs = RunScriptInput(script_id=schedule.script_id, params=params)
 
@@ -236,8 +256,6 @@ async def list_schedules(user: PrismaModels.User = Depends(get_user)):
             }
         },
     )
-    for schedule in schedules:
-        schedule.params = json.dumps(schedule.params)  # type: ignore
 
     return schedules
 
@@ -277,8 +295,6 @@ async def get_schedule(schedule_id: str, user: PrismaModels.User = Depends(get_u
     schedule = await PrismaModels.Schedule.prisma().find_unique(
         where={"id": schedule_id}, include={"script": True, "runs": True}
     )
-
-    schedule.params = json.dumps(schedule.params)  # type: ignore
 
     if schedule is None:
         raise HTTPException(status_code=404, detail="Schedule not found")
