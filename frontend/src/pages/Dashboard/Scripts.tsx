@@ -101,7 +101,7 @@ export const Scripts: React.FC = () => {
                     Create script <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
-            <div className="h-full flex-grow">
+            <div className="h-full flex-grow px-6">
                 <Table
                     loading={loading}
                     emptyState={<NoScripts />}

@@ -77,11 +77,11 @@ export const Runs: React.FC = () => {
     }, [])
 
     return (
-        <div className="flex h-full flex-col space-y-6 px-8 py-16">
+        <div className="flex h-full flex-col space-y-6 px-8 py-4">
             <div className="px-6">
                 <h1 className="text-2xl">Runs</h1>
             </div>
-            <div className="h-full flex-grow">
+            <div className="h-full flex-grow px-6">
                 <Table
                     loading={loading}
                     emptyState={<NoRuns />}
