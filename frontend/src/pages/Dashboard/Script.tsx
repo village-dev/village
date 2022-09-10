@@ -79,7 +79,7 @@ export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
                 loading={false}
                 emptyState={<NoBuilds />}
                 noResultsState={<NoBuildResults />}
-                columnNames={['Name', 'Schedule', 'Updated', '']}
+                columnNames={['ID', 'Status', 'Updated', '']}
                 rowData={builds}
                 RowRenderer={BuildRow}
                 searchFilter={searchBuildsFilter}
@@ -147,7 +147,7 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
                 loading={false}
                 emptyState={<NoRuns />}
                 noResultsState={<NoRunResults />}
-                columnNames={['Name', 'Schedule', 'Updated', '']}
+                columnNames={['ID', 'Status', 'Updated', '']}
                 rowData={runs}
                 RowRenderer={RunRow}
                 searchFilter={searchRunsFilter}
