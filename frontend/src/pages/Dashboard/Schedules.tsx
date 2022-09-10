@@ -1,6 +1,5 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
-import { Input } from '@components/Input'
 import { ListDropdown } from '@components/ListDropdown'
 import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'

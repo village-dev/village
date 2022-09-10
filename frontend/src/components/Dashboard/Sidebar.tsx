@@ -15,7 +15,7 @@ export const Sidebar: React.FC = () => {
     const activeButtonStyle = `${buttonStyle} bg-lightgreen text-black`
 
     return (
-        <nav className="flex h-screen w-60 shrink-0 flex-col px-4 py-4">
+        <nav className="flex h-full shrink-0 flex-col px-8 py-4">
             {/* Middle links */}
             <div className="flex flex-col space-y-2">
                 <NavLink

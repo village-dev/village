@@ -1,12 +1,10 @@
-import { getTimeSince, getFormattedDate } from '@common/dates'
+import { getFormattedDate } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
-import { Input } from '@components/Input'
 import { Table } from '@components/Table'
 import { useUserContext } from '@contexts/UserContext'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight, HiOutlineLink } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
-import { BarLoader } from 'react-spinners'
 import { Script } from '../../../api/models/Script'
 
 const NoScripts: React.FC = () => {

@@ -1,6 +1,5 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
-import { Input } from '@components/Input'
 import { Table } from '@components/Table'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
