@@ -26,15 +26,17 @@ export const Dashboard: React.FC = () => {
     }, [refreshUser])
 
     return (
-        <div>
-            <Navbar />
+        <div className="h-screen">
+            <div className="mb-4">
+                <Navbar />
+            </div>
 
             <div className="flex flex-row">
-                <div className="h-screen">
+                <div className="">
                     <Sidebar />
                 </div>
 
-                <div className="h-screen w-full overflow-y-scroll">
+                <div className="w-full overflow-y-scroll">
                     <Routes>
                         <Route path="" element={<Scripts />} />
                         <Route path="profile" element={<Profile />} />

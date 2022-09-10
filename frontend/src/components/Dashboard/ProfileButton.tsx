@@ -25,7 +25,7 @@ export const ProfileButton: React.FC = () => {
     return (
         <div className="relative">
             <button
-                className="flex w-full items-center rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-zinc-700"
+                className="flex w-full items-center rounded-lg px-1 py-1 hover:bg-gray-100 dark:hover:bg-zinc-700"
                 onClick={toggleUserOptions}
             >
                 {user?.picture ? (
@@ -37,9 +37,6 @@ export const ProfileButton: React.FC = () => {
                 ) : (
                     <div className="h-8 w-8 rounded-full bg-gray-300" />
                 )}
-                <div className="ml-3 truncate font-semibold">
-                    {user?.name ?? 'Loading...'}
-                </div>
             </button>
             <Transition
                 show={showUserOptions}
@@ -49,7 +46,7 @@ export const ProfileButton: React.FC = () => {
                 leave="transform duration-200 transition ease-in-out"
                 leaveFrom="opacity-100 scale-100 "
                 leaveTo="opacity-0 scale-95"
-                className="absolute z-10 w-full"
+                className="absolute right-0 z-10 w-auto"
             >
                 <div
                     className="rounded-lg border bg-white px-1 pt-2 pb-1 shadow dark:border-zinc-500 dark:bg-zinc-800"
