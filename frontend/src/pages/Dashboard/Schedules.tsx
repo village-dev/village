@@ -13,7 +13,7 @@ const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
     const schedule = data
 
     return (
-        <tr>
+        <tr key={schedule.id}>
             <td className="py-4">
                 <Link
                     to={`/app/schedules/${schedule.id}`}

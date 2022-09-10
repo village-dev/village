@@ -42,7 +42,7 @@ const NoBuildResults: React.FC = () => {
 const BuildRow: React.FC<{ data: Build }> = ({ data }) => {
     const build = data
     return (
-        <tr>
+        <tr key={build.id}>
             <td className="py-4">
                 <Link
                     to={`/app/builds/${build.id}`}
@@ -114,7 +114,7 @@ const NoRunResults: React.FC = () => {
 const RunRow: React.FC<{ data: Run }> = ({ data }) => {
     const run = data
     return (
-        <tr>
+        <tr key={run.id}>
             <td className="py-4">
                 <Link
                     to={`/app/runs/${run.id}`}
@@ -196,7 +196,7 @@ const ScheduleRow: React.FC<{ data: Schedule }> = ({ data }) => {
     const schedule = data
 
     return (
-        <tr>
+        <tr key={schedule.id}>
             <td className="py-4">
                 <Link
                     to={`/app/schedules/${schedule.id}`}
