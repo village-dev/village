@@ -16,6 +16,58 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
+const NoRuns: React.FC = () => {
+    return (
+        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
+            <h1 className="text-2xl font-semibold">No runs</h1>
+            <p className="mt-8 text-gray-600">
+                Run scripts to see the results here
+            </p>
+        </div>
+    )
+}
+
+const NoRunResults: React.FC = () => {
+    return (
+        <tr>
+            <td colSpan={3} align="center" className="py-16 ">
+                <h1 className="text-lg font-semibold text-gray-400">
+                    No runs found
+                </h1>
+            </td>
+        </tr>
+    )
+}
+
+const RunRow: React.FC<{ data: Run }> = ({ data }) => {
+    const run = data
+    return (
+        <tr>
+            <td className="py-4">
+                <Link
+                    to={`/app/runs/${run.id}`}
+                    className="w-full py-4 pl-4 pr-8 hover:text-emerald-500"
+                >
+                    {run.id}
+                </Link>
+            </td>
+            <td className="pl-4">{run.status}</td>
+            <td className="pl-4">{getTimeSince(run.created_at)}</td>
+        </tr>
+    )
+}
+
+const searchRunsFilter = ({ query, data }: { query: string; data: Run }) => {
+    const run = data
+    const script = run.build?.script
+
+    return (
+        script?.name.toLowerCase().includes(query.toLowerCase()) ||
+        script?.id.toLowerCase().includes(query.toLowerCase()) ||
+        run.status.toLowerCase().includes(query.toLowerCase())
+    )
+}
+
 export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
     return (
         <div className="flex-col space-y-2">
@@ -56,36 +108,15 @@ export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
 export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
     return (
         <div className="flex-col space-y-2">
-            <div className="my-4 flex px-6 font-semibold">
-                <div className="w-64">
-                    <h2>Run ID</h2>
-                </div>
-                <div className="w-96">
-                    <h2>Status</h2>
-                </div>
-                <div className="w-32">
-                    <h2>Time</h2>
-                </div>
-            </div>
-            {runs.map((run) => {
-                return (
-                    <Link
-                        key={run.id}
-                        to={`/build/${run.id}`}
-                        className="flex border-b-2 border-transparent px-6 hover:border-slate-200 hover:bg-slate-50"
-                    >
-                        <div className="w-64">
-                            <p>{run.id}</p>
-                        </div>
-                        <div className="w-96">
-                            <p>{run.status}</p>
-                        </div>
-                        <div className="w-32">
-                            <p>{getTimeSince(run.created_at)}</p>
-                        </div>
-                    </Link>
-                )
-            })}
+            <Table
+                loading={false}
+                emptyState={<NoRuns />}
+                noResultsState={<NoRunResults />}
+                columnNames={['Name', 'Schedule', 'Updated', '']}
+                rowData={runs}
+                RowRenderer={RunRow}
+                searchFilter={searchRunsFilter}
+            />
         </div>
     )
 }
@@ -101,7 +132,7 @@ const NoSchedules: React.FC = () => {
     )
 }
 
-const NoResults: React.FC = () => {
+const NoScheduleResults: React.FC = () => {
     return (
         <h1 className="text-lg font-semibold text-gray-400">
             No schedules found
@@ -109,7 +140,13 @@ const NoResults: React.FC = () => {
     )
 }
 
-const searchFilter = ({ query, data }: { query: string; data: Schedule }) => {
+const searchSchedulesFilter = ({
+    query,
+    data,
+}: {
+    query: string
+    data: Schedule
+}) => {
     const schedule = data
     const script = schedule.script
 
@@ -165,11 +202,11 @@ export const Schedules: React.FC<{ schedules: Schedule[] }> = ({
             <Table
                 loading={false}
                 emptyState={<NoSchedules />}
-                noResultsState={<NoResults />}
+                noResultsState={<NoScheduleResults />}
                 columnNames={['Name', 'Schedule', 'Updated', '']}
                 rowData={schedules}
                 RowRenderer={ScheduleRow}
-                searchFilter={searchFilter}
+                searchFilter={searchSchedulesFilter}
             />
         </div>
     )
