@@ -143,7 +143,7 @@ export const promptForCurrentWorkspace: () => Promise<{
         }
         let workspaces: Workspace[] = []
         try {
-            workspaces = await villageClient.workspace.listUserWorkspaces()
+            workspaces = await villageClient.workspaces.listUserWorkspaces()
         } catch (error) {
             await warnUnauthenticated(error)
         }
