@@ -1735,8 +1735,8 @@ paths:
       - HTTPBearer: []
       summary: Get Or Create User
       tags:
-      - user
-  /users/get:
+      - users
+  /user/get:
     get:
       description: Get a user.
       operationId: get_current_user
@@ -1751,7 +1751,37 @@ paths:
       - HTTPBearer: []
       summary: Get Current User
       tags:
-      - user
+      - users
+  /workspace/check_id:
+    get:
+      description: Check if a script ID is available.
+      operationId: check_workspace_id
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          title: Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Check Workspace Id
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Check Workspace Id
+      tags:
+      - workspaces
   /workspace/create:
     post:
       description: Create a workspace.
@@ -1779,7 +1809,7 @@ paths:
       - HTTPBearer: []
       summary: Create Workspace
       tags:
-      - workspace
+      - workspaces
   /workspace/get:
     get:
       description: Get a workspace.
@@ -1808,7 +1838,7 @@ paths:
       - HTTPBearer: []
       summary: Get Workspace
       tags:
-      - workspace
+      - workspaces
   /workspace/list:
     get:
       description: List all workspaces.
@@ -1827,7 +1857,37 @@ paths:
       - HTTPBearer: []
       summary: List User Workspaces
       tags:
-      - workspace
+      - workspaces
+  /workspace/propose_id:
+    get:
+      description: Propose a workspace ID based on the name.
+      operationId: propose_workspace_id
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Propose Workspace Id
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Propose Workspace Id
+      tags:
+      - workspaces
   /workspace/set_default:
     post:
       description: Set default workspace.
@@ -1857,67 +1917,7 @@ paths:
       - HTTPBearer: []
       summary: Set Default Workspace
       tags:
-      - workspace
-  /workspaces/check_id:
-    get:
-      description: Check if a script ID is available.
-      operationId: check_workspace_id
-      parameters:
-      - in: query
-        name: id
-        required: true
-        schema:
-          title: Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Check Workspace Id
-                type: boolean
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Check Workspace Id
-      tags:
-      - workspace
-  /workspaces/propose_id:
-    get:
-      description: Propose a workspace ID based on the name.
-      operationId: propose_workspace_id
-      parameters:
-      - in: query
-        name: name
-        required: true
-        schema:
-          title: Name
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Propose Workspace Id
-                type: string
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Propose Workspace Id
-      tags:
-      - workspace
+      - workspaces
 tags:
 - description: Scripts
   name: scripts
