@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import BarLoader from 'react-spinners/BarLoader'
 import { Input } from '@components/Input'
+import React, { useEffect, useState } from 'react'
 
 interface TableProps<T> {
     columnNames: string[]
