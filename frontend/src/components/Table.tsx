@@ -99,7 +99,7 @@ export const Table: TableComponent = ({
                                         (columnWidths !== undefined
                                             ? columnWidths[idx]
                                             : '') +
-                                        ' border-b p-4 pt-0 pb-1 text-left text-gray-400 dark:border-slate-600 dark:text-slate-200'
+                                        ' border-b p-4 pt-0 pb-1 text-left text-gray-400 '
                                     }
                                 >
                                     {name}
