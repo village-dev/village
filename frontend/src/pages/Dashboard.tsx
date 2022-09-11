@@ -36,7 +36,7 @@ export const Dashboard: React.FC = () => {
                 <Sidebar />
             </div>
 
-            <div className="overflow-y-scroll pt-4 lg:pl-[20rem]">
+            <div className="overflow-auto pt-4 lg:pl-[20rem]">
                 <Routes>
                     <Route path="" element={<Scripts />} />
                     <Route path="profile" element={<Profile />} />
