@@ -4,7 +4,7 @@ import { WorkspaceListBox } from '@components/Dashboard/WorkspaceListBox'
 
 export const Navbar: React.FC = () => {
     return (
-        <nav className="relative flex h-12 w-screen items-center space-x-4 border-b bg-cream pl-4 text-sm">
+        <nav className="relative flex h-14 w-screen items-center space-x-4 border-b bg-cream pl-4 text-sm">
             <span className="flex items-center space-x-2">
                 <LogoIcon className="h-5 w-5" />
                 <span className="font-display text-xl font-bold italic text-green">

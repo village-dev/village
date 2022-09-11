@@ -27,16 +27,16 @@ export const Dashboard: React.FC = () => {
     }, [refreshUser])
 
     return (
-        <div className="h-screen w-screen overflow-y-scroll">
-            <div className="sticky top-0 w-full flex-none">
+        <div className="h-screen w-screen overflow-auto">
+            <div className="sticky top-0 z-50 mb-6 w-full flex-none">
                 <Navbar />
             </div>
 
-            <div className="fixed inset-0 top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto z-20 hidden w-[20rem] overflow-y-auto lg:block">
+            <div className="fixed inset-0 top-[6.2rem] left-[max(0px,calc(50%-45rem))] right-auto hidden  w-[20rem] overflow-y-auto lg:block">
                 <Sidebar />
             </div>
 
-            <div className="overflow-y-scroll pt-4 lg:pl-[20rem]">
+            <div className="pt-4 lg:pl-[20rem]">
                 <Routes>
                     <Route path="" element={<Scripts />} />
                     <Route path="profile" element={<Profile />} />
