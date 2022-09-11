@@ -15,7 +15,7 @@ from routers.scripts import RunScriptInput, check_script_access, run_script_wrap
 from routers.users import get_user
 from worker import RunScheduledInput, RunScript
 
-router = APIRouter(tags=["schedules"])
+router = APIRouter(prefix="/schedule", tags=["schedules"])
 
 
 token_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -52,7 +52,7 @@ class CreateScheduleInput(BaseModel):
 
 
 @router.post(
-    "/schedule/create",
+    "/create",
     operation_id="create_schedule",
     response_model=PrismaModels.Schedule,
 )
@@ -153,7 +153,7 @@ async def check_schedule_access(user_id: str, schedule_id: str):
 
 
 @router.post(
-    "/schedule/update",
+    "/update",
     operation_id="update_schedule",
     response_model=PrismaModels.Schedule,
 )
@@ -200,9 +200,7 @@ class RunScheduleInput(BaseModel):
     token: str
 
 
-@router.post(
-    "/schedule/run", operation_id="run_schedule", response_model=PrismaModels.Run
-)
+@router.post("/run", operation_id="run_schedule", response_model=PrismaModels.Run)
 async def run_schedule(schedule_request: RunScheduleInput):
     """
     Execute a script based on its schedule entry
@@ -234,7 +232,7 @@ async def run_schedule(schedule_request: RunScheduleInput):
 
 
 @router.get(
-    "/schedule/list",
+    "/list",
     operation_id="list_schedules",
     response_model=List[PrismaPartials.ScheduleWithScript],
 )
@@ -261,7 +259,7 @@ async def list_schedules(user: PrismaModels.User = Depends(get_user)):
 
 
 @router.delete(
-    "/schedule/delete",
+    "/delete",
     operation_id="delete_schedule",
     response_model=PrismaModels.Schedule,
 )
@@ -282,7 +280,7 @@ async def delete_schedule(
 
 
 @router.get(
-    "/schedule/get",
+    "/get",
     operation_id="get_schedule",
     response_model=PrismaPartials.ScheduleWithScriptAndRuns,
 )

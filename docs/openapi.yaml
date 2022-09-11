@@ -1395,6 +1395,36 @@ paths:
       summary: Get Script Builds
       tags:
       - scripts
+  /script/check_id:
+    get:
+      description: Check if a script ID is available.
+      operationId: check_script_id
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          title: Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Check Script Id
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Check Script Id
+      tags:
+      - scripts
   /script/create:
     post:
       description: Initialize a script.
@@ -1511,6 +1541,36 @@ paths:
       security:
       - HTTPBearer: []
       summary: List Scripts
+      tags:
+      - scripts
+  /script/propose_id:
+    get:
+      description: Propose a script ID based on the name.
+      operationId: propose_script_id
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Propose Script Id
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Propose Script Id
       tags:
       - scripts
   /script/run:
@@ -1659,66 +1719,6 @@ paths:
       security:
       - HTTPBearer: []
       summary: Update Script
-      tags:
-      - scripts
-  /scripts/check_id:
-    get:
-      description: Check if a script ID is available.
-      operationId: check_script_id
-      parameters:
-      - in: query
-        name: id
-        required: true
-        schema:
-          title: Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Check Script Id
-                type: boolean
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Check Script Id
-      tags:
-      - scripts
-  /scripts/propose_id:
-    get:
-      description: Propose a script ID based on the name.
-      operationId: propose_script_id
-      parameters:
-      - in: query
-        name: name
-        required: true
-        schema:
-          title: Name
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Propose Script Id
-                type: string
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Propose Script Id
       tags:
       - scripts
   /user/create:
