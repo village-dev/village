@@ -27,7 +27,7 @@ export const Dashboard: React.FC = () => {
     }, [refreshUser])
 
     return (
-        <div className="h-screen w-screen overflow-y-scroll">
+        <div className="h-screen w-screen overflow-auto">
             <div className="sticky top-0 w-full flex-none">
                 <Navbar />
             </div>
@@ -36,7 +36,7 @@ export const Dashboard: React.FC = () => {
                 <Sidebar />
             </div>
 
-            <div className="overflow-auto pt-4 lg:pl-[20rem]">
+            <div className="pt-4 lg:pl-[20rem]">
                 <Routes>
                     <Route path="" element={<Scripts />} />
                     <Route path="profile" element={<Profile />} />

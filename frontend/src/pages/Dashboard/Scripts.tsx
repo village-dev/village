@@ -9,17 +9,27 @@ import { Script } from '../../../api/models/Script'
 
 const NoScripts: React.FC = () => {
     return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No scripts</h1>
-            <p className="mt-8 text-gray-600">Scripts can automate anything</p>
+        <div className="mx-6 mt-10 flex h-full flex-col items-center justify-center rounded-xl bg-gray-50 py-8">
+            <h1 className="text-2xl font-semibold text-black">
+                No scripts yet!
+            </h1>
+            <p className="text-md mt-8 text-gray-600">
+                Get started by looking at our{' '}
+                <a
+                    href="http://docs.village.dev"
+                    className="text-green underline-offset-4 hover:underline"
+                >
+                    Documentation.
+                </a>
+            </p>
         </div>
     )
 }
 
 const NoResults: React.FC = () => {
     return (
-        <h1 className="text-lg font-semibold text-gray-400">
-            No scripts found
+        <h1 className="mt-10 text-lg font-semibold text-gray-400">
+            No scripts found!
         </h1>
     )
 }
