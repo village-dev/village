@@ -47,10 +47,20 @@ const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
 
 const NoSchedules: React.FC = () => {
     return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No schedules</h1>
+        <div className="mx-6 mt-10 flex h-full flex-col items-center justify-center rounded-xl bg-gray-50 py-8 px-8">
+            <h1 className="text-2xl font-semibold text-black">
+                No schedules yet!
+            </h1>
             <p className="mt-8 text-gray-600">
-                Create a schedule to run a script at specific times
+                Create a schedule to run a script at specific times. Check out
+                our{' '}
+                <a
+                    href="http://docs.village.dev"
+                    className="text-green underline-offset-4 hover:underline"
+                >
+                    Documentation
+                </a>{' '}
+                for more help!
             </p>
         </div>
     )
