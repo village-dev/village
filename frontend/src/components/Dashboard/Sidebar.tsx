@@ -49,15 +49,14 @@ export const Sidebar: React.FC = () => {
             </div>
             {/* Bottom links */}
             <div className="flex h-full flex-col justify-end space-y-2">
-                <NavLink
-                    to="/docs"
-                    className={({ isActive }) =>
-                        isActive ? activeButtonStyle : inactiveButtonStyle
-                    }
+                <a
+                    href="http://docs.village.dev"
+                    className={inactiveButtonStyle}
+                    target="_blank"
                 >
                     <BookOpenIcon className={iconStyle} />
                     Documentation
-                </NavLink>
+                </a>
                 <NavLink
                     to="/support"
                     className={({ isActive }) =>

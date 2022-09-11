@@ -52,8 +52,7 @@ export const Table: TableComponent = ({
             )
         })
     } else {
-        // if (rowData.length === 0) {
-        if (true) {
+        if (rowData.length === 0) {
             innerTable = (
                 <tr>
                     <td colSpan={columnNames.length} align="center">
