@@ -73,7 +73,7 @@ const initializeUser = async (user: { sub: string }, accessToken: string) => {
         villageClient.request.config.HEADERS = {
             Authorization: `Bearer ${accessToken}`,
         }
-        const res = await villageClient.user.getOrCreateUser()
+        const res = await villageClient.users.getOrCreateUser()
         defaultWorkspace = (res.workspaces ?? [])[0].workspace_id
     } catch (error) {
         console.error(error)

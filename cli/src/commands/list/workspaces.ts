@@ -11,7 +11,7 @@ export const workspaces = (program: Command) => {
         .action(function () {
             const debug: boolean = this.opts().debug
 
-            villageClient.workspace
+            villageClient.workspaces
                 .listUserWorkspaces() // TODO: report if workspace is the default
                 .then((workspaces) => {
                     const table = new Table({

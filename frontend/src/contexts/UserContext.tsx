@@ -23,7 +23,7 @@ export const UserContext = React.createContext<UserContextProps | null>(null)
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const { user: auth0User, getAccessTokenSilently } = useAuth0()
+    const { getAccessTokenSilently } = useAuth0()
 
     const [user, setUser] = useState<UserType | null>(null)
 
@@ -34,7 +34,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
             VillageClient.request.config.HEADERS = {
                 Authorization: `Bearer ${token}`,
             }
-            const res = await VillageClient.user.getOrCreateUser()
+            const res = await VillageClient.users.getOrCreateUser()
 
             setUser({
                 id: res.id,

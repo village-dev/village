@@ -1246,7 +1246,7 @@
     "\/user\/create": {
       "post": {
         "tags": [
-          "user"
+          "users"
         ],
         "summary": "Get Or Create User",
         "operationId": "get_or_create_user",
@@ -1269,10 +1269,10 @@
         ]
       }
     },
-    "\/users\/get": {
+    "\/user\/get": {
       "get": {
         "tags": [
-          "user"
+          "users"
         ],
         "summary": "Get Current User",
         "description": "Get a user.",
@@ -1296,10 +1296,10 @@
         ]
       }
     },
-    "\/workspaces\/propose_id": {
+    "\/workspace\/propose_id": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Propose Workspace Id",
         "description": "Propose a workspace ID based on the name.",
@@ -1345,10 +1345,10 @@
         ]
       }
     },
-    "\/workspaces\/check_id": {
+    "\/workspace\/check_id": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Check Workspace Id",
         "description": "Check if a script ID is available.",
@@ -1397,7 +1397,7 @@
     "\/workspace\/create": {
       "post": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Create Workspace",
         "description": "Create a workspace.",
@@ -1444,7 +1444,7 @@
     "\/workspace\/get": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Get Workspace",
         "description": "Get a workspace.",
@@ -1492,7 +1492,7 @@
     "\/workspace\/list": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "List User Workspaces",
         "description": "List all workspaces.",
@@ -1523,7 +1523,7 @@
     "\/workspace\/set_default": {
       "post": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Set Default Workspace",
         "description": "Set default workspace.",

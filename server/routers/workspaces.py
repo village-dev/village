@@ -10,11 +10,11 @@ from routers.users import get_user, verify_token
 from utils.auth import ParsedToken
 from utils.ids import propose_workspace_id_internal
 
-router = APIRouter(tags=["workspace"])
+router = APIRouter(tags=["workspaces"])
 
 
 @router.get(
-    "/workspaces/propose_id",
+    "/workspace/propose_id",
     operation_id="propose_workspace_id",
     response_model=str,
 )
@@ -30,7 +30,7 @@ async def propose_workspace_id(
 
 
 @router.get(
-    "/workspaces/check_id", operation_id="check_workspace_id", response_model=bool
+    "/workspace/check_id", operation_id="check_workspace_id", response_model=bool
 )
 async def check_workspace_id(
     id: str,
