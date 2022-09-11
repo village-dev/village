@@ -290,6 +290,11 @@ components:
         output:
           title: Output
           type: string
+        params:
+          items:
+            $ref: '#/components/schemas/RunParam'
+          title: Params
+          type: array
         schedule:
           $ref: '#/components/schemas/Schedule'
         schedule_id:
@@ -315,6 +320,40 @@ components:
       - output
       - status
       title: Run
+      type: object
+    RunParam:
+      description: Represents a RunParam record
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        key:
+          title: Key
+          type: string
+        run:
+          $ref: '#/components/schemas/Run'
+        run_id:
+          title: Run Id
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        value:
+          title: Value
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - key
+      - value
+      - run_id
+      title: RunParam
       type: object
     RunScheduleInput:
       description: Schedule run model

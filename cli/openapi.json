@@ -1985,9 +1985,60 @@
           },
           "script": {
             "$ref": "#\/components\/schemas\/Script"
+          },
+          "params": {
+            "title": "Params",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/RunParam"
+            }
           }
         },
         "description": "Represents a Run record"
+      },
+      "RunParam": {
+        "title": "RunParam",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "key",
+          "value",
+          "run_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          },
+          "run": {
+            "$ref": "#\/components\/schemas\/Run"
+          }
+        },
+        "description": "Represents a RunParam record"
       },
       "RunScheduleInput": {
         "title": "RunScheduleInput",

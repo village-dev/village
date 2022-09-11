@@ -126,6 +126,16 @@ model Schedule {
   params        ScheduleParam[]
 }
 
+model RunParam {
+  id          String   @id @default(cuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  key         String
+  value       String
+  run_id String
+  run    Run @relation(fields: [run_id], references: [id], onDelete: Cascade)
+}
+
 model Run {
   id           String    @id @default(cuid())
   created_at   DateTime  @default(now())
@@ -141,6 +151,7 @@ model Run {
   created_by   User?     @relation(fields: [creator_id], references: [id])
   schedule     Schedule? @relation(fields: [schedule_id], references: [id])
   script       Script    @relation(fields: [script_id], references: [id], onDelete: Cascade)
+  params       RunParam[]
 }
 
 enum BuildStatus {
