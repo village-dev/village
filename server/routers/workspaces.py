@@ -10,11 +10,11 @@ from routers.users import get_user, verify_token
 from utils.auth import ParsedToken
 from utils.ids import propose_workspace_id_internal
 
-router = APIRouter(tags=["workspaces"])
+router = APIRouter(prefix="/workspace", tags=["workspaces"])
 
 
 @router.get(
-    "/workspace/propose_id",
+    "/propose_id",
     operation_id="propose_workspace_id",
     response_model=str,
 )
@@ -29,9 +29,7 @@ async def propose_workspace_id(
     return await propose_workspace_id_internal(name)
 
 
-@router.get(
-    "/workspace/check_id", operation_id="check_workspace_id", response_model=bool
-)
+@router.get("/check_id", operation_id="check_workspace_id", response_model=bool)
 async def check_workspace_id(
     id: str,
     token: ParsedToken = Depends(verify_token),  # to require authentication
@@ -51,7 +49,7 @@ class CreateWorkspaceInput(BaseModel):
 
 
 @router.post(
-    "/workspace/create",
+    "/create",
     operation_id="create_workspace",
     response_model=PrismaModels.Workspace,
 )
@@ -88,7 +86,7 @@ async def create_workspace(
 
 
 @router.get(
-    "/workspace/get",
+    "/get",
     operation_id="get_workspace",
     response_model=PrismaModels.Workspace,
 )
@@ -107,7 +105,7 @@ async def get_workspace(workspace_id: str, user: PrismaModels.User = Depends(get
 
 
 @router.get(
-    "/workspace/list",
+    "/list",
     operation_id="list_user_workspaces",
     response_model=List[PrismaModels.Workspace],
 )
@@ -124,7 +122,7 @@ async def list_user_workspaces(user: PrismaModels.User = Depends(get_user)):
 
 
 @router.post(
-    "/workspace/set_default",
+    "/set_default",
     operation_id="set_default_workspace",
     response_model=bool,
 )

@@ -33,7 +33,7 @@ from server.docker import docker_client, execute  # type: ignore
 from utils.auth import ParsedToken
 from utils.ids import propose_script_id_internal  # type: ignore
 
-router = APIRouter(tags=["scripts"])
+router = APIRouter(prefix="/script", tags=["scripts"])
 
 # Scheme for the Authorization header
 token_auth_scheme = HTTPBearer()
@@ -89,7 +89,7 @@ async def check_script_access(user_id: str, script_id: str):
     return
 
 
-@router.get("/scripts/propose_id", operation_id="propose_script_id", response_model=str)
+@router.get("/propose_id", operation_id="propose_script_id", response_model=str)
 async def propose_script_id(
     name: str,
     token: ParsedToken = Depends(verify_token),  # to require authentication
@@ -101,7 +101,7 @@ async def propose_script_id(
     return await propose_script_id_internal(name)
 
 
-@router.get("/scripts/check_id", operation_id="check_script_id", response_model=bool)
+@router.get("/check_id", operation_id="check_script_id", response_model=bool)
 async def check_script_id(
     id: str,
     token: ParsedToken = Depends(verify_token),  # to require authentication
@@ -116,7 +116,7 @@ async def check_script_id(
 
 
 @router.post(
-    "/script/create",
+    "/create",
     operation_id="create_script",
     response_model=PrismaModels.Script,
 )
@@ -163,7 +163,7 @@ class UpdateScriptInput(BaseModel):
 
 
 @router.post(
-    "/script/update",
+    "/update",
     response_model=PrismaModels.Script,
     operation_id="update_script",
 )
@@ -240,7 +240,7 @@ def construct_dockerfile(
 
 
 @router.post(
-    "/script/build",
+    "/build",
     response_model=PrismaModels.Build,
     operation_id="build_script",
 )
@@ -428,7 +428,7 @@ class RunScriptInput(BaseModel):
 
 
 @router.post(
-    "/script/build-container",
+    "/build-container",
     response_model=PrismaModels.Build,
     operation_id="build_container",
 )
@@ -578,7 +578,7 @@ async def build_container(
 
 
 @router.post(
-    "/script/run-container",
+    "/run-container",
     response_model=PrismaModels.Run,
     operation_id="run_container",
 )
@@ -734,7 +734,7 @@ async def run_script_wrapper(
     return run
 
 
-@router.post("/script/run", operation_id="run_script", response_model=PrismaModels.Run)
+@router.post("/run", operation_id="run_script", response_model=PrismaModels.Run)
 async def run_script(
     script: RunScriptInput, user: PrismaModels.User = Depends(get_user)
 ):
@@ -747,7 +747,7 @@ async def run_script(
 
 
 @router.get(
-    "/script/list",
+    "/list",
     operation_id="list_scripts",
     response_model=List[PrismaModels.Script],
 )
@@ -774,7 +774,7 @@ async def list_scripts(workspace_id: str, user: PrismaModels.User = Depends(get_
 
 
 @router.get(
-    "/script/get",
+    "/get",
     operation_id="get_script",
     response_model=PrismaPartials.ScriptWithMeta,
 )
@@ -808,7 +808,7 @@ async def get_script(script_id: str, user: PrismaModels.User = Depends(get_user)
 
 
 @router.get(
-    "/script/builds",
+    "/builds",
     operation_id="get_script_builds",
     response_model=List[PrismaModels.Build],
 )
@@ -829,7 +829,7 @@ async def get_script_builds(
 
 
 @router.get(
-    "/script/schedules",
+    "/schedules",
     operation_id="get_script_schedules",
     response_model=List[PrismaModels.Schedule],
 )
@@ -850,7 +850,7 @@ async def get_script_schedules(
 
 
 @router.get(
-    "/script/runs",
+    "/runs",
     operation_id="get_script_runs",
     response_model=List[PrismaModels.Run],
 )
@@ -870,7 +870,7 @@ async def get_script_runs(script_id: str, user: PrismaModels.User = Depends(get_
 
 
 @router.delete(
-    "/script/delete", operation_id="delete_script", response_model=PrismaModels.Script
+    "/delete", operation_id="delete_script", response_model=PrismaModels.Script
 )
 async def delete_script(script_id: str, user: PrismaModels.User = Depends(get_user)):
     """

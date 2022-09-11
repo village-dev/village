@@ -5,7 +5,7 @@
     "version": "0.1.0"
   },
   "paths": {
-    "\/scripts\/propose_id": {
+    "\/script\/propose_id": {
       "get": {
         "tags": [
           "scripts"
@@ -54,7 +54,7 @@
         ]
       }
     },
-    "\/scripts\/check_id": {
+    "\/script\/check_id": {
       "get": {
         "tags": [
           "scripts"
