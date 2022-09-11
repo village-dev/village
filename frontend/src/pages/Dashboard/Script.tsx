@@ -14,21 +14,12 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { NoSchedules } from '@components/EmptyStates/NoSchedules'
 import { NoRuns } from '@components/EmptyStates/NoRuns'
 import { NoBuilds } from '@components/EmptyStates/NoBuilds'
+import { NoRunResults } from '@components/EmptyStates/NoRunResults'
+import { NoBuildResults } from '@components/EmptyStates/NoBuildResults'
+import { NoScheduleResults } from '@components/EmptyStates/NoScheduleResults'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
-}
-
-const NoBuildResults: React.FC = () => {
-    return (
-        <tr>
-            <td colSpan={3} align="center" className="py-16 ">
-                <h1 className="text-lg font-semibold text-gray-400">
-                    No builds found
-                </h1>
-            </td>
-        </tr>
-    )
 }
 
 const BuildRow: React.FC<{ data: Build }> = ({ data }) => {
@@ -80,18 +71,6 @@ export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
     )
 }
 
-const NoRunResults: React.FC = () => {
-    return (
-        <tr>
-            <td colSpan={3} align="center" className="py-16 ">
-                <h1 className="text-lg font-semibold text-gray-400">
-                    No runs found
-                </h1>
-            </td>
-        </tr>
-    )
-}
-
 const RunRow: React.FC<{ data: Run }> = ({ data }) => {
     const run = data
     return (
@@ -134,14 +113,6 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
                 searchFilter={searchRunsFilter}
             />
         </div>
-    )
-}
-
-const NoScheduleResults: React.FC = () => {
-    return (
-        <h1 className="text-lg font-semibold text-gray-400">
-            No schedules found
-        </h1>
     )
 }
 

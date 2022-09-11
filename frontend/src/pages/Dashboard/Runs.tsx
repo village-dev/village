@@ -1,32 +1,11 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
+import { NoRunResults } from '@components/EmptyStates/NoRunResults'
+import { NoRuns } from '@components/EmptyStates/NoRuns'
 import { Table } from '@components/Table'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { RunWithScript } from '../../../api'
-
-const NoRuns: React.FC = () => {
-    return (
-        <div className="mx-6 mt-10 flex h-full flex-col items-center justify-center rounded-xl bg-gray-50 py-8 px-8">
-            <h1 className="text-2xl font-semibold">No runs yet!</h1>
-            <p className="text-md mt-8 text-gray-600">
-                Run scripts to see your results here.
-            </p>
-        </div>
-    )
-}
-
-const NoResults: React.FC = () => {
-    return (
-        <tr>
-            <td colSpan={3} align="center" className="py-16 ">
-                <h1 className="text-lg font-semibold text-gray-400">
-                    No runs found
-                </h1>
-            </td>
-        </tr>
-    )
-}
 
 const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
     const run = data
@@ -84,7 +63,7 @@ export const Runs: React.FC = () => {
                 <Table
                     loading={loading}
                     emptyState={<NoRuns />}
-                    noResultsState={<NoResults />}
+                    noResultsState={<NoRunResults />}
                     columnNames={['Name', 'Schedule', 'Updated', '']}
                     rowData={runs}
                     RowRenderer={RunRow}

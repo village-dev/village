@@ -1,5 +1,7 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
+import { NoScheduleResults } from '@components/EmptyStates/NoScheduleResults'
+import { NoSchedules } from '@components/EmptyStates/NoSchedules'
 import { ListDropdown } from '@components/ListDropdown'
 import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'
@@ -44,36 +46,6 @@ const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
         </tr>
     )
 }
-
-const NoSchedules: React.FC = () => {
-    return (
-        <div className="mx-6 mt-10 flex h-full flex-col items-center justify-center rounded-xl bg-gray-50 py-8 px-8">
-            <h1 className="text-2xl font-semibold text-black">
-                No schedules yet!
-            </h1>
-            <p className="mt-8 text-gray-600">
-                Create a schedule to run a script at specific times. Check out
-                our{' '}
-                <a
-                    href="http://docs.village.dev"
-                    className="text-green underline-offset-4 hover:underline"
-                >
-                    Documentation
-                </a>{' '}
-                for more help!
-            </p>
-        </div>
-    )
-}
-
-const NoResults: React.FC = () => {
-    return (
-        <h1 className="text-lg font-semibold text-gray-400">
-            No schedules found
-        </h1>
-    )
-}
-
 const searchFilter = ({
     query,
     data,
@@ -117,7 +89,7 @@ export const Schedules: React.FC = () => {
                 <Table
                     loading={loading}
                     emptyState={<NoSchedules />}
-                    noResultsState={<NoResults />}
+                    noResultsState={<NoScheduleResults />}
                     columnNames={['Name', 'Schedule', 'Updated', '']}
                     rowData={schedules}
                     RowRenderer={ScheduleRow}
