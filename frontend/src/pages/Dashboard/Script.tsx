@@ -11,20 +11,12 @@ import { BeatLoader } from 'react-spinners'
 import { Table } from '@components/Table'
 import { ListDropdown } from '@components/ListDropdown'
 import { MdDeleteOutline } from 'react-icons/md'
+import { NoSchedules } from '@components/EmptyStates/NoSchedules'
+import { NoRuns } from '@components/EmptyStates/NoRuns'
+import { NoBuilds } from '@components/EmptyStates/NoBuilds'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
-}
-
-const NoBuilds: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No builds</h1>
-            <p className="mt-8 text-gray-600">
-                Deploy scripts to see the results here
-            </p>
-        </div>
-    )
 }
 
 const NoBuildResults: React.FC = () => {
@@ -88,17 +80,6 @@ export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
     )
 }
 
-const NoRuns: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No runs</h1>
-            <p className="mt-8 text-gray-600">
-                Run scripts to see the results here
-            </p>
-        </div>
-    )
-}
-
 const NoRunResults: React.FC = () => {
     return (
         <tr>
@@ -152,17 +133,6 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
                 RowRenderer={RunRow}
                 searchFilter={searchRunsFilter}
             />
-        </div>
-    )
-}
-
-const NoSchedules: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No schedules</h1>
-            <p className="mt-8 text-gray-600">
-                Create a schedule to run a script at specific times
-            </p>
         </div>
     )
 }
