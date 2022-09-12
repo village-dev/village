@@ -713,7 +713,9 @@
             "description": "Successful Response",
             "content": {
               "application\/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#\/components\/schemas\/BuildWithMeta"
+                }
               }
             }
           },
@@ -1702,6 +1704,55 @@
         ],
         "type": "string",
         "description": "An enumeration."
+      },
+      "BuildWithMeta": {
+        "title": "BuildWithMeta",
+        "required": [
+          "id",
+          "status",
+          "created_at",
+          "updated_at",
+          "output"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#\/components\/schemas\/BuildStatus"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "output": {
+            "title": "Output",
+            "type": "string"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          }
+        }
       },
       "CreateScheduleInput": {
         "title": "CreateScheduleInput",

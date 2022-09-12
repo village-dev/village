@@ -99,6 +99,43 @@ components:
       - FAILURE
       title: BuildStatus
       type: string
+    BuildWithMeta:
+      properties:
+        completed_at:
+          format: date-time
+          title: Completed At
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        output:
+          title: Output
+          type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        status:
+          $ref: '#/components/schemas/BuildStatus'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - status
+      - created_at
+      - updated_at
+      - output
+      title: BuildWithMeta
+      type: object
     CreateScheduleInput:
       description: Schedule creation model
       properties:
@@ -1054,7 +1091,8 @@ paths:
         '200':
           content:
             application/json:
-              schema: {}
+              schema:
+                $ref: '#/components/schemas/BuildWithMeta'
           description: Successful Response
         '422':
           content:
