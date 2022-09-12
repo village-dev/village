@@ -99,7 +99,7 @@ export const NewWorkspace: React.FC = () => {
     }
 
     return (
-        <div className="flex max-w-screen-sm flex-col space-y-6 px-8 py-16">
+        <>
             <div className="px-6">
                 <h1 className="text-2xl">Create a workspace</h1>
             </div>
@@ -150,6 +150,6 @@ export const NewWorkspace: React.FC = () => {
                     </div>
                 </form>
             </div>
-        </div>
+        </>
     )
 }

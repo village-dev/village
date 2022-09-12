@@ -230,7 +230,7 @@ export const Script: React.FC = () => {
     const isDeployed = (script.builds || []).length > 0
 
     return (
-        <div className="flex flex-col space-y-6 px-8 py-16">
+        <>
             <div className="flex flex-col space-y-6 px-6">
                 <h1 className="text-2xl">{script.name}</h1>
                 <p>{script.description}</p>
@@ -295,6 +295,6 @@ export const Script: React.FC = () => {
                     </Tab.Panels>
                 </Tab.Group>
             </div>
-        </div>
+        </>
     )
 }

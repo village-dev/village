@@ -22,12 +22,12 @@ export const Run = () => {
     }
 
     return (
-        <div className="flex flex-col space-y-6 px-8 py-16">
+        <>
             <div className="flex flex-col px-6">
                 <h1 className="text-2xl">{run.build?.script?.name}</h1>
                 <h2>Build: {run.build?.id}</h2>
                 <p>Output: {run.output}</p>
             </div>
-        </div>
+        </>
     )
 }
