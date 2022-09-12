@@ -2,12 +2,12 @@ import { VillageClient } from '@common/VillageClient'
 import { Input } from '@components/Input'
 import { Select } from '@components/Select'
 import { Switch } from '@headlessui/react'
+import { PageLoading } from '@pages/PageLoading'
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import { useParams } from 'react-router-dom'
-import { BeatLoader } from 'react-spinners'
 import { Param, ParamType, ScriptWithMeta } from '../../../api'
 
 interface Option {
@@ -336,11 +336,7 @@ export const RunScriptStandalone = () => {
     }, [])
 
     if (script === null) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                <BeatLoader color="rgb(52 211 153)" />
-            </div>
-        )
+        return <PageLoading />
     }
 
     return (

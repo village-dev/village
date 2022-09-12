@@ -5,18 +5,18 @@ import { Link, useParams } from 'react-router-dom'
 import { Build, Run, Schedule, ScriptWithMeta } from '../../../api'
 import { RunScriptEmbeddable } from './RunScript'
 
-import { Tab } from '@headlessui/react'
-import { RiExternalLinkLine } from 'react-icons/ri'
-import { BeatLoader } from 'react-spinners'
-import { Table } from '@components/Table'
-import { ListDropdown } from '@components/ListDropdown'
-import { MdDeleteOutline } from 'react-icons/md'
-import { NoSchedules } from '@components/EmptyStates/NoSchedules'
-import { NoRuns } from '@components/EmptyStates/NoRuns'
+import { NoBuildResults } from '@components/EmptyStates/NoBuildResults'
 import { NoBuilds } from '@components/EmptyStates/NoBuilds'
 import { NoRunResults } from '@components/EmptyStates/NoRunResults'
-import { NoBuildResults } from '@components/EmptyStates/NoBuildResults'
+import { NoRuns } from '@components/EmptyStates/NoRuns'
 import { NoScheduleResults } from '@components/EmptyStates/NoScheduleResults'
+import { NoSchedules } from '@components/EmptyStates/NoSchedules'
+import { ListDropdown } from '@components/ListDropdown'
+import { Table } from '@components/Table'
+import { Tab } from '@headlessui/react'
+import { PageLoading } from '@pages/PageLoading'
+import { MdDeleteOutline } from 'react-icons/md'
+import { RiExternalLinkLine } from 'react-icons/ri'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -224,11 +224,7 @@ export const Script: React.FC = () => {
     }
 
     if (script === null) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                <BeatLoader color="rgb(52 211 153)" />
-            </div>
-        )
+        return <PageLoading />
     }
 
     const isDeployed = (script.builds || []).length > 0
