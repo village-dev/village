@@ -2178,6 +2178,12 @@
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"
+          },
+          "schedule": {
+            "$ref": "#\/components\/schemas\/Schedule"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
           }
         }
       },
@@ -2209,6 +2215,12 @@
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"
+          },
+          "schedule": {
+            "$ref": "#\/components\/schemas\/Schedule"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
           }
         }
       },
@@ -2620,13 +2632,6 @@
               "$ref": "#\/components\/schemas\/Build"
             }
           },
-          "runs": {
-            "title": "Runs",
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Run"
-            }
-          },
           "schedules": {
             "title": "Schedules",
             "type": "array",
@@ -2645,6 +2650,13 @@
           "workspace_id": {
             "title": "Workspace Id",
             "type": "string"
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
           }
         }
       },

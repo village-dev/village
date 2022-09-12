@@ -16,6 +16,8 @@ async def execute(
     executor_id: Optional[str] = None,
 ):
 
+    print(executor_id)
+
     run = await PrismaModels.Run.prisma().create(
         {
             "script_id": build.script_id,

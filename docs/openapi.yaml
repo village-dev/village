@@ -442,9 +442,13 @@ components:
           format: date-time
           title: Created At
           type: string
+        created_by:
+          $ref: '#/components/schemas/User'
         id:
           title: Id
           type: string
+        schedule:
+          $ref: '#/components/schemas/Schedule'
         status:
           $ref: '#/components/schemas/RunStatus'
       required:
@@ -461,12 +465,16 @@ components:
           format: date-time
           title: Created At
           type: string
+        created_by:
+          $ref: '#/components/schemas/User'
         id:
           title: Id
           type: string
         output:
           title: Output
           type: string
+        schedule:
+          $ref: '#/components/schemas/Schedule'
         status:
           $ref: '#/components/schemas/RunStatus'
       required:
