@@ -2023,6 +2023,38 @@ paths:
       summary: List User Workspaces
       tags:
       - workspaces
+  /workspace/list_users:
+    get:
+      description: List all users in a workspace.
+      operationId: list_workspace_users
+      parameters:
+      - in: query
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WorkspaceUsers'
+                title: Response List Workspace Users
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Workspace Users
+      tags:
+      - workspaces
   /workspace/propose_id:
     get:
       description: Propose a workspace ID based on the name.
@@ -2081,38 +2113,6 @@ paths:
       security:
       - HTTPBearer: []
       summary: Set Default Workspace
-      tags:
-      - workspaces
-  /workspace/workspace/list_users:
-    get:
-      description: List all users in a workspace.
-      operationId: list_workspace_users
-      parameters:
-      - in: query
-        name: workspace_id
-        required: true
-        schema:
-          title: Workspace Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/WorkspaceUsers'
-                title: Response List Workspace Users
-                type: array
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: List Workspace Users
       tags:
       - workspaces
 tags:

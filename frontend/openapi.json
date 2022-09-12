@@ -1522,7 +1522,7 @@
         ]
       }
     },
-    "\/workspace\/workspace\/list_users": {
+    "\/workspace\/list_users": {
       "get": {
         "tags": [
           "workspaces"

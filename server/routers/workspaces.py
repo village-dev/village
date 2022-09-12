@@ -122,7 +122,7 @@ async def list_user_workspaces(user: PrismaModels.User = Depends(get_user)):
 
 
 @router.get(
-    "/workspace/list_users",
+    "/list_users",
     operation_id="list_workspace_users",
     response_model=List[PrismaModels.WorkspaceUsers],
 )

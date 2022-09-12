@@ -2,14 +2,13 @@ import { VillageClient } from '@common/VillageClient'
 import { AUTH0_CLIENT_ID, AUTH0_DOMAIN } from '@config'
 import { UserContext } from '@contexts/UserContext'
 import { useContext, useEffect, useState } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import { HiOutlineClipboardCopy } from 'react-icons/hi'
 import { Role, WorkspaceUsers } from '../../../api'
 import { Table } from '@components/Table'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid'
 import { Fragment } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
 
 export interface Option {
     label: string

@@ -1,8 +1,8 @@
-import bcrypt
 import prisma.models as PrismaModels
 from fastapi import APIRouter, Depends, HTTPException
 from prisma.enums import Role
 
+from routers.schedules import hash_token, verify_token
 from routers.scripts import check_workspace_access
 from routers.users import get_user, verify_token_with_auth0
 
@@ -26,13 +26,12 @@ async def create_invite(
 
     await check_workspace_access(user.id, workspace_id)
 
-    salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(email.encode("utf-8"), salt)
+    token_hash = hash_token(email)
 
     try:
         invite = await PrismaModels.Invites.prisma().create(
             data={
-                "hash": hashed.decode("utf-8"),
+                "hash": token_hash,
                 "workspace_id": workspace_id,
                 "role": role,
             }
@@ -57,11 +56,7 @@ async def get_invite(invite_id: str, user=Depends(verify_token_with_auth0)):
     if invite is None:
         raise HTTPException(status_code=404, detail="Invite not found")
 
-    hashChecked = bcrypt.checkpw(
-        user["email"].encode("utf-8"), invite.hash.encode("utf-8")
-    )
-
-    if hashChecked is False:
+    if not verify_token(invite.hash, user["email"]):
         raise HTTPException(status_code=403, detail="Invalid invite")
 
     workspaceUser = await PrismaModels.WorkspaceUsers.prisma().create(
