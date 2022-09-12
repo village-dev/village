@@ -219,10 +219,10 @@ export const Users: React.FC = () => {
                         className="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-blue-100 p-2 text-blue-600 hover:bg-blue-200 disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:text-blue-400"
                         disabled={!currentWorkspace?.workspace_id}
                         onClick={async () => {
-                            console.log('currentWorkspace?.workspace_id')
+                            if (!currentWorkspace?.workspace_id) return
                             const inviteId = await saveUserEmail(
                                 email,
-                                currentWorkspace?.workspace_id!,
+                                currentWorkspace?.workspace_id,
                                 selectedRole.value as UserRoles
                             )
                             navigator.clipboard.writeText(
