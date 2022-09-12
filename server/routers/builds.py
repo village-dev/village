@@ -1,4 +1,5 @@
 import prisma.models as PrismaModels
+import prisma.partials as PrismaPartials
 from fastapi import APIRouter, Depends, HTTPException
 
 from routers.scripts import check_script_access
@@ -27,14 +28,18 @@ async def check_build_access(user_id: str, build_id: str):
     return
 
 
-@router.get("/get", operation_id="get_build")
+@router.get(
+    "/get", operation_id="get_build", response_model=PrismaPartials.BuildWithMeta
+)
 async def get_build(build_id: str, user: PrismaModels.User = Depends(get_user)):
     """
     Get a build.
     """
     await check_build_access(user.id, build_id)
 
-    build = await PrismaModels.Build.prisma().find_first(where={"id": build_id})
+    build = await PrismaModels.Build.prisma().find_first(
+        where={"id": build_id}, include={"runs": True, "script": True}
+    )
 
     if build is None:
         raise HTTPException(status_code=404, detail="Build not found")

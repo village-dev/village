@@ -2,11 +2,11 @@ import { VillageClient } from '@common/VillageClient'
 import { PageLoading } from '@pages/PageLoading'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Build as BuildType } from '../../../api'
+import { BuildWithMeta } from '../../../api'
 
 export const Build = () => {
     const { id } = useParams()
-    const [build, setBuild] = useState<BuildType | null>(null)
+    const [build, setBuild] = useState<BuildWithMeta | null>(null)
 
     useEffect(() => {
         if (id === undefined) return
@@ -25,7 +25,7 @@ export const Build = () => {
         <div className="flex flex-col space-y-6 px-8 py-16">
             <h1>{build.id}</h1>
             <h1>{build.status}</h1>
-            <h1>{build.script_id}</h1>
+            <h1>{build.script?.name}</h1>
             <h1>{build.created_at}</h1>
             <h1>{build.updated_at}</h1>
             <h1>{build.completed_at}</h1>
