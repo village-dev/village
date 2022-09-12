@@ -40,7 +40,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
             VillageClient.request.config.HEADERS = {
                 Authorization: `Bearer ${token}`,
             }
-            let user = await VillageClient.user.getOrCreateUser()
+            let user = await VillageClient.users.getOrCreateUser()
 
             if (inviteId) {
                 try {
@@ -50,7 +50,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
                     toast.success(
                         `You were added to workspace ${workspace_name}`
                     )
-                    user = await VillageClient.user.getOrCreateUser()
+                    user = await VillageClient.users.getOrCreateUser()
                 } catch (error) {
                     console.error(error)
                 }
