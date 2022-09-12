@@ -30,6 +30,7 @@ export const StringInput: React.FC<{
             onChange={(e) => {
                 setValue(e.target.value)
             }}
+            className="rounded-none rounded-r-lg"
         />
     )
 }
@@ -60,6 +61,7 @@ export const FloatInput: React.FC<{
             onChange={(e) => {
                 setValue(e.target.value)
             }}
+            className="rounded-none rounded-r-lg"
         />
     )
 }
@@ -74,6 +76,7 @@ export const IntegerInput: React.FC<{
             onChange={(e) => {
                 setValue(e.target.value)
             }}
+            className="rounded-none rounded-r-lg"
         />
     )
 }
@@ -177,9 +180,31 @@ export const ParamInput: React.FC<{
     value: string | null
     setValue: (value: string) => void
 }> = ({ param, value, setValue }) => {
+    // multiple lines
+    if (
+        [
+            ParamType.BIGSTRING,
+            ParamType.BOOLEAN,
+            ParamType.DATE,
+            ParamType.DATETIME,
+        ].includes(param.type)
+    ) {
+        return (
+            <div className="mt-4 w-full items-center">
+                <h2 className="whitespace-nowrap rounded-l-lg border px-2 py-1.5">
+                    {param.key}{' '}
+                    {param.required && (
+                        <span className="font-semibold text-red-500">*</span>
+                    )}
+                </h2>
+                {<BigStringInput value={value} setValue={setValue} />}
+            </div>
+        )
+    }
+
     const InnerInput = {
+        [ParamType.BIGSTRING]: StringInput,
         [ParamType.STRING]: StringInput,
-        [ParamType.BIGSTRING]: BigStringInput,
         [ParamType.INTEGER]: IntegerInput,
         [ParamType.FLOAT]: FloatInput,
         [ParamType.BOOLEAN]: BooleanInput,
@@ -188,8 +213,8 @@ export const ParamInput: React.FC<{
     }[param.type]
 
     return (
-        <div className="mt-4 w-full">
-            <h2>
+        <div className="mt-4 flex w-full items-center">
+            <h2 className="content-box whitespace-nowrap rounded-l-lg border border-gray-100 px-4 py-1.5">
                 {param.key}{' '}
                 {param.required && (
                     <span className="font-semibold text-red-500">*</span>
@@ -281,14 +306,14 @@ export const RunScriptEmbeddable: React.FC<{ script: ScriptWithMeta }> = ({
             ))}
             <button
                 onClick={submitScript}
-                className="mt-4 w-full rounded-md bg-indigo-500 py-2 font-medium text-white"
+                className="mt-8 w-full rounded-md bg-emerald-500 py-2 font-medium text-white"
             >
                 Run script
             </button>
             {output !== null && (
                 <div>
-                    <h2 className="text-2xl">Output</h2>
-                    <pre className="mt-2 rounded-md bg-gray-100 p-2 text-sm">
+                    <h2 className="mt-8 text-lg">Output</h2>
+                    <pre className="mt-2 rounded-md bg-gray-100 p-4 text-sm">
                         {output}
                     </pre>
                 </div>

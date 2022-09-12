@@ -242,8 +242,8 @@ export const Script: React.FC = () => {
                     Created {getTimeSince(script.created_at)}
                 </h3>
                 {isDeployed ? (
-                    <div className="rounded-lg border p-8">
-                        <h1 className="flex items-center text-2xl">
+                    <div className="max-w-2xl rounded-lg border p-8">
+                        <h1 className="flex items-center text-xl">
                             Run Script
                             <Link
                                 to={`/app/run/${script.id}`}
