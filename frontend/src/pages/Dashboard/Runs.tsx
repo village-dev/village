@@ -7,7 +7,10 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { RunWithScript } from '../../../api'
 
-const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
+const RunRow: React.FC<{ data: RunWithScript; idx: number }> = ({
+    data,
+    idx,
+}) => {
     const run = data
 
     let trigger
@@ -21,7 +24,10 @@ const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
     console.log(run.schedule)
 
     return (
-        <tr key={run.id}>
+        <tr
+            key={run.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/runs/${run.id}`}
