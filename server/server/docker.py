@@ -49,7 +49,7 @@ async def execute(
         {
             "output": output,
             "status": RunStatus.SUCCESS,
-            "completed_at": datetime.now(),
+            "completed_at": datetime.utcnow(),
         },
         where={"id": run.id},
     )

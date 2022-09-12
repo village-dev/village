@@ -465,6 +465,10 @@ components:
       properties:
         build:
           $ref: '#/components/schemas/Build'
+        completed_at:
+          format: date-time
+          title: Completed At
+          type: string
         created_at:
           format: date-time
           title: Created At

@@ -1,3 +1,4 @@
+import { getDuration, getFormattedDateTime, getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import { PageLoading } from '@pages/PageLoading'
 import { useEffect, useState } from 'react'
@@ -23,10 +24,37 @@ export const Run = () => {
 
     return (
         <>
-            <div className="flex flex-col px-6">
-                <h1 className="text-2xl">{run.build?.script?.name}</h1>
-                <h2>Build: {run.build?.id}</h2>
-                <p>Output: {run.output}</p>
+            <h1 className="text-2xl">{run.build?.script?.name}</h1>
+
+            <div className="mt-4 max-w-max rounded-lg border p-4">
+                <h2>
+                    <span className="font-semibold">Created</span>{' '}
+                    {getFormattedDateTime(run.created_at)} (
+                    {getTimeSince(run.created_at)})
+                </h2>
+
+                {run.completed_at && (
+                    <>
+                        <h2 className="mt-2">
+                            <span className="font-semibold text-green">
+                                Finished
+                            </span>{' '}
+                            {getFormattedDateTime(run.completed_at)} (
+                            {getTimeSince(run.completed_at)})
+                        </h2>
+                        <h2 className="mt-2">
+                            <span className="font-semibold">Duration:</span>{' '}
+                            {getDuration(run.completed_at, run.created_at)}
+                        </h2>
+                    </>
+                )}
+            </div>
+
+            <h2 className="mt-8 text-lg">Output</h2>
+            <div>
+                <pre className="mt-4 rounded-lg bg-gray-50 p-4">
+                    {run.output}
+                </pre>
             </div>
         </>
     )

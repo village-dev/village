@@ -22,6 +22,7 @@ Run.create_partial(
         "build": {"include": {"script": True}},
         "schedule": True,
         "created_by": True,
+        "completed_at": True,
     },
 )
 
