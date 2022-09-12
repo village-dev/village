@@ -7,7 +7,7 @@ import { useUserContext } from '@contexts/UserContext'
 import cronParser from 'cron-parser'
 import cronstrue from 'cronstrue'
 import { ScriptWithMeta } from '../../../api'
-import { Params } from '@components/Params'
+import { Params, ParsedParams } from '@components/Params'
 
 export const NewSchedule: React.FC = () => {
     const [name, setName] = useState('')
