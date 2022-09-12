@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { BuildWithMeta, Run } from '../../../api'
 
-const RunRow: React.FC<{ data: Run }> = ({ data }) => {
+const RunRow: React.FC<{ data: Run; idx: number }> = ({ data, idx }) => {
     const run = data
 
     let trigger
@@ -20,7 +20,10 @@ const RunRow: React.FC<{ data: Run }> = ({ data }) => {
     }
 
     return (
-        <tr key={run.id}>
+        <tr
+            key={run.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/runs/${run.id}`}

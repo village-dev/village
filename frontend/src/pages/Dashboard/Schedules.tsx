@@ -10,11 +10,17 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { ScheduleWithScript } from '../../../api'
 
-const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
+const ScheduleRow: React.FC<{ data: ScheduleWithScript; idx: number }> = ({
+    data,
+    idx,
+}) => {
     const schedule = data
 
     return (
-        <tr key={schedule.id}>
+        <tr
+            key={schedule.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/schedules/${schedule.id}`}

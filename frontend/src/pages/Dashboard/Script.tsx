@@ -22,10 +22,13 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const BuildRow: React.FC<{ data: Build }> = ({ data }) => {
+const BuildRow: React.FC<{ data: Build; idx: number }> = ({ data, idx }) => {
     const build = data
     return (
-        <tr key={build.id}>
+        <tr
+            key={build.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/builds/${build.id}`}
@@ -71,10 +74,13 @@ export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
     )
 }
 
-const RunRow: React.FC<{ data: Run }> = ({ data }) => {
+const RunRow: React.FC<{ data: Run; idx: number }> = ({ data, idx }) => {
     const run = data
     return (
-        <tr key={run.id}>
+        <tr
+            key={run.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/runs/${run.id}`}
@@ -133,11 +139,17 @@ const searchSchedulesFilter = ({
     )
 }
 
-const ScheduleRow: React.FC<{ data: Schedule }> = ({ data }) => {
+const ScheduleRow: React.FC<{ data: Schedule; idx: number }> = ({
+    data,
+    idx,
+}) => {
     const schedule = data
 
     return (
-        <tr key={schedule.id}>
+        <tr
+            key={schedule.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/schedules/${schedule.id}`}
