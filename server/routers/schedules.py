@@ -87,7 +87,7 @@ async def create_schedule(
             "month_of_year": schedule.month_of_year,
             "params": {
                 "create": [
-                    {"key": key, "value": value}
+                    {"key": key, "value": str(value)}
                     for key, value in schedule.params.items()
                 ]
             },
@@ -179,7 +179,7 @@ async def update_schedule(
             "month_of_year": schedule.month_of_year,
             "params": {
                 "create": [
-                    {"key": key, "value": value}
+                    {"key": key, "value": str(value)}
                     for key, value in schedule.params.items()
                 ]
             },
