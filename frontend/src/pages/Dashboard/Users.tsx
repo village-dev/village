@@ -97,9 +97,17 @@ const createShareLink = (uriSafeState: string) =>
 
 const NoUsers: React.FC = () => {
     return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No users</h1>
-            <p className="mt-8 text-gray-600">Add some users</p>
+        <div className="mt-10 flex h-full flex-col items-center justify-center rounded-xl bg-gray-50 py-8 px-8">
+            <h1 className="text-2xl font-semibold text-black">No users yet!</h1>
+            <p className="text-md mt-8 text-gray-600">
+                Get started by looking at our{' '}
+                <a
+                    href="http://docs.village.dev"
+                    className="text-green underline-offset-4 hover:underline"
+                >
+                    Documentation.
+                </a>
+            </p>
         </div>
     )
 }
@@ -184,6 +192,7 @@ export const Users: React.FC = () => {
     const [email, setEmail] = useState('')
     const userContext = useContext(UserContext)
     const currentWorkspace = userContext?.user?.currentWorkspace
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (!currentWorkspace) return
@@ -191,6 +200,7 @@ export const Users: React.FC = () => {
             .listWorkspaceUsers(currentWorkspace.workspace_id)
             .then((s) => {
                 setUsers(s)
+                setLoading(false)
             })
     }, [currentWorkspace])
 
@@ -236,7 +246,7 @@ export const Users: React.FC = () => {
             </div>
             <div className="h-full flex-grow px-6">
                 <Table
-                    loading={false}
+                    loading={loading}
                     emptyState={<NoUsers />}
                     noResultsState={<NoResults />}
                     columnNames={['Role', 'ID']}
