@@ -1,7 +1,7 @@
 import { VillageClient } from '@common/VillageClient'
+import { PageLoading } from '@pages/PageLoading'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { BeatLoader } from 'react-spinners'
 import { RunWithScriptDetailed } from '../../../api'
 
 export const Run = () => {
@@ -18,11 +18,7 @@ export const Run = () => {
     }, [id])
 
     if (run === null) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                <BeatLoader color="rgb(52 211 153)" />
-            </div>
-        )
+        return <PageLoading />
     }
 
     return (

@@ -1,11 +1,11 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { BeatLoader } from 'react-spinners'
-import { ScheduleWithScriptAndRuns } from '../../../api'
+import { PageLoading } from '@pages/PageLoading'
 import cronParser from 'cron-parser'
 import cronstrue from 'cronstrue'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { ScheduleWithScriptAndRuns } from '../../../api'
 
 export const Schedule = () => {
     const { id } = useParams()
@@ -23,11 +23,7 @@ export const Schedule = () => {
     }, [id])
 
     if (schedule === null) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                <BeatLoader color="rgb(52 211 153)" />
-            </div>
-        )
+        return <PageLoading />
     }
 
     const cron = `${schedule.minute} ${schedule.hour} ${schedule.day_of_month} ${schedule.month_of_year} ${schedule.day_of_week}`
