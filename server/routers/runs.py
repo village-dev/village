@@ -22,7 +22,11 @@ async def list_runs(user: PrismaModels.User = Depends(get_user)):
 
     runs = await PrismaModels.Run.prisma().find_many(
         order={"created_at": "desc"},
-        include={"build": {"include": {"script": True}}},
+        include={
+            "build": {"include": {"script": True}},
+            "schedule": True,
+            "created_by": True,
+        },
         where={
             "script": {
                 "is": {

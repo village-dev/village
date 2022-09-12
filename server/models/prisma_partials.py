@@ -7,6 +7,8 @@ Run.create_partial(
         "status": True,
         "created_at": True,
         "build": {"include": {"script": True}},
+        "schedule": True,
+        "created_by": True,
     },
 )
 
@@ -18,6 +20,8 @@ Run.create_partial(
         "created_at": True,
         "output": True,
         "build": {"include": {"script": True}},
+        "schedule": True,
+        "created_by": True,
     },
 )
 
@@ -31,7 +35,7 @@ Build.create_partial(
         "completed_at": True,
         "output": True,
         "script": True,
-        "runs": True,
+        "runs": {"include": {"schedule": True, "created_by": True}},
     },
 )
 
@@ -81,11 +85,11 @@ Script.create_partial(
         "updated_at": True,
         "engine": True,
         "builds": True,
-        "runs": True,
         "schedules": True,
         "engine_version": True,
         "description": True,
         "workspace_id": True,
+        "runs": {"include": {"schedule": True, "created_by": True}},
     },
 )
 

@@ -743,7 +743,7 @@ async def run_script(
     """
     await check_script_access(user.id, script.script_id)
 
-    return await run_script_wrapper(script)
+    return await run_script_wrapper(script, user_id=user.id)
 
 
 @router.get(

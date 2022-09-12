@@ -38,7 +38,11 @@ async def get_build(build_id: str, user: PrismaModels.User = Depends(get_user)):
     await check_build_access(user.id, build_id)
 
     build = await PrismaModels.Build.prisma().find_first(
-        where={"id": build_id}, include={"runs": True, "script": True}
+        where={"id": build_id},
+        include={
+            "runs": {"include": {"schedule": True, "created_by": True}},
+            "script": True,
+        },
     )
 
     if build is None:

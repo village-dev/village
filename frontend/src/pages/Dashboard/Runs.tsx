@@ -9,6 +9,17 @@ import { RunWithScript } from '../../../api'
 
 const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
     const run = data
+
+    let trigger
+
+    if (run.schedule !== null) {
+        trigger = <span className="text-gray-500">Scheduled</span>
+    } else if (run.created_by !== null) {
+        trigger = <span className="text-gray-500">Manual</span>
+    }
+
+    console.log(run.schedule)
+
     return (
         <tr key={run.id}>
             <td className="py-4">
@@ -21,6 +32,7 @@ const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
             </td>
             <td className="pl-4">{run.status}</td>
             <td className="pl-4">{getTimeSince(run.created_at)}</td>
+            <td>{trigger}</td>
         </tr>
     )
 }

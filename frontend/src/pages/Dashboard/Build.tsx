@@ -10,6 +10,15 @@ import { BuildWithMeta, Run } from '../../../api'
 
 const RunRow: React.FC<{ data: Run }> = ({ data }) => {
     const run = data
+
+    let trigger
+
+    if (run.schedule !== undefined) {
+        trigger = <span className="text-gray-500">Scheduled</span>
+    } else if (run.created_by !== undefined) {
+        trigger = <span className="text-gray-500">Manual</span>
+    }
+
     return (
         <tr key={run.id}>
             <td className="py-4">
@@ -22,6 +31,7 @@ const RunRow: React.FC<{ data: Run }> = ({ data }) => {
             </td>
             <td className="pl-4">{run.status}</td>
             <td className="pl-4">{getTimeSince(run.created_at)}</td>
+            <td>{trigger}</td>
         </tr>
     )
 }
@@ -44,7 +54,7 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
                 loading={false}
                 emptyState={<NoRuns />}
                 noResultsState={<NoRunResults />}
-                columnNames={['ID', 'Status', 'Updated', '']}
+                columnNames={['ID', 'Status', 'Updated', 'Trigger', '']}
                 rowData={runs}
                 RowRenderer={RunRow}
                 searchFilter={searchRunsFilter}
