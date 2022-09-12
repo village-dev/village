@@ -2,6 +2,7 @@ import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import { NoRunResults } from '@components/EmptyStates/NoRunResults'
 import { NoRuns } from '@components/EmptyStates/NoRuns'
+import { ParamInput } from '@components/Params'
 import { Table } from '@components/Table'
 import { PageLoading } from '@pages/PageLoading'
 import cronParser from 'cron-parser'
@@ -54,12 +55,12 @@ const searchRunsFilter = ({ query, data }: { query: string; data: Run }) => {
 
 export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
     return (
-        <div className="flex-col space-y-2">
+        <div className="w-full flex-col">
             <Table
                 loading={false}
                 emptyState={<NoRuns />}
                 noResultsState={<NoRunResults />}
-                columnNames={['ID', 'Status', 'Updated', 'Trigger', '']}
+                columnNames={['ID', 'Status', 'Updated', 'Trigger']}
                 rowData={runs}
                 RowRenderer={RunRow}
                 searchFilter={searchRunsFilter}
@@ -105,19 +106,32 @@ export const Schedule = () => {
                 <h3 className="text-slate-600">
                     Created {getTimeSince(schedule.created_at)}
                 </h3>
-                Params:
-                <pre>{JSON.stringify(schedule.params, null, 2)}</pre>
-                <div className="py-2">
-                    Next runs:
-                    {nextRuns.map((r, idx) => (
-                        <div key={idx} className="text-zinc-500">
-                            {r.toDate().toLocaleString()}
-                        </div>
-                    ))}
+                <h2 className="mt-4 font-semibold">Parameters</h2>
+                <div>
+                    {schedule.params?.map((param) => {
+                        return (
+                            <div className="flex flex-row">
+                                <div className="mr-2 font-semibold text-gray-400">
+                                    {param.key}:
+                                </div>
+                                <div>{param.value}</div>
+                            </div>
+                        )
+                    })}
                 </div>
                 <div>
-                    <h1 className="text-xl">Runs</h1>
-                    <div className="mt-4 w-full rounded-xl border bg-white p-3">
+                    <h2 className="mt-4 font-semibold">Next runs:</h2>
+                    <div className="flex flex-row">
+                        {nextRuns.map((r, idx) => (
+                            <div
+                                key={idx}
+                                className="mr-2 rounded-md bg-gray-100 px-2 py-0.5 text-zinc-500"
+                            >
+                                {r.toDate().toLocaleString()}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-6 w-full rounded-xl border bg-white p-3">
                         <Runs runs={schedule?.runs || []} />
                     </div>
                 </div>
