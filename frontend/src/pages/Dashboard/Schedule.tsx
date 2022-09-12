@@ -8,7 +8,7 @@ import cronParser from 'cron-parser'
 import cronstrue from 'cronstrue'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ScheduleWithScriptAndRuns } from '../../../api'
+import { Run, ScheduleWithMeta } from '../../../api'
 
 const RunRow: React.FC<{ data: Run }> = ({ data }) => {
     const run = data
@@ -67,9 +67,7 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
 
 export const Schedule = () => {
     const { id } = useParams()
-    const [schedule, setSchedule] = useState<ScheduleWithScriptAndRuns | null>(
-        null
-    )
+    const [schedule, setSchedule] = useState<ScheduleWithMeta | null>(null)
 
     useEffect(() => {
         if (id === undefined) return
