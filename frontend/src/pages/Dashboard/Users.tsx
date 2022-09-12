@@ -188,7 +188,7 @@ export const Users: React.FC = () => {
 
     useEffect(() => {
         if (!currentWorkspace) return
-        VillageClient.workspace
+        VillageClient.workspaces
             .listWorkspaceUsers(currentWorkspace.workspace_id)
             .then((s) => {
                 setUsers(s)
