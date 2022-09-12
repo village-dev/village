@@ -2234,6 +2234,11 @@
           },
           "created_by": {
             "$ref": "#\/components\/schemas\/User"
+          },
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

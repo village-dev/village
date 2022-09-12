@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from typing import Dict, Optional, Union
 
+import arrow
 import docker  # type: ignore
 from prisma import models as PrismaModels
 from prisma.enums import Engine, RunStatus
@@ -49,7 +50,7 @@ async def execute(
         {
             "output": output,
             "status": RunStatus.SUCCESS,
-            "completed_at": datetime.now(),
+            "completed_at": arrow.utcnow().isoformat(),
         },
         where={"id": run.id},
     )
