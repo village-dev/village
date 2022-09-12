@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 from prisma import Prisma
 
 from config import ALLOWED_ORIGINS
-from routers import builds, runs, schedules, scripts, users, workspaces
+from routers import builds, invites, runs, schedules, scripts, users, workspaces
 
 tags_meta = [
     {
@@ -38,6 +38,10 @@ tags_meta = [
     {
         "name": "workspaces",
         "description": "Workspaces",
+    },
+    {
+        "name": "invites",
+        "description": "Invites",
     },
 ]
 
@@ -86,6 +90,7 @@ add_router(runs.router)
 add_router(schedules.router)
 add_router(users.router)
 add_router(workspaces.router)
+add_router(invites.router)
 
 openapi = app.openapi()
 

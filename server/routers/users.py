@@ -1,9 +1,11 @@
 import logging
+import os
 import re
 from typing import Any, Union
 
 import prisma.models as PrismaModels
 import prisma.partials as PrismaPartials
+import requests
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer
 from prisma import Prisma
@@ -44,6 +46,18 @@ async def refresh_token(
         raise HTTPException(status_code=401, detail="Invalid token")
 
     return result
+
+
+async def verify_token_with_auth0(
+    token: Any = Depends(token_auth_scheme),
+):
+    """ """
+    domain = os.getenv("AUTH0_DOMAIN", "https://your.domain.com/")
+    r = requests.get(
+        f"{domain}userinfo", headers={"Authorization": f"Bearer {token.credentials}"}
+    )
+
+    return r.json()
 
 
 async def verify_token_with_create_user(

@@ -1520,6 +1520,58 @@
         ]
       }
     },
+    "\/workspace\/list_users": {
+      "get": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "List Workspace Users",
+        "description": "List all users in a workspace.",
+        "operationId": "list_workspace_users",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "name": "workspace_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response List Workspace Users",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/WorkspaceUsers"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "\/workspace\/set_default": {
       "post": {
         "tags": [
@@ -1547,6 +1599,121 @@
                 "schema": {
                   "title": "Response Set Default Workspace",
                   "type": "boolean"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/invites\/create": {
+      "post": {
+        "tags": [
+          "invites"
+        ],
+        "summary": "Create Invite",
+        "description": "Create an invite for a user",
+        "operationId": "create_invite",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Email",
+              "type": "string"
+            },
+            "name": "email",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "name": "workspace_id",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "$ref": "#\/components\/schemas\/Role"
+            },
+            "name": "role",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Create Invite",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "\/invites\/get": {
+      "get": {
+        "tags": [
+          "invites"
+        ],
+        "summary": "Get Invite",
+        "description": "Get an invite for a user",
+        "operationId": "get_invite",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Invite Id",
+              "type": "string"
+            },
+            "name": "invite_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "title": "Response Get Invite",
+                  "type": "string"
                 }
               }
             }
@@ -1914,7 +2081,8 @@
       "Role": {
         "title": "Role",
         "enum": [
-          "ADMIN"
+          "ADMIN",
+          "USER"
         ],
         "type": "string",
         "description": "An enumeration."
@@ -2891,6 +3059,10 @@
     {
       "name": "workspaces",
       "description": "Workspaces"
+    },
+    {
+      "name": "invites",
+      "description": "Invites"
     }
   ]
 }

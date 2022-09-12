@@ -270,8 +270,9 @@ export const RunScriptEmbeddable: React.FC<{ script: ScriptWithMeta }> = ({
 
     return (
         <>
-            {scriptParams.map((param) => (
+            {scriptParams.map((param, idx) => (
                 <ParamInput
+                    key={idx}
                     param={param}
                     value={params[param.key]}
                     setValue={setParamValue({

@@ -157,8 +157,18 @@ enum RunStatus {
   FAILURE
 }
 
+model Invites {
+  id           String    @id @default(cuid())
+  created_at   DateTime  @default(now())
+  expires_at   DateTime  @default(dbgenerated("now() + interval '2 day'"))
+  hash         String
+  workspace_id String
+  role         Role
+}
+
 enum Role {
   ADMIN
+  USER
 }
 
 enum Engine {

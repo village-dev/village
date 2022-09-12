@@ -18,6 +18,7 @@ import { NotFound } from '@pages/NotFound'
 
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { Users } from './Dashboard/Users'
 
 export const Dashboard: React.FC = () => {
     const { refreshUser } = useUserContext()
@@ -69,6 +70,8 @@ export const Dashboard: React.FC = () => {
                     </Route>
 
                     <Route path="workflows" element={<Workflows />} />
+
+                    <Route path="users" element={<Users />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>

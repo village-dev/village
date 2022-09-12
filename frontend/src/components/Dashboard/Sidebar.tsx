@@ -5,6 +5,7 @@ import {
     LifebuoyIcon,
     PuzzlePieceIcon,
 } from '@heroicons/react/24/outline'
+import { FiUsers } from 'react-icons/fi'
 import { NavLink } from 'react-router-dom'
 
 export const Sidebar: React.FC = () => {
@@ -45,6 +46,15 @@ export const Sidebar: React.FC = () => {
                 >
                     <InboxIcon className={iconStyle} />
                     Runs
+                </NavLink>
+                <NavLink
+                    to="/app/users"
+                    className={({ isActive }) =>
+                        isActive ? activeButtonStyle : inactiveButtonStyle
+                    }
+                >
+                    <FiUsers className={iconStyle} />
+                    Users
                 </NavLink>
             </div>
             {/* Bottom links */}

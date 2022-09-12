@@ -37,13 +37,13 @@ export const Table: TableComponent = ({
     let innerTable
 
     if (loading) {
-        innerTable = [null, null, null].map(() => {
+        innerTable = [null, null, null].map((_, idx) => {
             const arr = new Array(columnNames.length).fill(null)
             return (
-                <tr>
-                    {arr.map(() => {
+                <tr key={idx}>
+                    {arr.map((_, idx) => {
                         return (
-                            <td className="py-4 px-4">
+                            <td key={idx} className="py-4 px-4">
                                 <div className="h-4 w-full animate-pulse rounded bg-gray-300"></div>
                             </td>
                         )
@@ -94,6 +94,7 @@ export const Table: TableComponent = ({
                         {columnNames.map((name, idx) => {
                             return (
                                 <th
+                                    key={idx}
                                     className={
                                         (columnWidths !== undefined
                                             ? columnWidths[idx]

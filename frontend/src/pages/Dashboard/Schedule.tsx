@@ -54,16 +54,16 @@ export const Schedule = () => {
                 <pre>{JSON.stringify(schedule.params, null, 2)}</pre>
                 <div className="py-2">
                     Next runs:
-                    {nextRuns.map((r) => (
-                        <div className="text-zinc-500">
+                    {nextRuns.map((r, idx) => (
+                        <div key={idx} className="text-zinc-500">
                             {r.toDate().toLocaleString()}
                         </div>
                     ))}
                 </div>
                 <div>
                     <h1 className="text-xl">Runs</h1>
-                    {(schedule.runs ?? []).map((run) => (
-                        <div className="flex flex-row space-x-4">
+                    {(schedule.runs ?? []).map((run, idx) => (
+                        <div key={idx} className="flex flex-row space-x-4">
                             <div className="w-32">
                                 <p>{run.id}</p>
                                 <p>{run.status}</p>
