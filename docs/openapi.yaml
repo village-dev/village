@@ -595,60 +595,7 @@ components:
       - schedule_id
       title: ScheduleParam
       type: object
-    ScheduleWithScript:
-      properties:
-        created_at:
-          format: date-time
-          title: Created At
-          type: string
-        day_of_month:
-          title: Day Of Month
-          type: string
-        day_of_week:
-          title: Day Of Week
-          type: string
-        description:
-          title: Description
-          type: string
-        hour:
-          title: Hour
-          type: string
-        id:
-          title: Id
-          type: string
-        minute:
-          title: Minute
-          type: string
-        month_of_year:
-          title: Month Of Year
-          type: string
-        name:
-          title: Name
-          type: string
-        params:
-          items:
-            $ref: '#/components/schemas/ScheduleParam'
-          title: Params
-          type: array
-        script:
-          $ref: '#/components/schemas/Script'
-        updated_at:
-          format: date-time
-          title: Updated At
-          type: string
-      required:
-      - id
-      - name
-      - created_at
-      - updated_at
-      - minute
-      - hour
-      - day_of_month
-      - month_of_year
-      - day_of_week
-      title: ScheduleWithScript
-      type: object
-    ScheduleWithScriptAndRuns:
+    ScheduleWithMeta:
       properties:
         created_at:
           format: date-time
@@ -704,7 +651,60 @@ components:
       - day_of_month
       - month_of_year
       - day_of_week
-      title: ScheduleWithScriptAndRuns
+      title: ScheduleWithMeta
+      type: object
+    ScheduleWithScript:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        description:
+          title: Description
+          type: string
+        hour:
+          title: Hour
+          type: string
+        id:
+          title: Id
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        name:
+          title: Name
+          type: string
+        params:
+          items:
+            $ref: '#/components/schemas/ScheduleParam'
+          title: Params
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - minute
+      - hour
+      - day_of_month
+      - month_of_year
+      - day_of_week
+      title: ScheduleWithScript
       type: object
     Script:
       description: Represents a Script record
@@ -1314,7 +1314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScheduleWithScriptAndRuns'
+                $ref: '#/components/schemas/ScheduleWithMeta'
           description: Successful Response
         '422':
           content:

@@ -283,7 +283,7 @@ async def delete_schedule(
 @router.get(
     "/get",
     operation_id="get_schedule",
-    response_model=PrismaPartials.ScheduleWithScriptAndRuns,
+    response_model=PrismaPartials.ScheduleWithMeta,
 )
 async def get_schedule(schedule_id: str, user: PrismaModels.User = Depends(get_user)):
     """
@@ -292,7 +292,8 @@ async def get_schedule(schedule_id: str, user: PrismaModels.User = Depends(get_u
     await check_schedule_access(user.id, schedule_id)
 
     schedule = await PrismaModels.Schedule.prisma().find_unique(
-        where={"id": schedule_id}, include={"script": True, "runs": True}
+        where={"id": schedule_id},
+        include={"script": True, "runs": True, "params": True},
     )
 
     if schedule is None:
