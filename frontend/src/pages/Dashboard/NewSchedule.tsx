@@ -8,6 +8,7 @@ import cronParser from 'cron-parser'
 import cronstrue from 'cronstrue'
 import { ScriptWithMeta } from '../../../api'
 import { Params, ParsedParams } from '@components/Params'
+import { toNewScript, toSchedule } from '@utils/links'
 
 export const NewSchedule: React.FC = () => {
     const [name, setName] = useState('')
@@ -96,7 +97,7 @@ export const NewSchedule: React.FC = () => {
                 })
                 .then((s) => {
                     // redirect to schedule page
-                    navigate(`/app/schedules/${s.id}`)
+                    navigate(toSchedule(s.id))
                 })
         } catch (err) {
             console.error(err)
@@ -143,7 +144,7 @@ export const NewSchedule: React.FC = () => {
                                 No scripts available. Create one{' '}
                                 <Link
                                     className="font-semibold text-emerald-500"
-                                    to="/app/new/script"
+                                    to={toNewScript}
                                 >
                                     here
                                 </Link>

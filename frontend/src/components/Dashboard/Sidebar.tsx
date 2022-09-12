@@ -5,6 +5,7 @@ import {
     LifebuoyIcon,
     PuzzlePieceIcon,
 } from '@heroicons/react/24/outline'
+import { toRuns, toSchedules, toScripts, toUsers } from '@utils/links'
 import { FiUsers } from 'react-icons/fi'
 import { NavLink } from 'react-router-dom'
 
@@ -20,7 +21,7 @@ export const Sidebar: React.FC = () => {
             {/* Middle links */}
             <div className="flex flex-col space-y-2">
                 <NavLink
-                    to="/app/scripts"
+                    to={toScripts}
                     className={({ isActive }) =>
                         isActive ? activeButtonStyle : inactiveButtonStyle
                     }
@@ -29,7 +30,7 @@ export const Sidebar: React.FC = () => {
                     Scripts
                 </NavLink>
                 <NavLink
-                    to="/app/schedules"
+                    to={toSchedules}
                     className={({ isActive }) =>
                         isActive ? activeButtonStyle : inactiveButtonStyle
                     }
@@ -39,7 +40,7 @@ export const Sidebar: React.FC = () => {
                 </NavLink>
                 {/* <NavLink to="/workflows">Workflows</NavLink> */}
                 <NavLink
-                    to="/app/runs"
+                    to={toRuns}
                     className={({ isActive }) =>
                         isActive ? activeButtonStyle : inactiveButtonStyle
                     }
@@ -48,7 +49,7 @@ export const Sidebar: React.FC = () => {
                     Runs
                 </NavLink>
                 <NavLink
-                    to="/app/users"
+                    to={toUsers}
                     className={({ isActive }) =>
                         isActive ? activeButtonStyle : inactiveButtonStyle
                     }

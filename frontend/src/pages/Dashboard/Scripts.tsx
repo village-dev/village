@@ -4,6 +4,7 @@ import { NoScriptResults } from '@components/EmptyStates/NoScriptResults'
 import { NoScripts } from '@components/EmptyStates/NoScripts'
 import { Table } from '@components/Table'
 import { useUserContext } from '@contexts/UserContext'
+import { toNewScript } from '@utils/links'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight, HiOutlineLink } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
@@ -78,7 +79,7 @@ export const Scripts: React.FC = () => {
             <div className="flex space-x-6 px-6">
                 <h1 className="text-2xl">Scripts</h1>{' '}
                 <Link
-                    to="/app/new/script"
+                    to={toNewScript}
                     className="flex items-center rounded-md bg-lightgreen px-3 py-1.5 text-sm font-semibold text-green hover:bg-emerald-200"
                 >
                     Create script <HiOutlineArrowRight className="ml-1" />
