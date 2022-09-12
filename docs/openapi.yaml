@@ -99,6 +99,43 @@ components:
       - FAILURE
       title: BuildStatus
       type: string
+    BuildWithMeta:
+      properties:
+        completed_at:
+          format: date-time
+          title: Completed At
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        output:
+          title: Output
+          type: string
+        runs:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Runs
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        status:
+          $ref: '#/components/schemas/BuildStatus'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - status
+      - created_at
+      - updated_at
+      - output
+      title: BuildWithMeta
+      type: object
     CreateScheduleInput:
       description: Schedule creation model
       properties:
@@ -125,7 +162,11 @@ components:
           type: string
         params:
           additionalProperties:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
           title: Params
           type: object
         script_id:
@@ -291,6 +332,11 @@ components:
         output:
           title: Output
           type: string
+        params:
+          items:
+            $ref: '#/components/schemas/RunParam'
+          title: Params
+          type: array
         schedule:
           $ref: '#/components/schemas/Schedule'
         schedule_id:
@@ -316,6 +362,40 @@ components:
       - output
       - status
       title: Run
+      type: object
+    RunParam:
+      description: Represents a RunParam record
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          title: Id
+          type: string
+        key:
+          title: Key
+          type: string
+        run:
+          $ref: '#/components/schemas/Run'
+        run_id:
+          title: Run Id
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        value:
+          title: Value
+          type: string
+      required:
+      - id
+      - created_at
+      - updated_at
+      - key
+      - value
+      - run_id
+      title: RunParam
       type: object
     RunScheduleInput:
       description: Schedule run model
@@ -367,9 +447,13 @@ components:
           format: date-time
           title: Created At
           type: string
+        created_by:
+          $ref: '#/components/schemas/User'
         id:
           title: Id
           type: string
+        schedule:
+          $ref: '#/components/schemas/Schedule'
         status:
           $ref: '#/components/schemas/RunStatus'
       required:
@@ -386,12 +470,16 @@ components:
           format: date-time
           title: Created At
           type: string
+        created_by:
+          $ref: '#/components/schemas/User'
         id:
           title: Id
           type: string
         output:
           title: Output
           type: string
+        schedule:
+          $ref: '#/components/schemas/Schedule'
         status:
           $ref: '#/components/schemas/RunStatus'
       required:
@@ -508,60 +596,7 @@ components:
       - schedule_id
       title: ScheduleParam
       type: object
-    ScheduleWithScript:
-      properties:
-        created_at:
-          format: date-time
-          title: Created At
-          type: string
-        day_of_month:
-          title: Day Of Month
-          type: string
-        day_of_week:
-          title: Day Of Week
-          type: string
-        description:
-          title: Description
-          type: string
-        hour:
-          title: Hour
-          type: string
-        id:
-          title: Id
-          type: string
-        minute:
-          title: Minute
-          type: string
-        month_of_year:
-          title: Month Of Year
-          type: string
-        name:
-          title: Name
-          type: string
-        params:
-          items:
-            $ref: '#/components/schemas/ScheduleParam'
-          title: Params
-          type: array
-        script:
-          $ref: '#/components/schemas/Script'
-        updated_at:
-          format: date-time
-          title: Updated At
-          type: string
-      required:
-      - id
-      - name
-      - created_at
-      - updated_at
-      - minute
-      - hour
-      - day_of_month
-      - month_of_year
-      - day_of_week
-      title: ScheduleWithScript
-      type: object
-    ScheduleWithScriptAndRuns:
+    ScheduleWithMeta:
       properties:
         created_at:
           format: date-time
@@ -617,7 +652,60 @@ components:
       - day_of_month
       - month_of_year
       - day_of_week
-      title: ScheduleWithScriptAndRuns
+      title: ScheduleWithMeta
+      type: object
+    ScheduleWithScript:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        day_of_month:
+          title: Day Of Month
+          type: string
+        day_of_week:
+          title: Day Of Week
+          type: string
+        description:
+          title: Description
+          type: string
+        hour:
+          title: Hour
+          type: string
+        id:
+          title: Id
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month_of_year:
+          title: Month Of Year
+          type: string
+        name:
+          title: Name
+          type: string
+        params:
+          items:
+            $ref: '#/components/schemas/ScheduleParam'
+          title: Params
+          type: array
+        script:
+          $ref: '#/components/schemas/Script'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - minute
+      - hour
+      - day_of_month
+      - month_of_year
+      - day_of_week
+      title: ScheduleWithScript
       type: object
     Script:
       description: Represents a Script record
@@ -760,7 +848,11 @@ components:
           type: string
         params:
           additionalProperties:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
           title: Params
           type: object
         schedule_id:
@@ -1016,7 +1108,8 @@ paths:
         '200':
           content:
             application/json:
-              schema: {}
+              schema:
+                $ref: '#/components/schemas/BuildWithMeta'
           description: Successful Response
         '422':
           content:
@@ -1293,7 +1386,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScheduleWithScriptAndRuns'
+                $ref: '#/components/schemas/ScheduleWithMeta'
           description: Successful Response
         '422':
           content:
@@ -1467,6 +1560,36 @@ paths:
       summary: Get Script Builds
       tags:
       - scripts
+  /script/check_id:
+    get:
+      description: Check if a script ID is available.
+      operationId: check_script_id
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          title: Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Check Script Id
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Check Script Id
+      tags:
+      - scripts
   /script/create:
     post:
       description: Initialize a script.
@@ -1583,6 +1706,36 @@ paths:
       security:
       - HTTPBearer: []
       summary: List Scripts
+      tags:
+      - scripts
+  /script/propose_id:
+    get:
+      description: Propose a script ID based on the name.
+      operationId: propose_script_id
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Propose Script Id
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Propose Script Id
       tags:
       - scripts
   /script/run:
@@ -1733,66 +1886,6 @@ paths:
       summary: Update Script
       tags:
       - scripts
-  /scripts/check_id:
-    get:
-      description: Check if a script ID is available.
-      operationId: check_script_id
-      parameters:
-      - in: query
-        name: id
-        required: true
-        schema:
-          title: Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Check Script Id
-                type: boolean
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Check Script Id
-      tags:
-      - scripts
-  /scripts/propose_id:
-    get:
-      description: Propose a script ID based on the name.
-      operationId: propose_script_id
-      parameters:
-      - in: query
-        name: name
-        required: true
-        schema:
-          title: Name
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Propose Script Id
-                type: string
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Propose Script Id
-      tags:
-      - scripts
   /user/create:
     post:
       operationId: get_or_create_user
@@ -1807,8 +1900,8 @@ paths:
       - HTTPBearer: []
       summary: Get Or Create User
       tags:
-      - user
-  /users/get:
+      - users
+  /user/get:
     get:
       description: Get a user.
       operationId: get_current_user
@@ -1823,7 +1916,37 @@ paths:
       - HTTPBearer: []
       summary: Get Current User
       tags:
-      - user
+      - users
+  /workspace/check_id:
+    get:
+      description: Check if a script ID is available.
+      operationId: check_workspace_id
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          title: Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Check Workspace Id
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Check Workspace Id
+      tags:
+      - workspaces
   /workspace/create:
     post:
       description: Create a workspace.
@@ -1851,7 +1974,7 @@ paths:
       - HTTPBearer: []
       summary: Create Workspace
       tags:
-      - workspace
+      - workspaces
   /workspace/get:
     get:
       description: Get a workspace.
@@ -1880,7 +2003,7 @@ paths:
       - HTTPBearer: []
       summary: Get Workspace
       tags:
-      - workspace
+      - workspaces
   /workspace/list:
     get:
       description: List all workspaces.
@@ -1899,8 +2022,68 @@ paths:
       - HTTPBearer: []
       summary: List User Workspaces
       tags:
-      - workspace
-  /workspace/list_users:
+      - workspaces
+  /workspace/propose_id:
+    get:
+      description: Propose a workspace ID based on the name.
+      operationId: propose_workspace_id
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Propose Workspace Id
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Propose Workspace Id
+      tags:
+      - workspaces
+  /workspace/set_default:
+    post:
+      description: Set default workspace.
+      operationId: set_default_workspace
+      parameters:
+      - in: query
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Set Default Workspace
+                type: boolean
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Set Default Workspace
+      tags:
+      - workspaces
+  /workspace/workspace/list_users:
     get:
       description: List all users in a workspace.
       operationId: list_workspace_users
@@ -1931,97 +2114,7 @@ paths:
       - HTTPBearer: []
       summary: List Workspace Users
       tags:
-      - workspace
-  /workspace/set_default:
-    post:
-      description: Set default workspace.
-      operationId: set_default_workspace
-      parameters:
-      - in: query
-        name: workspace_id
-        required: true
-        schema:
-          title: Workspace Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Set Default Workspace
-                type: boolean
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Set Default Workspace
-      tags:
-      - workspace
-  /workspaces/check_id:
-    get:
-      description: Check if a script ID is available.
-      operationId: check_workspace_id
-      parameters:
-      - in: query
-        name: id
-        required: true
-        schema:
-          title: Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Check Workspace Id
-                type: boolean
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Check Workspace Id
-      tags:
-      - workspace
-  /workspaces/propose_id:
-    get:
-      description: Propose a workspace ID based on the name.
-      operationId: propose_workspace_id
-      parameters:
-      - in: query
-        name: name
-        required: true
-        schema:
-          title: Name
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                title: Response Propose Workspace Id
-                type: string
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - HTTPBearer: []
-      summary: Propose Workspace Id
-      tags:
-      - workspace
+      - workspaces
 tags:
 - description: Scripts
   name: scripts

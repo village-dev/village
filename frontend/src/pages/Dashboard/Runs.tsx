@@ -1,37 +1,33 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
+import { NoRunResults } from '@components/EmptyStates/NoRunResults'
+import { NoRuns } from '@components/EmptyStates/NoRuns'
 import { Table } from '@components/Table'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { RunWithScript } from '../../../api'
 
-const NoRuns: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No runs</h1>
-            <p className="mt-8 text-gray-600">
-                Run scripts to see the results here
-            </p>
-        </div>
-    )
-}
-
-const NoResults: React.FC = () => {
-    return (
-        <tr>
-            <td colSpan={3} align="center" className="py-16 ">
-                <h1 className="text-lg font-semibold text-gray-400">
-                    No runs found
-                </h1>
-            </td>
-        </tr>
-    )
-}
-
-const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
+const RunRow: React.FC<{ data: RunWithScript; idx: number }> = ({
+    data,
+    idx,
+}) => {
     const run = data
+
+    let trigger
+
+    if (run.schedule !== null) {
+        trigger = <span className="text-gray-500">Scheduled</span>
+    } else if (run.created_by !== null) {
+        trigger = <span className="text-gray-500">Manual</span>
+    }
+
+    console.log(run.schedule)
+
     return (
-        <tr key={run.id}>
+        <tr
+            key={run.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/runs/${run.id}`}
@@ -42,6 +38,7 @@ const RunRow: React.FC<{ data: RunWithScript }> = ({ data }) => {
             </td>
             <td className="pl-4">{run.status}</td>
             <td className="pl-4">{getTimeSince(run.created_at)}</td>
+            <td>{trigger}</td>
         </tr>
     )
 }
@@ -76,21 +73,21 @@ export const Runs: React.FC = () => {
     }, [])
 
     return (
-        <div className="flex h-full flex-col space-y-6 px-8 py-4">
+        <>
             <div className="px-6">
                 <h1 className="text-2xl">Runs</h1>
             </div>
-            <div className="h-full flex-grow px-6">
+            <div className="mt-8 h-full flex-grow px-6">
                 <Table
                     loading={loading}
                     emptyState={<NoRuns />}
-                    noResultsState={<NoResults />}
+                    noResultsState={<NoRunResults />}
                     columnNames={['Name', 'Schedule', 'Updated', '']}
                     rowData={runs}
                     RowRenderer={RunRow}
                     searchFilter={searchFilter}
                 />
             </div>
-        </div>
+        </>
     )
 }

@@ -5,7 +5,7 @@
     "version": "0.1.0"
   },
   "paths": {
-    "\/scripts\/propose_id": {
+    "\/script\/propose_id": {
       "get": {
         "tags": [
           "scripts"
@@ -54,7 +54,7 @@
         ]
       }
     },
-    "\/scripts\/check_id": {
+    "\/script\/check_id": {
       "get": {
         "tags": [
           "scripts"
@@ -713,7 +713,9 @@
             "description": "Successful Response",
             "content": {
               "application\/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#\/components\/schemas\/BuildWithMeta"
+                }
               }
             }
           },
@@ -1220,7 +1222,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/ScheduleWithScriptAndRuns"
+                  "$ref": "#\/components\/schemas\/ScheduleWithMeta"
                 }
               }
             }
@@ -1246,7 +1248,7 @@
     "\/user\/create": {
       "post": {
         "tags": [
-          "user"
+          "users"
         ],
         "summary": "Get Or Create User",
         "operationId": "get_or_create_user",
@@ -1269,10 +1271,10 @@
         ]
       }
     },
-    "\/users\/get": {
+    "\/user\/get": {
       "get": {
         "tags": [
-          "user"
+          "users"
         ],
         "summary": "Get Current User",
         "description": "Get a user.",
@@ -1296,10 +1298,10 @@
         ]
       }
     },
-    "\/workspaces\/propose_id": {
+    "\/workspace\/propose_id": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Propose Workspace Id",
         "description": "Propose a workspace ID based on the name.",
@@ -1345,10 +1347,10 @@
         ]
       }
     },
-    "\/workspaces\/check_id": {
+    "\/workspace\/check_id": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Check Workspace Id",
         "description": "Check if a script ID is available.",
@@ -1397,7 +1399,7 @@
     "\/workspace\/create": {
       "post": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Create Workspace",
         "description": "Create a workspace.",
@@ -1444,7 +1446,7 @@
     "\/workspace\/get": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Get Workspace",
         "description": "Get a workspace.",
@@ -1492,7 +1494,7 @@
     "\/workspace\/list": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "List User Workspaces",
         "description": "List all workspaces.",
@@ -1520,10 +1522,10 @@
         ]
       }
     },
-    "\/workspace\/list_users": {
+    "\/workspace\/workspace\/list_users": {
       "get": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "List Workspace Users",
         "description": "List all users in a workspace.",
@@ -1575,7 +1577,7 @@
     "\/workspace\/set_default": {
       "post": {
         "tags": [
-          "workspace"
+          "workspaces"
         ],
         "summary": "Set Default Workspace",
         "description": "Set default workspace.",
@@ -1870,6 +1872,55 @@
         "type": "string",
         "description": "An enumeration."
       },
+      "BuildWithMeta": {
+        "title": "BuildWithMeta",
+        "required": [
+          "id",
+          "status",
+          "created_at",
+          "updated_at",
+          "output"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#\/components\/schemas\/BuildStatus"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "output": {
+            "title": "Output",
+            "type": "string"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
+          }
+        }
+      },
       "CreateScheduleInput": {
         "title": "CreateScheduleInput",
         "required": [
@@ -1899,7 +1950,20 @@
             "title": "Params",
             "type": "object",
             "additionalProperties": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
             }
           },
           "day_of_month": {
@@ -2153,9 +2217,60 @@
           },
           "script": {
             "$ref": "#\/components\/schemas\/Script"
+          },
+          "params": {
+            "title": "Params",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/RunParam"
+            }
           }
         },
         "description": "Represents a Run record"
+      },
+      "RunParam": {
+        "title": "RunParam",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "key",
+          "value",
+          "run_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          },
+          "run": {
+            "$ref": "#\/components\/schemas\/Run"
+          }
+        },
+        "description": "Represents a RunParam record"
       },
       "RunScheduleInput": {
         "title": "RunScheduleInput",
@@ -2244,6 +2359,12 @@
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"
+          },
+          "schedule": {
+            "$ref": "#\/components\/schemas\/Schedule"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
           }
         }
       },
@@ -2275,6 +2396,12 @@
           },
           "build": {
             "$ref": "#\/components\/schemas\/Build"
+          },
+          "schedule": {
+            "$ref": "#\/components\/schemas\/Schedule"
+          },
+          "created_by": {
+            "$ref": "#\/components\/schemas\/User"
           }
         }
       },
@@ -2417,77 +2544,8 @@
         },
         "description": "Represents a ScheduleParam record"
       },
-      "ScheduleWithScript": {
-        "title": "ScheduleWithScript",
-        "required": [
-          "id",
-          "name",
-          "created_at",
-          "updated_at",
-          "minute",
-          "hour",
-          "day_of_month",
-          "month_of_year",
-          "day_of_week"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "title": "Id",
-            "type": "string"
-          },
-          "name": {
-            "title": "Name",
-            "type": "string"
-          },
-          "created_at": {
-            "title": "Created At",
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "title": "Updated At",
-            "type": "string",
-            "format": "date-time"
-          },
-          "script": {
-            "$ref": "#\/components\/schemas\/Script"
-          },
-          "minute": {
-            "title": "Minute",
-            "type": "string"
-          },
-          "hour": {
-            "title": "Hour",
-            "type": "string"
-          },
-          "day_of_month": {
-            "title": "Day Of Month",
-            "type": "string"
-          },
-          "month_of_year": {
-            "title": "Month Of Year",
-            "type": "string"
-          },
-          "day_of_week": {
-            "title": "Day Of Week",
-            "type": "string"
-          },
-          "description": {
-            "title": "Description",
-            "type": "string"
-          },
-          "params": {
-            "title": "Params",
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/ScheduleParam"
-            }
-          }
-        }
-      },
-      "ScheduleWithScriptAndRuns": {
-        "title": "ScheduleWithScriptAndRuns",
+      "ScheduleWithMeta": {
+        "title": "ScheduleWithMeta",
         "required": [
           "id",
           "name",
@@ -2552,6 +2610,75 @@
             "items": {
               "$ref": "#\/components\/schemas\/Run"
             }
+          },
+          "params": {
+            "title": "Params",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/ScheduleParam"
+            }
+          }
+        }
+      },
+      "ScheduleWithScript": {
+        "title": "ScheduleWithScript",
+        "required": [
+          "id",
+          "name",
+          "created_at",
+          "updated_at",
+          "minute",
+          "hour",
+          "day_of_month",
+          "month_of_year",
+          "day_of_week"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
           },
           "params": {
             "title": "Params",
@@ -2686,13 +2813,6 @@
               "$ref": "#\/components\/schemas\/Build"
             }
           },
-          "runs": {
-            "title": "Runs",
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Run"
-            }
-          },
           "schedules": {
             "title": "Schedules",
             "type": "array",
@@ -2711,6 +2831,13 @@
           "workspace_id": {
             "title": "Workspace Id",
             "type": "string"
+          },
+          "runs": {
+            "title": "Runs",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Run"
+            }
           }
         }
       },
@@ -2731,7 +2858,20 @@
             "title": "Params",
             "type": "object",
             "additionalProperties": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
             }
           },
           "name": {

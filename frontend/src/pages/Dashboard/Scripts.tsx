@@ -1,28 +1,13 @@
 import { getFormattedDate } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
+import { NoScriptResults } from '@components/EmptyStates/NoScriptResults'
+import { NoScripts } from '@components/EmptyStates/NoScripts'
 import { Table } from '@components/Table'
 import { useUserContext } from '@contexts/UserContext'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight, HiOutlineLink } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 import { Script } from '../../../api/models/Script'
-
-const NoScripts: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No scripts</h1>
-            <p className="mt-8 text-gray-600">Scripts can automate anything</p>
-        </div>
-    )
-}
-
-const NoResults: React.FC = () => {
-    return (
-        <h1 className="text-lg font-semibold text-gray-400">
-            No scripts found
-        </h1>
-    )
-}
 
 const ScriptRow: React.FC<{ data: Script; idx: number }> = ({ data, idx }) => {
     const script = data
@@ -89,7 +74,7 @@ export const Scripts: React.FC = () => {
     }, [user?.currentWorkspace])
 
     return (
-        <div className="flex h-full flex-col space-y-6 px-8 py-4">
+        <>
             <div className="flex space-x-6 px-6">
                 <h1 className="text-2xl">Scripts</h1>{' '}
                 <Link
@@ -99,11 +84,11 @@ export const Scripts: React.FC = () => {
                     Create script <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
-            <div className="h-full flex-grow px-6">
+            <div className="mt-8 h-full flex-grow px-6">
                 <Table
                     loading={loading}
                     emptyState={<NoScripts />}
-                    noResultsState={<NoResults />}
+                    noResultsState={<NoScriptResults />}
                     columnNames={['Name', 'Modified', 'Engine', '']} //TODO(John): Replace with Status icons
                     columnWidths={['w-9/12', 'w-30', 'w-30', 'w-10']}
                     rowData={scripts}
@@ -111,6 +96,6 @@ export const Scripts: React.FC = () => {
                     searchFilter={searchFilter}
                 />
             </div>
-        </div>
+        </>
     )
 }

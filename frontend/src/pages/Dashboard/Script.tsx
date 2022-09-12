@@ -5,44 +5,30 @@ import { Link, useParams } from 'react-router-dom'
 import { Build, Run, Schedule, ScriptWithMeta } from '../../../api'
 import { RunScriptEmbeddable } from './RunScript'
 
-import { Tab } from '@headlessui/react'
-import { RiExternalLinkLine } from 'react-icons/ri'
-import { BeatLoader } from 'react-spinners'
-import { Table } from '@components/Table'
+import { NoBuildResults } from '@components/EmptyStates/NoBuildResults'
+import { NoBuilds } from '@components/EmptyStates/NoBuilds'
+import { NoRunResults } from '@components/EmptyStates/NoRunResults'
+import { NoRuns } from '@components/EmptyStates/NoRuns'
+import { NoScheduleResults } from '@components/EmptyStates/NoScheduleResults'
+import { NoSchedules } from '@components/EmptyStates/NoSchedules'
 import { ListDropdown } from '@components/ListDropdown'
+import { Table } from '@components/Table'
+import { Tab } from '@headlessui/react'
+import { PageLoading } from '@pages/PageLoading'
 import { MdDeleteOutline } from 'react-icons/md'
+import { RiExternalLinkLine } from 'react-icons/ri'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const NoBuilds: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No builds</h1>
-            <p className="mt-8 text-gray-600">
-                Deploy scripts to see the results here
-            </p>
-        </div>
-    )
-}
-
-const NoBuildResults: React.FC = () => {
-    return (
-        <tr>
-            <td colSpan={3} align="center" className="py-16 ">
-                <h1 className="text-lg font-semibold text-gray-400">
-                    No builds found
-                </h1>
-            </td>
-        </tr>
-    )
-}
-
-const BuildRow: React.FC<{ data: Build }> = ({ data }) => {
+const BuildRow: React.FC<{ data: Build; idx: number }> = ({ data, idx }) => {
     const build = data
     return (
-        <tr key={build.id}>
+        <tr
+            key={build.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/builds/${build.id}`}
@@ -88,33 +74,13 @@ export const Builds: React.FC<{ builds: Build[] }> = ({ builds }) => {
     )
 }
 
-const NoRuns: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No runs</h1>
-            <p className="mt-8 text-gray-600">
-                Run scripts to see the results here
-            </p>
-        </div>
-    )
-}
-
-const NoRunResults: React.FC = () => {
-    return (
-        <tr>
-            <td colSpan={3} align="center" className="py-16 ">
-                <h1 className="text-lg font-semibold text-gray-400">
-                    No runs found
-                </h1>
-            </td>
-        </tr>
-    )
-}
-
-const RunRow: React.FC<{ data: Run }> = ({ data }) => {
+const RunRow: React.FC<{ data: Run; idx: number }> = ({ data, idx }) => {
     const run = data
     return (
-        <tr key={run.id}>
+        <tr
+            key={run.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/runs/${run.id}`}
@@ -156,25 +122,6 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
     )
 }
 
-const NoSchedules: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No schedules</h1>
-            <p className="mt-8 text-gray-600">
-                Create a schedule to run a script at specific times
-            </p>
-        </div>
-    )
-}
-
-const NoScheduleResults: React.FC = () => {
-    return (
-        <h1 className="text-lg font-semibold text-gray-400">
-            No schedules found
-        </h1>
-    )
-}
-
 const searchSchedulesFilter = ({
     query,
     data,
@@ -192,11 +139,17 @@ const searchSchedulesFilter = ({
     )
 }
 
-const ScheduleRow: React.FC<{ data: Schedule }> = ({ data }) => {
+const ScheduleRow: React.FC<{ data: Schedule; idx: number }> = ({
+    data,
+    idx,
+}) => {
     const schedule = data
 
     return (
-        <tr key={schedule.id}>
+        <tr
+            key={schedule.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/schedules/${schedule.id}`}
@@ -283,17 +236,13 @@ export const Script: React.FC = () => {
     }
 
     if (script === null) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                <BeatLoader color="rgb(52 211 153)" />
-            </div>
-        )
+        return <PageLoading />
     }
 
     const isDeployed = (script.builds || []).length > 0
 
     return (
-        <div className="flex flex-col space-y-6 px-8 py-16">
+        <>
             <div className="flex flex-col space-y-6 px-6">
                 <h1 className="text-2xl">{script.name}</h1>
                 <p>{script.description}</p>
@@ -301,11 +250,11 @@ export const Script: React.FC = () => {
                     Created {getTimeSince(script.created_at)}
                 </h3>
                 {isDeployed ? (
-                    <div className="rounded-lg border p-8">
-                        <h1 className="flex items-center text-2xl">
+                    <div className="max-w-2xl rounded-lg border p-8">
+                        <h1 className="flex items-center text-xl">
                             Run Script
                             <Link
-                                to={`/app/run/${script.id}`}
+                                to={`/app/run-script/${script.id}`}
                                 className="ml-2"
                                 target="_blank"
                             >
@@ -358,6 +307,6 @@ export const Script: React.FC = () => {
                     </Tab.Panels>
                 </Tab.Group>
             </div>
-        </div>
+        </>
     )
 }

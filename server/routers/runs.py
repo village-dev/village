@@ -7,11 +7,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from routers.scripts import check_script_access
 from routers.users import get_user
 
-router = APIRouter(tags=["runs"])
+router = APIRouter(prefix="/run", tags=["runs"])
 
 
 @router.get(
-    "/run/list",
+    "/list",
     operation_id="list_runs",
     response_model=List[PrismaPartials.RunWithScript],
 )
@@ -22,7 +22,11 @@ async def list_runs(user: PrismaModels.User = Depends(get_user)):
 
     runs = await PrismaModels.Run.prisma().find_many(
         order={"created_at": "desc"},
-        include={"build": {"include": {"script": True}}},
+        include={
+            "build": {"include": {"script": True}},
+            "schedule": True,
+            "created_by": True,
+        },
         where={
             "script": {
                 "is": {
@@ -60,7 +64,7 @@ async def check_run_access(user_id: str, run_id: str):
 
 
 @router.get(
-    "/run/get",
+    "/get",
     operation_id="get_run",
     response_model=PrismaPartials.RunWithScriptDetailed,
 )
@@ -82,9 +86,7 @@ async def get_run(run_id: str, user: PrismaModels.User = Depends(get_user)):
     return run
 
 
-@router.delete(
-    "/run/delete", operation_id="delete_run", response_model=PrismaModels.Run
-)
+@router.delete("/delete", operation_id="delete_run", response_model=PrismaModels.Run)
 async def delete_run(run_id: str, user: PrismaModels.User = Depends(get_user)):
     """
     Delete a run.

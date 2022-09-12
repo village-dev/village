@@ -4,11 +4,9 @@ import { NoRunResults } from '@components/EmptyStates/NoRunResults'
 import { NoRuns } from '@components/EmptyStates/NoRuns'
 import { Table } from '@components/Table'
 import { PageLoading } from '@pages/PageLoading'
-import cronParser from 'cron-parser'
-import cronstrue from 'cronstrue'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Run, ScheduleWithMeta } from '../../../api'
+import { BuildWithMeta, Run } from '../../../api'
 
 const RunRow: React.FC<{ data: Run; idx: number }> = ({ data, idx }) => {
     const run = data
@@ -68,59 +66,34 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => {
     )
 }
 
-export const Schedule = () => {
+export const Build = () => {
     const { id } = useParams()
-    const [schedule, setSchedule] = useState<ScheduleWithMeta | null>(null)
+    const [build, setBuild] = useState<BuildWithMeta | null>(null)
 
     useEffect(() => {
         if (id === undefined) return
-        if (schedule?.id === id) return
+        if (build?.id === id) return
 
-        VillageClient.schedules.getSchedule(id).then((s) => {
-            setSchedule(s)
+        VillageClient.builds.getBuild(id).then((s) => {
+            setBuild(s)
         })
     }, [id])
 
-    if (schedule === null) {
+    if (build === null) {
         return <PageLoading />
     }
 
-    const cron = `${schedule.minute} ${schedule.hour} ${schedule.day_of_month} ${schedule.month_of_year} ${schedule.day_of_week}`
-
-    const interval = cronParser.parseExpression(cron)
-    const nextRuns = []
-    for (let i = 0; i < 3; i++) {
-        nextRuns.push(interval.next())
-    }
-    const cronExpression = cronstrue.toString(cron)
-
     return (
         <>
-            <div className="flex flex-col px-6">
-                <h1 className="text-2xl">{schedule.name}</h1>
-                <div className="py-2 font-semibold text-emerald-500">
-                    {cronExpression}
-                </div>
-                <p>{schedule.description}</p>
-                <h3 className="text-slate-600">
-                    Created {getTimeSince(schedule.created_at)}
-                </h3>
-                Params:
-                <pre>{JSON.stringify(schedule.params, null, 2)}</pre>
-                <div className="py-2">
-                    Next runs:
-                    {nextRuns.map((r, idx) => (
-                        <div key={idx} className="text-zinc-500">
-                            {r.toDate().toLocaleString()}
-                        </div>
-                    ))}
-                </div>
-                <div>
-                    <h1 className="text-xl">Runs</h1>
-                    <div className="mt-4 w-full rounded-xl border bg-white p-3">
-                        <Runs runs={schedule?.runs || []} />
-                    </div>
-                </div>
+            <h1>{build.id}</h1>
+            <h1>{build.status}</h1>
+            <h1>{build.script?.name}</h1>
+            <h1>{build.created_at}</h1>
+            <h1>{build.updated_at}</h1>
+            <h1>{build.completed_at}</h1>
+            <h1>Runs</h1>
+            <div className="mt-4 w-full rounded-xl border bg-white p-3">
+                <Runs runs={build.runs ?? []} />
             </div>
         </>
     )

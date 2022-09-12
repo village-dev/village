@@ -24,7 +24,7 @@ export const NewWorkspace: React.FC = () => {
     const proposeId = useRef(
         debounce(async (title: string) => {
             setProposingId(true)
-            VillageClient.workspace.proposeWorkspaceId(title).then((newId) => {
+            VillageClient.workspaces.proposeWorkspaceId(title).then((newId) => {
                 setId(newId)
                 setProposingId(false)
             })
@@ -33,7 +33,7 @@ export const NewWorkspace: React.FC = () => {
 
     const checkId = useRef(
         debounce(async (id: string) => {
-            VillageClient.workspace.checkWorkspaceId(id).then((available) => {
+            VillageClient.workspaces.checkWorkspaceId(id).then((available) => {
                 setIdAvailable(available)
             })
         }, 500)
@@ -58,11 +58,11 @@ export const NewWorkspace: React.FC = () => {
     const submitHandler = async (): Promise<void> => {
         setSubmitting(true)
         try {
-            VillageClient.workspace
+            VillageClient.workspaces
                 .createWorkspace({ name, id })
                 .then(async ({ id }) => {
                     // refresh workspaces
-                    const res = await VillageClient.user.getCurrentUser()
+                    const res = await VillageClient.users.getCurrentUser()
 
                     const newCurrentWorkspace =
                         res.workspaces?.find((w) => w.workspace_id === id) ??
@@ -99,7 +99,7 @@ export const NewWorkspace: React.FC = () => {
     }
 
     return (
-        <div className="flex max-w-screen-sm flex-col space-y-6 px-8 py-16">
+        <>
             <div className="px-6">
                 <h1 className="text-2xl">Create a workspace</h1>
             </div>
@@ -150,6 +150,6 @@ export const NewWorkspace: React.FC = () => {
                     </div>
                 </form>
             </div>
-        </div>
+        </>
     )
 }

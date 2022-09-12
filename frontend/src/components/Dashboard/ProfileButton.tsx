@@ -20,12 +20,12 @@ export const ProfileButton: React.FC = () => {
     })
 
     const profileButtonStyle =
-        'flex items-center w-full px-3 py-3 text-sm text-left text-gray-600 hover:text-black dark:text-gray-200 dark:hover:bg-zinc-700 rounded-lg hover:bg-gray-100 transform hover:-translate-y-0.5 transition ease-in-out duration-200 mb-0.5'
+        'flex items-center w-full px-3 py-3 text-sm text-left text-gray-600 hover:text-black rounded-lg hover:bg-gray-100 transform hover:-translate-y-0.5 transition ease-in-out duration-200 mb-0.5'
 
     return (
         <div className="relative">
             <button
-                className="flex w-full items-center rounded-lg px-1 py-1 hover:bg-gray-100 dark:hover:bg-zinc-700"
+                className="0 flex w-full items-center rounded-lg px-1 py-1 hover:bg-gray-100"
                 onClick={toggleUserOptions}
             >
                 {user?.picture ? (
@@ -49,17 +49,17 @@ export const ProfileButton: React.FC = () => {
                 className="absolute right-0 z-10 w-auto"
             >
                 <div
-                    className="rounded-lg border bg-white px-1 pt-2 pb-1 shadow dark:border-zinc-500 dark:bg-zinc-800"
+                    className="rounded-lg border bg-white px-1 pt-2 pb-1 shadow "
                     ref={userOptionsRef}
                 >
                     <NavLink to="/app/settings" className={profileButtonStyle}>
-                        <RiSettings4Line className="mr-3 text-xl text-black dark:text-white" />{' '}
+                        <RiSettings4Line className="mr-3 text-xl text-black" />{' '}
                         Settings
                     </NavLink>
 
-                    <div className="mb-1 w-auto border-b dark:border-b-zinc-600"></div>
+                    <div className="mb-1 w-auto border-b "></div>
                     <LogoutButton className={profileButtonStyle}>
-                        <FiLogOut className="mr-3 text-xl text-black dark:text-white" />
+                        <FiLogOut className="mr-3 text-xl text-black " />
                         Sign out
                     </LogoutButton>
                 </div>

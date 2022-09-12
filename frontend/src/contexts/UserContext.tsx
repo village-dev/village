@@ -1,12 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { VillageClient } from '@common/VillageClient'
-import React, {
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { WorkspaceUsers } from '../../api'
 import { useSearchParams } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'

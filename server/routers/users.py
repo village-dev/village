@@ -18,7 +18,7 @@ from utils.auth import ParsedToken, VerifyToken
 from utils.ids import propose_workspace_id_internal
 from utils.logger import logger
 
-router = APIRouter(tags=["user"])
+router = APIRouter(prefix="/user", tags=["users"])
 
 # Scheme for the Authorization header
 token_auth_scheme = HTTPBearer()
@@ -169,7 +169,7 @@ async def get_user(
 
 
 @router.post(
-    "/user/create",
+    "/create",
     operation_id="get_or_create_user",
     response_model=PrismaPartials.UserWithWorkspaces,
 )
@@ -178,7 +178,7 @@ async def get_or_create_user(user: Any = Depends(verify_token_with_create_user))
 
 
 @router.get(
-    "/users/get",
+    "/get",
     operation_id="get_current_user",
     response_model=UserWithWorkspaces,
 )

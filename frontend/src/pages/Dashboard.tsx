@@ -1,3 +1,4 @@
+import { Layout } from '@components/Dashboard/Layout'
 import { Navbar } from '@components/Dashboard/Navbar'
 import { Sidebar } from '@components/Dashboard/Sidebar'
 import { useUserContext } from '@contexts/UserContext'
@@ -15,10 +16,11 @@ import { Scripts } from '@pages/Dashboard/Scripts'
 import { Settings } from '@pages/Dashboard/Settings'
 import { Workflows } from '@pages/Dashboard/Workflows'
 import { NotFound } from '@pages/NotFound'
+import { Users } from '@pages/Dashboard/Users'
 
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Users } from './Dashboard/Users'
+import { Build } from './Dashboard/Build'
 
 export const Dashboard: React.FC = () => {
     const { refreshUser } = useUserContext()
@@ -28,53 +30,65 @@ export const Dashboard: React.FC = () => {
     }, [refreshUser])
 
     return (
-        <div className="h-screen w-screen overflow-y-scroll">
-            <div className="sticky top-0 w-full flex-none">
+        <div className="h-screen w-screen overflow-auto">
+            <div className="sticky top-0 z-50 mb-6 w-full flex-none">
                 <Navbar />
             </div>
 
-            <div className="fixed inset-0 top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto z-20 hidden w-[20rem] overflow-y-auto lg:block">
+            <div className="fixed inset-0 top-[6.2rem] left-[max(0px,calc(50%-45rem))] right-auto hidden  w-[20rem] overflow-y-auto lg:block">
                 <Sidebar />
             </div>
 
-            <div className="overflow-y-scroll pt-4 lg:pl-[20rem]">
-                <Routes>
-                    <Route path="" element={<Scripts />} />
-                    <Route path="profile" element={<Profile />} />
-
-                    <Route path="settings" element={<Settings />} />
-
-                    <Route path="scripts">
-                        <Route path=":id" element={<Script />} />
+            <div className="pt-4 lg:pl-[20rem]">
+                <Layout>
+                    <Routes>
                         <Route path="" element={<Scripts />} />
-                    </Route>
+                        <Route path="profile" element={<Profile />} />
 
-                    <Route path="schedules">
-                        <Route path=":id" element={<Schedule />} />
-                        <Route path="" element={<Schedules />} />
-                    </Route>
+                        <Route path="settings" element={<Settings />} />
 
-                    <Route path="new">
-                        <Route path="script" element={<NewScript />} />
-                        <Route path="schedule" element={<NewSchedule />} />
-                        <Route path="workspace" element={<NewWorkspace />} />
-                    </Route>
+                        <Route path="scripts">
+                            <Route path=":id" element={<Script />} />
+                            <Route path="" element={<Scripts />} />
+                        </Route>
 
-                    <Route path="runs">
-                        <Route path=":id" element={<Run />} />
-                        <Route path="" element={<Runs />} />
-                    </Route>
+                        <Route path="schedules">
+                            <Route path=":id" element={<Schedule />} />
+                            <Route path="" element={<Schedules />} />
+                        </Route>
 
-                    <Route path="run">
-                        <Route path=":id" element={<RunScriptStandalone />} />
-                    </Route>
+                        <Route path="new">
+                            <Route path="script" element={<NewScript />} />
+                            <Route path="schedule" element={<NewSchedule />} />
+                            <Route
+                                path="workspace"
+                                element={<NewWorkspace />}
+                            />
+                        </Route>
 
-                    <Route path="workflows" element={<Workflows />} />
+                        <Route path="runs">
+                            <Route path=":id" element={<Run />} />
+                            <Route path="" element={<Runs />} />
+                        </Route>
 
-                    <Route path="users" element={<Users />} />
+                        <Route path="run-script">
+                            <Route
+                                path=":id"
+                                element={<RunScriptStandalone />}
+                            />
+                        </Route>
 
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
+                        <Route path="builds">
+                            <Route path=":id" element={<Build />} />
+                        </Route>
+
+                        <Route path="workflows" element={<Workflows />} />
+
+                        <Route path="users" element={<Users />} />
+
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </Layout>
             </div>
         </div>
     )

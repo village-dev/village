@@ -130,7 +130,7 @@ export const NewScript: React.FC = () => {
     }
 
     return (
-        <div className="flex max-w-screen-sm flex-col space-y-6 px-8 py-16">
+        <>
             <div className="px-6">
                 <h1 className="text-2xl">Create a script</h1>
             </div>
@@ -209,6 +209,6 @@ export const NewScript: React.FC = () => {
                     </div>
                 </form>
             </div>
-        </div>
+        </>
     )
 }

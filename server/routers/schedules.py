@@ -11,11 +11,12 @@ from pydantic import BaseModel
 from temporalio.client import Client
 
 from config import TEMPORAL_SERVER
+from models.params import ParamInputType
 from routers.scripts import RunScriptInput, check_script_access, run_script_wrapper
 from routers.users import get_user
 from worker import RunScheduledInput, RunScript
 
-router = APIRouter(tags=["schedules"])
+router = APIRouter(prefix="/schedule", tags=["schedules"])
 
 
 token_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -43,7 +44,7 @@ class CreateScheduleInput(BaseModel):
     script_id: str
     name: str
     description: Optional[str]
-    params: Optional[Dict[str, str]]
+    params: ParamInputType
     day_of_month: str
     day_of_week: str
     hour: str
@@ -52,7 +53,7 @@ class CreateScheduleInput(BaseModel):
 
 
 @router.post(
-    "/schedule/create",
+    "/create",
     operation_id="create_schedule",
     response_model=PrismaModels.Schedule,
 )
@@ -86,7 +87,7 @@ async def create_schedule(
             "month_of_year": schedule.month_of_year,
             "params": {
                 "create": [
-                    {"key": key, "value": value}
+                    {"key": key, "value": str(value)}
                     for key, value in schedule.params.items()
                 ]
             },
@@ -119,7 +120,7 @@ class UpdateScheduleInput(BaseModel):
     Schedule update model
     """
 
-    params: Optional[Dict[str, str]]
+    params: ParamInputType
     name: str
     description: Optional[str]
     day_of_month: str
@@ -153,7 +154,7 @@ async def check_schedule_access(user_id: str, schedule_id: str):
 
 
 @router.post(
-    "/schedule/update",
+    "/update",
     operation_id="update_schedule",
     response_model=PrismaModels.Schedule,
 )
@@ -178,7 +179,7 @@ async def update_schedule(
             "month_of_year": schedule.month_of_year,
             "params": {
                 "create": [
-                    {"key": key, "value": value}
+                    {"key": key, "value": str(value)}
                     for key, value in schedule.params.items()
                 ]
             },
@@ -200,9 +201,7 @@ class RunScheduleInput(BaseModel):
     token: str
 
 
-@router.post(
-    "/schedule/run", operation_id="run_schedule", response_model=PrismaModels.Run
-)
+@router.post("/run", operation_id="run_schedule", response_model=PrismaModels.Run)
 async def run_schedule(schedule_request: RunScheduleInput):
     """
     Execute a script based on its schedule entry
@@ -234,7 +233,7 @@ async def run_schedule(schedule_request: RunScheduleInput):
 
 
 @router.get(
-    "/schedule/list",
+    "/list",
     operation_id="list_schedules",
     response_model=List[PrismaPartials.ScheduleWithScript],
 )
@@ -261,7 +260,7 @@ async def list_schedules(user: PrismaModels.User = Depends(get_user)):
 
 
 @router.delete(
-    "/schedule/delete",
+    "/delete",
     operation_id="delete_schedule",
     response_model=PrismaModels.Schedule,
 )
@@ -282,9 +281,9 @@ async def delete_schedule(
 
 
 @router.get(
-    "/schedule/get",
+    "/get",
     operation_id="get_schedule",
-    response_model=PrismaPartials.ScheduleWithScriptAndRuns,
+    response_model=PrismaPartials.ScheduleWithMeta,
 )
 async def get_schedule(schedule_id: str, user: PrismaModels.User = Depends(get_user)):
     """
@@ -293,7 +292,8 @@ async def get_schedule(schedule_id: str, user: PrismaModels.User = Depends(get_u
     await check_schedule_access(user.id, schedule_id)
 
     schedule = await PrismaModels.Schedule.prisma().find_unique(
-        where={"id": schedule_id}, include={"script": True, "runs": True}
+        where={"id": schedule_id},
+        include={"script": True, "runs": True, "params": True},
     )
 
     if schedule is None:

@@ -1,4 +1,4 @@
-from prisma.models import Run, Schedule, Script, User
+from prisma.models import Build, Run, Schedule, Script, User
 
 Run.create_partial(
     "RunWithScript",
@@ -7,8 +7,11 @@ Run.create_partial(
         "status": True,
         "created_at": True,
         "build": {"include": {"script": True}},
+        "schedule": True,
+        "created_by": True,
     },
 )
+
 Run.create_partial(
     "RunWithScriptDetailed",
     include={
@@ -17,8 +20,25 @@ Run.create_partial(
         "created_at": True,
         "output": True,
         "build": {"include": {"script": True}},
+        "schedule": True,
+        "created_by": True,
     },
 )
+
+Build.create_partial(
+    "BuildWithMeta",
+    include={
+        "id": True,
+        "status": True,
+        "created_at": True,
+        "updated_at": True,
+        "completed_at": True,
+        "output": True,
+        "script": True,
+        "runs": {"include": {"schedule": True, "created_by": True}},
+    },
+)
+
 Schedule.create_partial(
     "ScheduleWithScript",
     include={
@@ -36,8 +56,9 @@ Schedule.create_partial(
         "params": True,
     },
 )
+
 Schedule.create_partial(
-    "ScheduleWithScriptAndRuns",
+    "ScheduleWithMeta",
     include={
         "id": True,
         "name": True,
@@ -54,6 +75,7 @@ Schedule.create_partial(
         "params": True,
     },
 )
+
 Script.create_partial(
     "ScriptWithMeta",
     include={
@@ -63,13 +85,14 @@ Script.create_partial(
         "updated_at": True,
         "engine": True,
         "builds": True,
-        "runs": True,
         "schedules": True,
         "engine_version": True,
         "description": True,
         "workspace_id": True,
+        "runs": {"include": {"schedule": True, "created_by": True}},
     },
 )
+
 User.create_partial(
     "UserWithWorkspaces",
     include={

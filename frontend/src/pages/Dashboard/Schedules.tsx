@@ -1,5 +1,7 @@
 import { getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
+import { NoScheduleResults } from '@components/EmptyStates/NoScheduleResults'
+import { NoSchedules } from '@components/EmptyStates/NoSchedules'
 import { ListDropdown } from '@components/ListDropdown'
 import { Table } from '@components/Table'
 import React, { useEffect, useState } from 'react'
@@ -8,11 +10,17 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { ScheduleWithScript } from '../../../api'
 
-const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
+const ScheduleRow: React.FC<{ data: ScheduleWithScript; idx: number }> = ({
+    data,
+    idx,
+}) => {
     const schedule = data
 
     return (
-        <tr key={schedule.id}>
+        <tr
+            key={schedule.id}
+            className={'hover:bg-lightgreen' + (idx % 2 ? ' bg-gray-50' : '')}
+        >
             <td className="py-4">
                 <Link
                     to={`/app/schedules/${schedule.id}`}
@@ -44,26 +52,6 @@ const ScheduleRow: React.FC<{ data: ScheduleWithScript }> = ({ data }) => {
         </tr>
     )
 }
-
-const NoSchedules: React.FC = () => {
-    return (
-        <div className="mx-6 flex h-full flex-col items-center justify-center rounded-xl bg-gray-100">
-            <h1 className="text-2xl font-semibold">No schedules</h1>
-            <p className="mt-8 text-gray-600">
-                Create a schedule to run a script at specific times
-            </p>
-        </div>
-    )
-}
-
-const NoResults: React.FC = () => {
-    return (
-        <h1 className="text-lg font-semibold text-gray-400">
-            No schedules found
-        </h1>
-    )
-}
-
 const searchFilter = ({
     query,
     data,
@@ -93,7 +81,7 @@ export const Schedules: React.FC = () => {
     }, [])
 
     return (
-        <div className="flex h-full flex-col space-y-6 px-8 py-4">
+        <>
             <div className="flex items-center space-x-6 px-6">
                 <h1 className="text-2xl">Schedules</h1>{' '}
                 <Link
@@ -103,17 +91,17 @@ export const Schedules: React.FC = () => {
                     Create schedule <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
-            <div className="h-full flex-grow px-6">
+            <div className="mt-8 h-full flex-grow px-6">
                 <Table
                     loading={loading}
                     emptyState={<NoSchedules />}
-                    noResultsState={<NoResults />}
+                    noResultsState={<NoScheduleResults />}
                     columnNames={['Name', 'Schedule', 'Updated', '']}
                     rowData={schedules}
                     RowRenderer={ScheduleRow}
                     searchFilter={searchFilter}
                 />
             </div>
-        </div>
+        </>
     )
 }
