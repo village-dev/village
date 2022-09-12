@@ -241,8 +241,8 @@ export const NewSchedule: React.FC = () => {
                             </div>
                             <div className="px-4 py-2">
                                 Next runs:
-                                {nextRuns.map((r) => (
-                                    <div className="text-zinc-500">
+                                {nextRuns.map((r, idx) => (
+                                    <div key={idx} className="text-zinc-500">
                                         {r.toDate().toLocaleString()}
                                     </div>
                                 ))}

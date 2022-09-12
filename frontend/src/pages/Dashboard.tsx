@@ -16,6 +16,7 @@ import { Scripts } from '@pages/Dashboard/Scripts'
 import { Settings } from '@pages/Dashboard/Settings'
 import { Workflows } from '@pages/Dashboard/Workflows'
 import { NotFound } from '@pages/NotFound'
+import { Users } from '@pages/Dashboard/Users'
 
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
@@ -82,6 +83,8 @@ export const Dashboard: React.FC = () => {
                         </Route>
 
                         <Route path="workflows" element={<Workflows />} />
+
+                        <Route path="users" element={<Users />} />
 
                         <Route path="*" element={<NotFound />} />
                     </Routes>

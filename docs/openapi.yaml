@@ -302,6 +302,7 @@ components:
       description: An enumeration.
       enum:
       - ADMIN
+      - USER
       title: Role
       type: string
     Run:
@@ -1168,6 +1169,77 @@ paths:
       summary: Get Build Runs
       tags:
       - builds
+  /invites/create:
+    post:
+      description: Create an invite for a user
+      operationId: create_invite
+      parameters:
+      - in: query
+        name: email
+        required: true
+        schema:
+          title: Email
+          type: string
+      - in: query
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: role
+        required: true
+        schema:
+          $ref: '#/components/schemas/Role'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Create Invite
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Invite
+      tags:
+      - invites
+  /invites/get:
+    get:
+      description: Get an invite for a user
+      operationId: get_invite
+      parameters:
+      - in: query
+        name: invite_id
+        required: true
+        schema:
+          title: Invite Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                title: Response Get Invite
+                type: string
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Invite
+      tags:
+      - invites
   /run/delete:
     delete:
       description: Delete a run.
@@ -1955,6 +2027,38 @@ paths:
       summary: List User Workspaces
       tags:
       - workspaces
+  /workspace/list_users:
+    get:
+      description: List all users in a workspace.
+      operationId: list_workspace_users
+      parameters:
+      - in: query
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WorkspaceUsers'
+                title: Response List Workspace Users
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Workspace Users
+      tags:
+      - workspaces
   /workspace/propose_id:
     get:
       description: Propose a workspace ID based on the name.
@@ -2028,3 +2132,5 @@ tags:
   name: users
 - description: Workspaces
   name: workspaces
+- description: Invites
+  name: invites

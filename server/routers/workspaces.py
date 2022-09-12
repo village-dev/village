@@ -121,6 +121,31 @@ async def list_user_workspaces(user: PrismaModels.User = Depends(get_user)):
     return workspaces
 
 
+@router.get(
+    "/list_users",
+    operation_id="list_workspace_users",
+    response_model=List[PrismaModels.WorkspaceUsers],
+)
+async def list_workspace_users(
+    workspace_id: str, user: PrismaModels.User = Depends(get_user)
+):
+    """
+    List all users in a workspace.
+    """
+
+    workspace = await PrismaModels.Workspace.prisma().find_first(
+        where={"id": workspace_id, "users": {"some": {"user_id": {"equals": user.id}}}}
+    )
+    if workspace is None:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+
+    users = await PrismaModels.WorkspaceUsers.prisma().find_many(
+        where={"workspace_id": workspace.id}
+    )
+
+    return users
+
+
 @router.post(
     "/set_default",
     operation_id="set_default_workspace",
