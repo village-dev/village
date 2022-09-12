@@ -1222,7 +1222,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/ScheduleWithScriptAndRuns"
+                  "$ref": "#\/components\/schemas\/ScheduleWithMeta"
                 }
               }
             }
@@ -2376,77 +2376,8 @@
         },
         "description": "Represents a ScheduleParam record"
       },
-      "ScheduleWithScript": {
-        "title": "ScheduleWithScript",
-        "required": [
-          "id",
-          "name",
-          "created_at",
-          "updated_at",
-          "minute",
-          "hour",
-          "day_of_month",
-          "month_of_year",
-          "day_of_week"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "title": "Id",
-            "type": "string"
-          },
-          "name": {
-            "title": "Name",
-            "type": "string"
-          },
-          "created_at": {
-            "title": "Created At",
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "title": "Updated At",
-            "type": "string",
-            "format": "date-time"
-          },
-          "script": {
-            "$ref": "#\/components\/schemas\/Script"
-          },
-          "minute": {
-            "title": "Minute",
-            "type": "string"
-          },
-          "hour": {
-            "title": "Hour",
-            "type": "string"
-          },
-          "day_of_month": {
-            "title": "Day Of Month",
-            "type": "string"
-          },
-          "month_of_year": {
-            "title": "Month Of Year",
-            "type": "string"
-          },
-          "day_of_week": {
-            "title": "Day Of Week",
-            "type": "string"
-          },
-          "description": {
-            "title": "Description",
-            "type": "string"
-          },
-          "params": {
-            "title": "Params",
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/ScheduleParam"
-            }
-          }
-        }
-      },
-      "ScheduleWithScriptAndRuns": {
-        "title": "ScheduleWithScriptAndRuns",
+      "ScheduleWithMeta": {
+        "title": "ScheduleWithMeta",
         "required": [
           "id",
           "name",
@@ -2511,6 +2442,75 @@
             "items": {
               "$ref": "#\/components\/schemas\/Run"
             }
+          },
+          "params": {
+            "title": "Params",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/ScheduleParam"
+            }
+          }
+        }
+      },
+      "ScheduleWithScript": {
+        "title": "ScheduleWithScript",
+        "required": [
+          "id",
+          "name",
+          "created_at",
+          "updated_at",
+          "minute",
+          "hour",
+          "day_of_month",
+          "month_of_year",
+          "day_of_week"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "script": {
+            "$ref": "#\/components\/schemas\/Script"
+          },
+          "minute": {
+            "title": "Minute",
+            "type": "string"
+          },
+          "hour": {
+            "title": "Hour",
+            "type": "string"
+          },
+          "day_of_month": {
+            "title": "Day Of Month",
+            "type": "string"
+          },
+          "month_of_year": {
+            "title": "Month Of Year",
+            "type": "string"
+          },
+          "day_of_week": {
+            "title": "Day Of Week",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
           },
           "params": {
             "title": "Params",

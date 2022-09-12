@@ -58,7 +58,7 @@ Schedule.create_partial(
 )
 
 Schedule.create_partial(
-    "ScheduleWithScriptAndRuns",
+    "ScheduleWithMeta",
     include={
         "id": True,
         "name": True,
