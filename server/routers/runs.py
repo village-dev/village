@@ -77,7 +77,11 @@ async def get_run(run_id: str, user: PrismaModels.User = Depends(get_user)):
 
     run = await PrismaModels.Run.prisma().find_unique(
         where={"id": run_id},
-        include={"build": {"include": {"script": True}}},
+        include={
+            "build": {"include": {"script": True}},
+            "schedule": True,
+            "created_by": True,
+        },
     )
 
     if run is None:

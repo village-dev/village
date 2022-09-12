@@ -2,7 +2,7 @@ import { getDuration, getFormattedDateTime, getTimeSince } from '@common/dates'
 import { VillageClient } from '@common/VillageClient'
 import { PageLoading } from '@pages/PageLoading'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { RunWithScriptDetailed } from '../../../api'
 
 export const Run = () => {
@@ -25,6 +25,26 @@ export const Run = () => {
     return (
         <>
             <h1 className="text-2xl">{run.build?.script?.name}</h1>
+
+            <h2>
+                Triggered by{' '}
+                {run.schedule && (
+                    <Link
+                        className="font-semibold text-green"
+                        to={`/app/schedules/${run.schedule}`}
+                    >
+                        {run.schedule.name}
+                    </Link>
+                )}
+                {run.created_by && (
+                    <Link
+                        className="font-semibold text-green"
+                        to={`/app/users/${run.created_by}`}
+                    >
+                        {run.created_by.id}
+                    </Link>
+                )}
+            </h2>
 
             <div className="mt-4 max-w-max rounded-lg border p-4">
                 <h2>
