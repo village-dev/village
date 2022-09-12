@@ -246,7 +246,7 @@ export const Script: React.FC = () => {
                         <h1 className="flex items-center text-xl">
                             Run Script
                             <Link
-                                to={`/app/run/${script.id}`}
+                                to={`/app/run-script/${script.id}`}
                                 className="ml-2"
                                 target="_blank"
                             >
