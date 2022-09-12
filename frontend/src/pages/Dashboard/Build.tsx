@@ -81,7 +81,7 @@ export const Build = () => {
     }
 
     return (
-        <div className="flex flex-col space-y-6 px-8 py-16">
+        <>
             <h1>{build.id}</h1>
             <h1>{build.status}</h1>
             <h1>{build.script?.name}</h1>
@@ -92,6 +92,6 @@ export const Build = () => {
             <div className="mt-4 w-full rounded-xl border bg-white p-3">
                 <Runs runs={build.runs ?? []} />
             </div>
-        </div>
+        </>
     )
 }

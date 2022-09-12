@@ -92,7 +92,7 @@ export const Schedule = () => {
     const cronExpression = cronstrue.toString(cron)
 
     return (
-        <div className="flex flex-col space-y-6 px-8 py-16">
+        <>
             <div className="flex flex-col px-6">
                 <h1 className="text-2xl">{schedule.name}</h1>
                 <div className="py-2 font-semibold text-emerald-500">
@@ -119,6 +119,6 @@ export const Schedule = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

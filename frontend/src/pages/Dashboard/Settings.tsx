@@ -4,7 +4,7 @@ export const Settings = () => {
     const { user } = useAuth0()
 
     return (
-        <div className="mx-16 mt-16">
+        <>
             <h1 className="text-2xl">Settings</h1>
             <div className="mt-8 flex items-center">
                 {user?.picture ? (
@@ -25,6 +25,6 @@ export const Settings = () => {
             <div className="mt-12">
                 <h2 className="text-lg">Notification settings</h2>
             </div>
-        </div>
+        </>
     )
 }

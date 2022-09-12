@@ -74,7 +74,7 @@ export const Scripts: React.FC = () => {
     }, [user?.currentWorkspace])
 
     return (
-        <div className="flex h-full flex-col space-y-6 px-8 py-4">
+        <>
             <div className="flex space-x-6 px-6">
                 <h1 className="text-2xl">Scripts</h1>{' '}
                 <Link
@@ -84,7 +84,7 @@ export const Scripts: React.FC = () => {
                     Create script <HiOutlineArrowRight className="ml-1" />
                 </Link>
             </div>
-            <div className="h-full flex-grow px-6">
+            <div className="mt-8 h-full flex-grow px-6">
                 <Table
                     loading={loading}
                     emptyState={<NoScripts />}
@@ -96,6 +96,6 @@ export const Scripts: React.FC = () => {
                     searchFilter={searchFilter}
                 />
             </div>
-        </div>
+        </>
     )
 }

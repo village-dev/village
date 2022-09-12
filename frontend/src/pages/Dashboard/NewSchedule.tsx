@@ -114,7 +114,7 @@ export const NewSchedule: React.FC = () => {
     const cronBlockStyle = 'p-4'
 
     return (
-        <div className="flex max-w-screen-sm flex-col space-y-6 px-8 py-16">
+        <>
             <div className="px-6">
                 <h1 className="text-2xl">Create a schedule</h1>
             </div>
@@ -262,6 +262,6 @@ export const NewSchedule: React.FC = () => {
                     </div>
                 </form>
             </div>
-        </div>
+        </>
     )
 }
