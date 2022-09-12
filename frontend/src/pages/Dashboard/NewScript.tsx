@@ -10,6 +10,7 @@ import { Textarea } from '@components/Textarea'
 import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
 import { BeatLoader } from 'react-spinners'
+import { toScript } from '@utils/links'
 
 const engineLabels = [
     { value: Engine.PYTHON, label: 'Python' },
@@ -104,7 +105,7 @@ export const NewScript: React.FC = () => {
                 })
                 .then((s) => {
                     // redirect to script page
-                    navigate(`/app/scripts/${s.id}`)
+                    navigate(toScript(s.id))
                 })
         } catch (err) {
             console.error(err)

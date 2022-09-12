@@ -4,6 +4,7 @@ import { NoScheduleResults } from '@components/EmptyStates/NoScheduleResults'
 import { NoSchedules } from '@components/EmptyStates/NoSchedules'
 import { ListDropdown } from '@components/ListDropdown'
 import { Table } from '@components/Table'
+import { toNewSchedule } from '@utils/links'
 import React, { useEffect, useState } from 'react'
 import { HiOutlineArrowRight } from 'react-icons/hi'
 import { MdDeleteOutline } from 'react-icons/md'
@@ -85,7 +86,7 @@ export const Schedules: React.FC = () => {
             <div className="flex items-center space-x-6 px-6">
                 <h1 className="text-2xl">Schedules</h1>{' '}
                 <Link
-                    to="/app/new/schedule"
+                    to={toNewSchedule}
                     className="flex items-center rounded-md bg-lightgreen px-3 py-1.5 text-sm font-semibold text-green hover:bg-emerald-200"
                 >
                     Create schedule <HiOutlineArrowRight className="ml-1" />

@@ -6,6 +6,7 @@ import { Input } from '@components/Input'
 import { useUserContext } from '@contexts/UserContext'
 import { debounce } from '@utils/debounce'
 import { BeatLoader } from 'react-spinners'
+import { toApp } from '@utils/links'
 
 export const NewWorkspace: React.FC = () => {
     const [name, setName] = useState('')
@@ -73,7 +74,7 @@ export const NewWorkspace: React.FC = () => {
                         setCurrentWorkspace(newCurrentWorkspace)
                     }
 
-                    navigate('/app')
+                    navigate(toApp)
                 })
         } catch (err) {
             console.error(err)
