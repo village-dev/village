@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import Dict, Optional, Union
 
 import docker  # type: ignore
-import pytz
 from prisma import models as PrismaModels
 from prisma.enums import Engine, RunStatus
 
