@@ -162,7 +162,11 @@ components:
           type: string
         params:
           additionalProperties:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
           title: Params
           type: object
         script_id:
@@ -843,7 +847,11 @@ components:
           type: string
         params:
           additionalProperties:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
           title: Params
           type: object
         schedule_id:

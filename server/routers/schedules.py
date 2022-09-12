@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from temporalio.client import Client
 
 from config import TEMPORAL_SERVER
+from models.params import ParamInputType
 from routers.scripts import RunScriptInput, check_script_access, run_script_wrapper
 from routers.users import get_user
 from worker import RunScheduledInput, RunScript
@@ -43,7 +44,7 @@ class CreateScheduleInput(BaseModel):
     script_id: str
     name: str
     description: Optional[str]
-    params: Optional[Dict[str, str]]
+    params: ParamInputType
     day_of_month: str
     day_of_week: str
     hour: str
@@ -119,7 +120,7 @@ class UpdateScheduleInput(BaseModel):
     Schedule update model
     """
 
-    params: Optional[Dict[str, str]]
+    params: ParamInputType
     name: str
     description: Optional[str]
     day_of_month: str
