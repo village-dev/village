@@ -40,7 +40,7 @@ async def execute(
     output: str = ""
 
     if build.script.engine == Engine.Python:
-        output = docker_client.containers.run(build.id, f"python shim.py '{json.dumps(params)}'").decode("utf-8")  # type: ignore
+        output = docker_client.containers.run(build.id, f"python3 shim.py '{json.dumps(params)}'").decode("utf-8")  # type: ignore
 
     elif build.script.engine == Engine.Node:
         output = docker_client.containers.run(build.id, f"node shim.js '{json.dumps(params)}'").decode("utf-8")  # type: ignore

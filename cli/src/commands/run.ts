@@ -15,8 +15,12 @@ export const run = (program: Command) => {
             let params: Record<string, string>
 
             try {
-                const splitParams = rawParams.map((x) => x.split('=', 2))
-                params = Object.fromEntries(splitParams)
+                if (rawParams === undefined) {
+                    params = {}
+                } else {
+                    const splitParams = rawParams.map((x) => x.split('=', 2))
+                    params = Object.fromEntries(splitParams)
+                }
             } catch (err) {
                 console.log('Invalid params format.')
                 return

@@ -214,8 +214,8 @@ def construct_dockerfile(
         COPY shim.py /app
 
         RUN tar -xzf package.tar.gz
-        RUN if test -f "./requirements.txt"; then python3 -m pip install -r requirements.txt; fi
         {f'RUN {build_command}' if build_command is not None else ""}
+        RUN if test -f "./requirements.txt"; then python3 -m pip install -r requirements.txt; fi
         CMD ["python3", "shim.py"]
         """
 
@@ -232,8 +232,8 @@ def construct_dockerfile(
         COPY shim.js /app
 
         RUN tar -xzf package.tar.gz
-        RUN yarn install
         {f'RUN {build_command}' if build_command is not None else ""}
+        RUN yarn install
         CMD ["node", "shim.js"]
         """
 
