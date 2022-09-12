@@ -80,7 +80,7 @@ export const Build = () => {
             <h1>{build.completed_at}</h1>
             <h1>Runs</h1>
             <div className="mt-4 w-full rounded-xl border bg-white p-3">
-                <Runs runs={build.runs} />
+                <Runs runs={build.runs ?? []} />
             </div>
         </div>
     )
