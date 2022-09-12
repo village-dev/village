@@ -13,7 +13,7 @@ from typing import Dict, List, Optional, Union
 
 import aiofiles
 import boto3
-import docker  # type: ignore
+import docker
 import prisma.partials as PrismaPartials
 import pulumi
 import pulumi_aws as aws
@@ -28,6 +28,7 @@ from pulumi import automation as auto
 from pydantic import BaseModel
 
 from models.config import Config
+from models.params import ParamInputType  # type: ignore
 from routers.users import get_user, verify_token
 from server.docker import docker_client, execute  # type: ignore
 from utils.auth import ParsedToken
@@ -424,7 +425,7 @@ class RunScriptInput(BaseModel):
     """
 
     script_id: str
-    params: Optional[Dict[str, Union[str, int, float, bool]]]
+    params: ParamInputType
 
 
 @router.post(

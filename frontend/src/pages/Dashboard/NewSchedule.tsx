@@ -6,11 +6,18 @@ import { Option, Select } from '@components/Select'
 import { useUserContext } from '@contexts/UserContext'
 import cronParser from 'cron-parser'
 import cronstrue from 'cronstrue'
+import { ScriptWithMeta } from '../../../api'
+import { Params, ParsedParams } from '@components/Params'
 
 export const NewSchedule: React.FC = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [selectedScript, setSelectedScript] = useState<Option | null>(null)
+    const [selectedScriptData, setSelectedScriptData] =
+        useState<ScriptWithMeta | null>(null)
+
+    const [params, setParams] = useState<Record<string, string | null>>({})
+    const [parsedParams, setParsedParams] = useState<ParsedParams>({})
 
     const [scripts, setScripts] = useState<Option[]>([])
 
@@ -29,6 +36,15 @@ export const NewSchedule: React.FC = () => {
                 setSelectedScript(s[0])
             })
     }, [user?.currentWorkspace])
+
+    useEffect(() => {
+        if (selectedScript?.value === undefined) return
+        if (selectedScriptData?.id === selectedScript?.value) return
+
+        VillageClient.scripts.getScript(selectedScript?.value).then((s) => {
+            setSelectedScriptData(s)
+        })
+    }, [])
 
     const [submitting, setSubmitting] = useState(false)
 
@@ -76,6 +92,7 @@ export const NewSchedule: React.FC = () => {
                     day_of_month: dayOfMonth,
                     month_of_year: monthOfYear,
                     day_of_week: dayOfWeek,
+                    params: parsedParams,
                 })
                 .then((s) => {
                     // redirect to schedule page
@@ -144,9 +161,20 @@ export const NewSchedule: React.FC = () => {
                             rows={4}
                         />
                     </div>
+                    <div className="rounded-lg border p-4">
+                        <h2>Parameters</h2>
+                        <Params
+                            scriptParams={
+                                selectedScriptData?.builds?.[0]?.params || []
+                            }
+                            params={params}
+                            setParams={setParams}
+                            setParsedParams={setParsedParams}
+                        />
+                    </div>
                     <div>
                         <label className={labelStyle}>Schedule</label>
-                        <div className="border-md mt-2  rounded border p-4">
+                        <div className="border-md mt-2  rounded-lg border p-4">
                             <div className="flex flex-row flex-wrap items-end">
                                 <div className={cronBlockStyle}>
                                     <label className={labelStyle}>Minute</label>
