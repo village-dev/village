@@ -1,8 +1,9 @@
 use clap::{Parser, Subcommand};
 use tokio;
 
+mod lib;
 mod cli;
-use cli::{login,logout};
+use cli::{login,logout,init};
 
 #[derive(Parser)]
 struct Root {
@@ -14,6 +15,7 @@ struct Root {
 enum Commands {
     Login,
     Logout,
+    Init,
 }
 
 #[tokio::main]
@@ -26,6 +28,9 @@ async fn main() {
         }
         Commands::Logout => {
             logout::logout().ok();
+        }
+        Commands::Init => {
+            init::init().await;
         }
     }
 }
