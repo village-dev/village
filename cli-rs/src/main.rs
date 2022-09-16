@@ -3,7 +3,7 @@ use tokio;
 
 mod lib;
 mod cli;
-use cli::{login,logout,init,deploy};
+use cli::{login,logout,init,deploy, token};
 
 #[derive(Parser)]
 struct Root {
@@ -16,7 +16,8 @@ enum Commands {
     Login,
     Logout,
     Init,
-    Deploy
+    Deploy,
+    Token
 }
 
 #[tokio::main]
@@ -35,6 +36,9 @@ async fn main() {
         }
         Commands::Deploy => {
             deploy::deploy().await;
+        }
+        Commands::Token => {
+            token::token();
         }
     }
 }
