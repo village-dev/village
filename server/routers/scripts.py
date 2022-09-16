@@ -24,12 +24,13 @@ from prisma import models as PrismaModels
 from prisma import types as PrismaTypes
 from prisma.enums import BuildStatus, Engine, ParamType, RunStatus
 from prisma.errors import UniqueViolationError
+from prisma.partials import UserWithWorkspaces
 from pulumi import automation as auto
 from pydantic import BaseModel
 
 from models.config import Config
 from models.params import ParamInputType  # type: ignore
-from routers.users import get_user, verify_token
+from routers.users import get_user, verify_token, verify_token_with_create_user
 from server.docker import docker_client, execute  # type: ignore
 from utils.auth import ParsedToken
 from utils.ids import propose_script_id_internal  # type: ignore
@@ -210,10 +211,10 @@ def construct_dockerfile(
         
         WORKDIR /app
         
-        COPY package.tar.gz /app
+        COPY context.tar.gz /app
         COPY shim.py /app
 
-        RUN tar -xzf package.tar.gz
+        RUN tar -xzf context.tar.gz
         {f'RUN {build_command}' if build_command is not None else ""}
         RUN if test -f "./requirements.txt"; then python3 -m pip install -r requirements.txt; fi
         CMD ["python3", "shim.py"]
@@ -228,10 +229,10 @@ def construct_dockerfile(
         
         WORKDIR /app
         
-        COPY package.tar.gz /app
+        COPY context.tar.gz /app
         COPY shim.js /app
 
-        RUN tar -xzf package.tar.gz
+        RUN tar -xzf context.tar.gz
         {f'RUN {build_command}' if build_command is not None else ""}
         RUN yarn install
         CMD ["node", "shim.js"]
@@ -248,7 +249,7 @@ def construct_dockerfile(
 async def build_script(
     script_id: str = Form(...),
     context: UploadFile = File(...),
-    user: PrismaModels.User = Depends(get_user),
+    user: UserWithWorkspaces = Depends(verify_token_with_create_user),
 ):
     """
     Build a script so that it can be run.
@@ -262,8 +263,16 @@ async def build_script(
     if script is None:
         raise HTTPException(status_code=404, detail="Script not found")
 
+    # async with aiofiles.open(
+    #     "/Users/kevinhu/Desktop/received.tar.gz", "wb"
+    # ) as out_file:
+    #     while content := await context.read(1024):  # async read chunk
+    #         await out_file.write(content)  # async write chunk
+
+    # return
+
     temp_dir = TemporaryDirectory()
-    package_path = temp_dir.name + "/package.tar.gz"
+    package_path = temp_dir.name + "/context.tar.gz"
     # see https://stackoverflow.com/questions/63580229/how-to-save-uploadfile-in-fastapi
     async with aiofiles.open(package_path, "wb") as out_file:
         while content := await context.read(1024):  # async read chunk
@@ -449,7 +458,7 @@ async def build_container(
         raise HTTPException(status_code=404, detail="Script not found")
 
     temp_dir = TemporaryDirectory()
-    package_path = temp_dir.name + "/package.tar.gz"
+    package_path = temp_dir.name + "/context.tar.gz"
     # see https://stackoverflow.com/questions/63580229/how-to-save-uploadfile-in-fastapi
     async with aiofiles.open(package_path, "wb") as out_file:
         while content := await context.read(1024):  # async read chunk

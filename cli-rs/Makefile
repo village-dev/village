@@ -4,3 +4,6 @@ default:
 
 generate:
 	openapi-generator generate -g rust -i openapi.json -o api --additional-properties=packageName=api
+
+install:
+	cargo install --path .
