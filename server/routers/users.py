@@ -173,7 +173,9 @@ async def get_user(
     operation_id="get_or_create_user",
     response_model=PrismaPartials.UserWithWorkspaces,
 )
-async def get_or_create_user(user: Any = Depends(verify_token_with_create_user)):
+async def get_or_create_user(
+    user: UserWithWorkspaces = Depends(verify_token_with_create_user),
+):
     return user
 
 

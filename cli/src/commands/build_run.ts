@@ -133,7 +133,7 @@ export const build_run = (program: Command) => {
             console.log(tmpFile.name)
             form.append('context', fs.createReadStream(tmpFile.name))
 
-            fs.copyFile(tmpFile.name, 'package.tar.gz', (err) => {
+            fs.copyFile(tmpFile.name, 'context.tar.gz', (err) => {
                 if (err) console.log(err)
             })
 
