@@ -38,7 +38,7 @@ async fn main() {
             deploy::deploy().await;
         }
         Commands::Token => {
-            token::token();
+            token::token().await;
         }
     }
 }

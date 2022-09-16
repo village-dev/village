@@ -90,16 +90,12 @@ pub async fn login() {
 
     match tokens {
         Ok(tokens) => {
-            // write tokens to JSON
-            let tokens_json = serde_json::to_string(&tokens).unwrap();
-
             let home_dir = dirs::home_dir().unwrap();
             fs::create_dir_all(home_dir.join(".village")).unwrap();
 
             // write tokens to file
             let file = std::fs::File::create(home_dir.join(".village/tokens.json")).unwrap();
-            let mut f = BufWriter::new(file);
-            f.write_all(tokens_json.as_bytes()).unwrap();
+            serde_json::to_writer_pretty(file, &tokens).unwrap();
 
             println!("Successfully logged in!");
         }
