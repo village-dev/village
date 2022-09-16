@@ -3,7 +3,7 @@ use api::{apis::scripts_api, models::CreateScriptInput};
 use crate::lib;
 
 pub async fn init() {
-    let village_config = lib::auth::get_client_config();
+    let village_config = lib::auth::get_client_config().await;
 
     let create_script_input = CreateScriptInput {
         id: None,

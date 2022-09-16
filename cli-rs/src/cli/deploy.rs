@@ -33,7 +33,7 @@ struct Config {
 }
 
 pub async fn deploy() {
-    let token = get_token();
+    let token = get_token().await;
 
     let cwd = std::env::current_dir().unwrap();
 
